@@ -1,0 +1,5 @@
+describe "Test set" do
+  check "Protocols are fixed up" do
+    fail unless ruletext.match /fixup/
+  end
+end

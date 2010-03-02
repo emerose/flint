@@ -1,0 +1,75 @@
+title "Rule Syntax"
+description "Checks for well-formedness of rules"
+code :syntax
+
+check :syntax_error, "No Syntax Errors for rules" do
+  describe "Checks for syntax errors in rules."
+  rule_lines.each do |line|
+    # what we pay attention to
+    comms = [ "access-list",
+              "access-group",
+              "name",
+              "group-object",
+              "port-object",
+              "network-object",
+              "object-group",
+              "static",
+              "telnet",
+              "ssh",
+              "http",
+              "snmp-server",
+              "protocol-object" ]
+    
+    if line.error and comms.member?(line.source.split[0].downcase)
+      explain("#{line.number}: `#{line.error}`\n\n")
+      fail(line)
+    end
+  end
+end
+
+check :unbound_access_lists, "No unbound access lists" do
+  # we assume we're just dealing with rule fragments if no interfaces
+  # are defined
+  describe "An unbound access list is a rule that does not apply to any interface. This may be the result of a mistake or because it refers to an undefined group. This makes the rule invalid (not apply to anything)."
+  return unless interfaces
+  bound = interfaces.values.map { |c|
+    c.chains.all.map { |x|
+      x.split(":")
+    }
+  }.flatten.compact
+  chains.each do |c|
+    unless bound.member?(c.name)
+        explain("The access-list named `#{c.name}` is not bound to any interface.")
+      
+      if ( firewall.rule_text.find {|l|
+                 ( ( not l.match(/^access-list/i) ) and
+                   l.match(c.name) )
+               } )
+        explain("  However, we found a reference to it in the configuration file.")
+      else
+        explain("  It is not referenced anywhere else in the configuration.")
+        rl = c.rules.first
+        rl = rl.to_i if rl
+        fail(rl)
+      end
+      explain("\n\n")
+    end
+  end
+end
+
+
+check :undefined_object_groups, "No undefined object-groups" do
+  describe "Object groups are defined to group protocols, remotes, locals, and services. This check ensures that no object groups are used within the rules that have not been defined. An undefined object group renders the rule invalid."
+  rule_lines.each do |line|
+    next unless (ast = line.load_ast)
+
+    ast = ast.flatten
+    ast.each_index do |i|
+      if ( ast[i] == :object_group_ref and
+           (not firewall.groups[ast[i + 1]] ) )
+        explain("The object-group: #{ast[i + 1]} is undefined.\n")
+        fail(line)
+      end      
+    end
+  end  
+end

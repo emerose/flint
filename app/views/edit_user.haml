@@ -1,0 +1,23 @@
+%form{:id => "edituser", :action => "/admin/user/new", :method => "POST"}
+  %table
+    %tr
+      %td.subleft Full Name:
+      %td
+        %input{:type => "textarea", :name => "full_name"}
+    %tr
+      %td.subleft Login:
+      %td
+        %input{:type => "textarea", :name => "username"} 
+    %tr
+      %td.subleft Password once:
+      %td
+        %input{:type => "password", :name => "password1", :id => "password1"}
+    %tr
+      %td.subleft Password twice:
+      %td
+        %input{:type => "password", :name => "password2", :id => "password2"}
+    %tr
+      %td
+        &nbsp;
+      %td
+        %input{:type => "submit", :value => "submit"}

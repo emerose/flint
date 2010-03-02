@@ -1,0 +1,78 @@
+!!! Transitional
+%html{:xmlns => "http://www.w3.org/1999/xhtml", "xml:lang" => "en", :lang => "en"}
+  %head
+
+    %script{:type => "text/javascript", :src => "/ui/script/jquery-1.4.1.min.js" }
+    %script{:type => "text/javascript", :src => "/ui/script/jquery-ui-1.7.2.custom.min.js" }
+    %script{:type => "text/javascript", :src => "/ui/script/jquery.validate.min.js" }
+    %script{:type => "text/javascript", :src => "/ui/script/flint.js" }
+    - if @welcome
+      %script $(document).ready(function(){$("#new_report_dialog").dialog('open');});
+
+    %link{:href => "/ui/script/css/start/jquery-ui-1.7.2.custom.css",
+          :rel => "stylesheet",
+          :type => "text/css",
+          :media => "screen, projection" }
+
+    %link{:href => "/ui/style/screen.css",
+          :rel => "stylesheet",
+          :type => "text/css",
+          :media => "screen, projection" }
+
+    %link{:href => "/ui/style/print.css",
+          :rel => "stylesheet",
+          :type => "text/css",
+          :media => "print" }
+      
+    %link{:href => "/ui/style/main.css",
+          :rel => "stylesheet",
+          :type => "text/css",
+          :media => "screen, projection" }
+
+    / [ if IE ]
+      %link{ :rel => "stylesheet",
+             :type => "text/css",
+             :media => "screen",
+             :href => "/ui/style/ie.css" }
+
+      %link{ :rel => "stylesheet",
+             :type => "text/css",
+             :media => "screen",
+             :href => "/ui/style/flint_ie.css" }
+
+  %body
+    
+    #header
+      .container
+        .logo
+          %a{:href => "/"}
+            %img{:src => "/assets/flint_logo.png"}
+        .new_report_button
+          %a{:href => "#"}
+            %img{:src => "/assets/new_report.png"}
+        .business
+          %span.padded
+            %a{:href => "/logout"} 
+              %img{:src => "/assets/arrow-curve-000-left.png"}
+              Logout
+          - if user_is_admin
+            %span.padded
+              %a{:href => "/admin"} 
+                %img{:src => "/assets/users.png"}
+                Settings
+
+        .nav
+          %ul
+            %li.overview
+              %a{:href => "/overview"} Overview
+            %li.protocol
+              %a{:href => "/protocol"} Protocol
+            %li.interface
+              %a{:href => "/interface"} Interface
+          
+    #main
+      = yield 
+
+    #footer
+    #new_report_dialog.dialog(title="Run New Report")
+      = haml :new_report, :layout => false

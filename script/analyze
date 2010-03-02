@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+
+flintpath = File.expand_path(File.dirname(__FILE__) + "/../lib")
+$LOAD_PATH.unshift flintpath
+require 'rubygems'
+require 'flint'
+
+
+fwdat = if f=ARGV.shift and f != '-'
+          File.read(f)
+        else
+          STDIN.read
+        end
+
+tests = unless ARGV.empty?
+          ARGV
+        else
+          Dir[ FLINT_ROOT + "/checks/pix/*.ftg"]
+        end
+
+firewall = Flint::CiscoFirewall.factory(fwdat)
+
+runs = []
+tests.each do |t|
+  tg = Flint::TestGroup.load(t)
+  tr = Flint::TestRunner.new(tg)
+  tr.run(firewall)
+  runs << [tg,tr.results]
+end
+
+runs.each do |run|
+  gr = run[0]
+  results = run[1]
+  puts "##################################################################"
+  puts "#{gr.title}"
+  puts "##################################################################"
+  results.each do |r|
+    puts r.to_s
+  end
+end

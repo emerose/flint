@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+
+flintpath = File.expand_path(File.dirname(__FILE__) + "/../lib")
+$LOAD_PATH.unshift flintpath
+require 'rubygems'
+require 'flint'
+
+rtext = STDIN.read
+lines = rtext.split("\n")
+
+# nuke any previous garbage
+Flint::CiscoLine.find(:sha => "garbage").all.each { |l| l.delete }
+
+lines.each_with_index do |l, i|
+  cl = Flint::CiscoLine.factory("garbage",l, i + 1)
+  if cl.error
+    puts "ERROR:#{cl.source} #{cl.error.backtrace}\n              #{cl.source}"
+  else
+    #puts cl.ast.inspect
+    puts cl.ast.to_hash.inspect
+  end
+end
+    

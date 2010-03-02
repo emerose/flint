@@ -1,0 +1,1334 @@
+## Every time you modify this file, you have to regenerate pf_parser.rb by
+## running the following command:
+##
+## rake playbook:pf_parser
+##
+## racc is in the third party build, so make sure to set your environment accordingly
+## Just in case, you might wanna save a copy of the existing pf_parser.rb
+
+
+class PfParser
+    token PASS BLOCK SCRUB RETURN IN OS OUT LOG QUICK ON FROM TO FLAGS
+    RETURNRST RETURNICMP RETURNICMP6 PROTO INET INET6 ALL ANY ICMPTYPE
+    ICMP6TYPE CODE KEEP MODULATE STATE PORT RDR NAT BINAT ARROW NODF
+    MINTTL ERROR ALLOWOPTS FASTROUTE FILENAME ROUTETO DUPTO REPLYTO NO LABEL
+    NOROUTE URPFFAILED FRAGMENT USER GROUP MAXMSS MAXIMUM TTL TOS DROP TABLE
+    REASSEMBLE FRAGDROP FRAGCROP ANCHOR NATANCHOR RDRANCHOR BINATANCHOR
+    SET OPTIMIZATION TIMEOUT LIMIT LOGINTERFACE BLOCKPOLICY RANDOMID
+    REQUIREORDER SYNPROXY FINGERPRINTS NOSYNC DEBUG SKIP HOSTID
+    ANTISPOOF FOR ROUTING TCP_STATE IPADDR
+    BITMASK RANDOM SOURCEHASH ROUNDROBIN STATICPORT PROBABILITY
+    ALTQ CBQ PRIQ HFSC BANDWIDTH TBRSIZE LINKSHARE REALTIME UPPERLIMIT
+    QUEUE PRIORITY QLIMIT
+    LOAD ID NUMBER
+    STICKYADDRESS MAXSRCSTATES MAXSRCNODES SOURCETRACK GLOBAL RULE
+    MAXSRCCONN MAXSRCCONNRATE OVERLOAD FLUSH
+    TAGGED TAG IFBOUND FLOATING STATEPOLICY ROUTE STRING PORTBINARY BYTECOUNT
+    YES PERCENT OPEN_BRACE CLOSE_BRACE LESS_THAN GREATER_THAN SLASH
+    OPEN_PAREN CLOSE_PAREN BANG COMMA EQUALS TABLEREF MACRODEF PERCENTAGE
+    MACROREF COLON
+
+    start rule_line
+
+    rule
+    rule_line : option
+    { result = val }
+    |  scrubrule
+    { result = val }
+    |  natrule
+    { result = val }
+    |  binatrule
+    { result = val }
+    |  pfrule
+    { result = val }
+    |  anchorrule
+    { result = val }
+    |  loadrule
+    { result = val }
+    |  altqif
+    { result = val }
+    |  queuespec
+    { result = val }
+    |  macrodef
+    { result = val }
+    |  antispoof
+    { result = val }
+    |  tabledef
+    { result = val }
+    |  error
+    { result = val }
+    | /* empty */
+    { result = nil }
+    ;
+
+option    : SET OPTIMIZATION id
+    { result = val }
+    | SET TIMEOUT timeout_list
+    { result = val }
+    | SET TIMEOUT OPEN_BRACE timeout_list CLOSE_BRACE
+    { result = val }
+    | SET LIMIT limit_list
+    { result = val }
+    | SET LIMIT OPEN_BRACE limit_list CLOSE_BRACE
+    { result = val }
+    | SET LOGINTERFACE ID
+    { result = val }
+    | SET HOSTID number
+    { result = val }
+    | SET BLOCKPOLICY DROP
+    { result = val }
+    | SET BLOCKPOLICY RETURN
+    { result = val }
+    | SET REQUIREORDER yesno
+    { result = val }
+    | SET FINGERPRINTS id
+    { result = val }
+    | SET FINGERPRINTS STRING
+    { result = val }
+    | SET STATEPOLICY statelock
+    { result = val }
+    | SET DEBUG id
+    { result = val }
+    | SET SKIP interface
+    { result = val }
+    ;
+
+string    : string STRING
+    { result = val }
+    | STRING
+    { result = val }
+    ;
+
+macrodef    : id EQUALS STRING
+    { result = val }
+    ;
+
+macroval    : MACROREF
+    { result = val }
+    
+anchorrule  : ANCHOR string dir interface af proto fromto filter_opts
+    { result = val }
+    | ANCHOR id interface af proto fromto
+    | NATANCHOR string interface af proto fromto
+    { result = val }
+    | NATANCHOR id interface af proto fromto
+    { result = val }
+    | RDRANCHOR string interface af proto fromto
+    { result = val }
+    | RDRANCHOR id interface af proto fromto
+    { result = val }
+    | BINATANCHOR id interface af proto fromto
+    { result = val }
+    | BINATANCHOR string interface af proto fromto
+    { result = val }
+    ;
+
+loadrule  : LOAD ANCHOR string FROM string
+    { result = val }
+    ;
+
+scrubaction : no SCRUB
+    { result = val }
+    ;
+
+scrubrule : scrubaction dir logquick interface af proto fromto scrub_opts
+    { result = val }
+    ;
+
+scrub_opts  : scrub_opts_l
+    { result = val }
+    | /* empty */
+    { result = nil }
+    ;
+
+scrub_opts_l  : scrub_opts_l scrub_opt
+    { result = val }
+    | scrub_opt
+    { result = val }
+    ;
+
+scrub_opt : NODF
+    { result = val }
+    | MINTTL number
+    { result = val }
+    | MAXMSS number
+    { result = val }
+    | fragcache
+    { result = val }
+    | REASSEMBLE STRING
+    { result = val }
+    | RANDOMID
+    { result = val }
+    ;
+
+fragcache : FRAGMENT REASSEMBLE
+    { result = val }
+    | FRAGMENT FRAGCROP
+    { result = val }
+    | FRAGMENT FRAGDROP
+    { result = val }
+    ;
+
+antispoof : ANTISPOOF logquick antispoof_ifspc af antispoof_opts
+    { result = val }
+    ;
+
+antispoof_ifspc : FOR antispoof_if
+    { result = val }
+    | FOR OPEN_BRACE antispoof_iflst CLOSE_BRACE
+    { result = val }
+    ;
+
+antispoof_iflst : antispoof_if
+    { result = val }
+    | antispoof_iflst comma antispoof_if
+    { result = val }
+    ;
+
+antispoof_if  : if_item
+    { result = val }
+    | OPEN_PAREN if_item CLOSE_PAREN
+    { result = val }
+    ;
+
+antispoof_opts  : antispoof_opts_l
+    { result = val }
+    | /* empty */
+    { result = nil }
+    ;
+
+antispoof_opts_l  : antispoof_opts_l antispoof_opt
+    { result = val }
+    | antispoof_opt
+    { result = val }
+      ;
+
+antispoof_opt : label
+    { result = val }
+    ;
+
+not   : BANG
+    { result = val }
+    | /* empty */
+    { result = nil }
+    ;
+
+tabledef  : TABLE TABLEREF table_opts
+    { result = val }
+    ;
+
+table_opts  : table_opts_l
+    { result = val }
+    | /* empty */
+    { result = nil }
+    ;
+
+table_opts_l  : table_opts_l table_opt
+    { result = val }
+    | table_opt
+    { result = val }
+    ;
+
+table_opt : id
+    { result = val }
+    | OPEN_BRACE CLOSE_BRACE
+    { result = val }
+    | OPEN_BRACE table_list CLOSE_BRACE
+    { result = IPTable.new(val) }
+    | FILENAME STRING
+    { result = val }
+    ;
+
+table_list : table_item
+    { result = val }
+    | table_list comma table_item
+    { result = val }
+    ;
+table_item : port
+    {  result = val }
+    | host
+    {  result = val }
+    | xhost
+    {  result = val }
+    ;
+    
+altqif    : ALTQ interface queue_opts QUEUE qassign
+    { result = val }
+    ;
+
+queuespec : QUEUE STRING interface queue_opts qassign
+    { result = val }
+    | QUEUE id queue_opts
+    { result = val }
+    ;
+
+queue_opts  : queue_opts_l
+    { result = val }
+    | /* empty */
+    { result = nil }
+    ;
+
+queue_opts_l  : queue_opts_l queue_opt
+    { result = val }
+    | queue_opt
+    { result = val }
+    ;
+
+queue_opt : BANDWIDTH bandwidth
+    { result = val }
+    | PRIORITY number
+    { result = val }
+    | QLIMIT number
+    { result = val }
+    | scheduler
+    { result = val }
+    | TBRSIZE number
+    { result = val }
+    | queue_list
+    { result = val }
+    ;
+
+bandwidth : STRING
+    { result = val }
+    | BYTECOUNT
+    { result = val }
+    | PERCENTAGE
+    { result = val }
+    | ID
+    { result = val }
+    ;
+
+scheduler : CBQ
+    { result = val }
+    | CBQ OPEN_PAREN cbqflags_list CLOSE_PAREN
+    { result = val }
+    | PRIQ
+    { result = val }
+    | PRIQ OPEN_PAREN priqflags_list CLOSE_PAREN
+    { result = val }
+    | HFSC
+    { result = val }
+    | HFSC OPEN_PAREN hfsc_opts CLOSE_PAREN
+    { result = val }
+    ;
+
+cbqflags_list : cbqflags_item
+    { result = val }
+    | cbqflags_list comma cbqflags_item
+    { result = val }
+    ;
+
+cbqflags_item : STRING
+    { result = val }
+    | ID
+    { result = val }
+    ;
+
+priqflags_list  : priqflags_item
+    { result = val }
+    | priqflags_list comma priqflags_item
+    { result = val }
+    ;
+
+priqflags_item  : STRING
+    { result = val }
+    | id
+    { result = val }
+    ;
+
+hfsc_opts : hfscopts_list
+    { result = val }
+    ;
+
+hfscopts_list : hfscopts_item
+    { result = val }
+    | hfscopts_list comma hfscopts_item
+    { result = val }
+    ;
+
+hfscopts_item : LINKSHARE bandwidth
+    { result = val }
+    | LINKSHARE OPEN_PAREN bandwidth comma number comma bandwidth CLOSE_PAREN
+    { result = val }
+    | REALTIME bandwidth
+    { result = val }
+    | REALTIME OPEN_PAREN bandwidth comma number comma bandwidth CLOSE_PAREN
+    { result = val }
+    | UPPERLIMIT bandwidth
+    { result = val }
+    | UPPERLIMIT OPEN_PAREN bandwidth comma number comma bandwidth CLOSE_PAREN
+    { result = val }
+    | STRING
+    { result = val }
+    ;
+
+qassign   : /* empty */
+    { result = nil }
+    | qassign_item
+    { result = val }
+    | OPEN_BRACE qassign_list CLOSE_BRACE
+    { result = val }
+    ;
+
+qassign_list  : qassign_item
+    { result = val }
+    | qassign_list comma qassign_item
+    { result = val }
+    ;
+
+qassign_item  : STRING
+    { result = val }
+    | id
+    { result = val }
+    ;
+
+pfrule    : action dir logquick interface route af proto fromto filter_opts
+    { result = val }
+    ;
+
+filter_opts : filter_opts_l
+    { result = val }
+    | /* empty */
+    { result = nil }
+    ;
+
+filter_opts_l : filter_opts_l filter_opt
+    { result = val }
+    | filter_opt
+    { result = val }
+    ;
+
+filter_opt  : USER uids
+    { result = val }
+    | GROUP gids
+    { result = val }
+    | flags
+    { result = val }
+    | icmpspec
+    { result = val }
+    | tos
+    { result = val }
+    | keep
+    { result = val }
+    | FRAGMENT
+    { result = val }
+    | ALLOWOPTS
+    { result = val }
+    | label
+    { result = val }
+    | qname
+    { result = val }
+    | TAG id
+    { result = val }
+    | not matchtag
+    { result = val }
+    | PROBABILITY id
+    { result = val }
+    | ROUTING
+    { result = val }
+    | TCP_STATE
+    { result = val }
+    | id
+    { result = val }
+    ;
+
+matchtag  : TAGGED matchtag_item
+    { result = val }
+    | TAGGED OPEN_BRACE matchtag_list CLOSE_BRACE
+    { result = val }
+    ;
+
+matchtag_list : matchtag_item
+    { result = val }
+    | matchtag_list comma matchtag_item
+    { result = val }
+    ;
+
+matchtag_item : id
+    { result = val }
+    ;
+
+action    : PASS
+    { result = val }
+    | BLOCK blockspec
+    { result = val }
+    ;
+
+blockspec : /* empty */
+    { result = val }
+    | DROP
+    { result = val }
+    | RETURNRST
+    { result = val }
+    | RETURNRST OPEN_PAREN TTL number CLOSE_PAREN
+    { result = val }
+    | RETURNICMP
+    { result = val }
+    | RETURNICMP6
+    { result = val }
+    | RETURNICMP OPEN_PAREN STRING CLOSE_PAREN
+    { result = val }
+    | RETURNICMP6 OPEN_PAREN STRING CLOSE_PAREN
+    { result = val }
+    | RETURNICMP OPEN_PAREN STRING comma STRING CLOSE_PAREN
+    { result = val }
+    | RETURN
+    { result = val }
+    ;
+
+dir   : /* empty */
+    { result = nil }
+    | IN
+    { result = val }
+    | OUT
+    { result = val }
+    ;
+
+logquick  : /* empty */
+    { result = nil }
+    | log
+    { result = val }
+    | QUICK
+    { result = val }
+    | log QUICK
+    { result = val }
+    | QUICK log
+    { result = val }
+    ;
+
+log   : LOG
+    { result = val }
+    | LOG OPEN_PAREN logopts CLOSE_PAREN
+    { result = val }
+    | id
+    { result = val }
+    ;
+
+logopts   : logopt
+    { result = val }
+    | logopts comma logopt
+    { result = val }
+    ;
+
+logopt    : ALL
+    { result = val }
+    | USER
+    { result = val }
+    | GROUP
+    { result = val }
+    | id
+    { result = val }
+    ;
+
+interface : /* empty */
+    { result = nil }
+    | ON id
+    { result = val }
+    | ON if_item_not
+    { result = val }
+    | ON OPEN_BRACE if_list CLOSE_BRACE
+    { result = val }
+    ;
+
+if_list   : if_item_not
+    { result = val }
+    | if_list comma if_item_not
+    { result = val }
+    | if_list comma if_item
+    { result = val }
+    | if_item
+    { result = val }
+    ;
+
+if_item_not : not if_item
+    { result = val }
+    ;
+
+if_item   : STRING
+    { result = val }
+    | id
+    { result = val }
+    ;
+
+af    : /* empty */
+    { result = nil }
+    | INET
+    { result = val }
+    | INET6
+    { result = val }
+    ;
+
+proto   : /* empty */
+    { result = nil }
+    | PROTO proto_item
+    { result = val }
+    | PROTO OPEN_BRACE proto_list CLOSE_BRACE
+    { result = val }
+    ;
+
+proto_list  : proto_item
+    { result = val }
+    | proto_list comma proto_item
+    { result = val }
+    ;
+
+proto_item  : id
+    { result = val }
+    | NUMBER
+    { result = val }
+    ;
+
+fromto    : ALL
+    { result = val }
+    | from os to
+    { result = val }
+    ;
+
+os    : /* empty */
+    { result = val }
+    | OS xos
+    { result = val }
+    | OS OPEN_BRACE os_list CLOSE_BRACE
+    { result = val }
+    ;
+
+xos   : STRING
+    { result = val }
+    ;
+
+os_list   : xos
+    { result = val }
+    | os_list comma xos
+    { result = val }
+    ;
+
+from    : /* empty */
+    { result = nil }
+    | FROM ipportspec
+    { result = val }
+    ;
+
+to    : /* empty */
+    { result = nil }
+    | TO ipportspec
+    { result = val }
+    ;
+
+ipportspec  : ipspec
+    { result = val }
+    | ipspec PORT portspec
+    { result = val }
+    | PORT portspec
+    { result = val }
+    ;
+
+ipspec : ANY
+    { result = val }
+    | xhost
+    { result = val }
+    | host
+    { result = val }
+    | OPEN_BRACE host_list CLOSE_BRACE
+    { result = val }
+    ;
+
+host_list : ipspec
+    { result = val }
+    | host_list comma ipspec
+    { result = val }
+    ;
+
+xhost   : not host
+    { result = val }
+    | not NOROUTE
+    { result = val }
+    | not URPFFAILED
+    { result = val }
+    ;
+
+host    : id
+    { result = Hostname.new(val[0]) }
+    | IPADDR
+    {  result = begin IPAddr.parse(val[0]) rescue val[0] end }
+    | id SLASH number
+    { result = val }
+    | dynaddr
+    { result = val }
+    | dynaddr SLASH number
+    { result = val }
+    | TABLEREF
+    { result = Tablename.new(val[0]) }
+    | ROUTE id
+    { result = val }
+    | id COLON id
+    { result = val }
+
+    ;
+
+number    : id
+    { result = val }
+    | NUMBER
+    {  result = val }
+    ;
+
+dynaddr   : OPEN_PAREN id CLOSE_PAREN
+    { result = val }
+                ;
+
+portspec  : port_item
+    { result = val }
+    | OPEN_BRACE port_list CLOSE_BRACE
+    { result = val }
+    ;
+
+port_list : port_item
+    { result = val }
+    | port_list comma port_item
+    { result = val }
+    ;
+
+port_item : port
+    { result = val }
+    | unaryop port
+    { result = val }
+    | port PORTBINARY port
+    { result = val }
+    ;
+
+port    : id
+    { result = PortName.new(val[0]) }
+    | NUMBER
+    { result = PortNumber.new(val[0].to_i) }
+    ;
+
+uids    : uid_item
+    { result = val }
+    | OPEN_BRACE uid_list CLOSE_BRACE
+    { result = val }
+    ;
+
+uid_list  : uid_item
+    { result = val }
+    | uid_list comma uid_item
+    { result = val }
+    ;
+
+uid_item  : uid
+    { result = val }
+    | unaryop uid
+    { result = val }
+    | uid PORTBINARY uid
+    { result = val }
+    ;
+
+uid   : id
+    { result = val }
+                ;
+
+gids    : gid_item
+    { result = val }
+    | OPEN_BRACE gid_list CLOSE_BRACE
+    { result = val }
+    ;
+
+gid_list  : gid_item
+    { result = val }
+    | gid_list comma gid_item
+    { result = val }
+    ;
+
+gid_item  : gid
+    { result = val }
+    | unaryop gid
+    { result = val }
+    | gid PORTBINARY gid
+    { result = val }
+    ;
+
+gid   : id
+    { result = val }
+    ;
+
+flag    : id
+    { result = val }
+    ;
+
+flags   : FLAGS flag SLASH flag
+    { result = val }
+    | FLAGS SLASH flag
+    { result = val }
+    ;
+
+icmpspec  : ICMPTYPE icmp_item
+    { result = val }
+    | ICMPTYPE OPEN_BRACE icmp_list CLOSE_BRACE
+    { result = val }
+    | ICMP6TYPE icmp6_item
+    { result = val }
+    | ICMP6TYPE OPEN_BRACE icmp6_list CLOSE_BRACE
+    { result = val }
+    ;
+
+icmp_list : icmp_item
+    { result = val }
+    | icmp_list comma icmp_item
+    { result = val }
+    ;
+
+icmp6_list  : icmp6_item
+    { result = val }
+    | icmp6_list comma icmp6_item
+    { result = val }
+    ;
+
+icmp_item : icmptype
+    { result = val }
+    | icmptype CODE id
+    { result = val }
+    | icmptype CODE NUMBER
+    { result = val }
+                ;
+
+icmp6_item  : icmp6type
+    { result = val }
+    | icmp6type CODE id
+    { result = val }
+    | icmp6type CODE NUMBER
+    { result = val }
+    ;
+
+icmptype  : id
+    { result = val }
+    | NUMBER
+    { result = val }
+    ;
+
+icmp6type : id
+    { result = val }
+    ;
+
+tos   : TOS id
+    { result = val }
+    ;
+
+sourcetrack : SOURCETRACK
+    { result = val }
+    | SOURCETRACK GLOBAL
+    { result = val }
+    | SOURCETRACK RULE
+    { result = val }
+    ;
+
+statelock : IFBOUND
+    { result = val }
+    | FLOATING
+    { result = val }
+    ;
+
+keep    : KEEP STATE state_opt_spec
+    { result = val }
+    | MODULATE STATE state_opt_spec
+    { result = val }
+    | SYNPROXY STATE state_opt_spec
+    { result = val }
+    ;
+
+flush   : /* empty */
+    { result = val }
+    | FLUSH
+    { result = val }
+    | FLUSH GLOBAL
+    { result = val }
+    ;
+
+state_opt_spec  : OPEN_PAREN state_opt_list CLOSE_PAREN
+    { result = val }
+    | /* empty */
+    { result = nil }
+    ;
+
+state_opt_list  : state_opt_item
+    { result = val }
+    | state_opt_list comma state_opt_item
+    { result = val }
+    ;
+
+state_opt_item  : MAXIMUM number
+    { result = val }
+    | NOSYNC
+    { result = val }
+    | MAXSRCSTATES number
+    { result = val }
+    | MAXSRCCONN number
+    { result = val }
+    | MAXSRCCONNRATE number SLASH number
+    { result = val }
+    | OVERLOAD LESS_THAN STRING GREATER_THAN flush
+    { result = val }
+    | MAXSRCNODES number
+    { result = val }
+    | sourcetrack
+    { result = val }
+    | statelock
+    { result = val }
+    | id number
+    { result = val }
+                ;
+
+label   : LABEL STRING
+    { result = val }
+    | LABEL id
+    { result = val }
+    ;
+
+queue_list : /* empty */
+    {  result = nil }
+    | OPEN_BRACE CLOSE_BRACE
+    { result = val }
+    | OPEN_BRACE queue_list CLOSE_BRACE
+    { result = val }
+    ;
+    
+queue_list : id
+    {  result = val }
+    | queue_list comma id
+    {  result = val }
+    ;
+    
+    
+qname   : QUEUE STRING
+    { result = val }
+    | QUEUE OPEN_PAREN STRING CLOSE_PAREN
+    { result = val }
+    | QUEUE OPEN_PAREN ID CLOSE_PAREN
+    { result = val }
+    | QUEUE OPEN_PAREN STRING comma STRING CLOSE_PAREN
+    { result = val }
+    | QUEUE OPEN_PAREN ID comma ID CLOSE_PAREN
+    { result = val }
+    | QUEUE id
+    { result = val }
+    | QUEUE id queue_list
+    { result = val }
+    ;
+
+    
+    
+no    : /* empty */
+    { result = nil }
+    | NO
+    { result = val }
+    ;
+
+rport   : id
+    { result = PortName.new(val[0]) }
+        | NUMBER 
+    { result = PortNumber.new(val[0].to_i) }
+;
+
+redirspec : host
+    { result = val }
+    | OPEN_BRACE redir_host_list CLOSE_BRACE
+    { result = val }
+    ;
+
+redir_host_list : host
+    { result = val }
+    | redir_host_list comma host
+    { result = val }
+    ;
+
+redirpool : /* empty */
+    { result = nil }
+    | ARROW redirspec
+    { result = val }
+    | ARROW redirspec PORT rport
+    { result = val }
+    ;
+
+hashkey   : /* empty */
+    { result = nil }
+    | string
+    { result = val }
+    ;
+
+pool_opts : pool_opts_l
+    { result = val }
+    | /* empty */
+    { result = nil }
+    ;
+
+pool_opts_l : pool_opts_l pool_opt
+    { result = val }
+    | pool_opt
+    { result = val }
+    ;
+
+pool_opt  : BITMASK
+    { result = val }
+    | RANDOM
+    { result = val }
+    | SOURCEHASH hashkey
+    { result = val }
+    | ROUNDROBIN
+    { result = val }
+    | STATICPORT
+    { result = val }
+    | STICKYADDRESS
+    { result = val }
+    ;
+
+redirection : /* empty */
+    { result = nil }
+    | ARROW host
+    { result = val }
+    | ARROW host PORT rport
+    { result = val }
+    ;
+
+natpass   : /* empty */
+    { result = nil }
+    | PASS
+    { result = val }
+    | PASS log
+    { result = val }
+    ;
+
+nataction : no NAT natpass
+    { result = val }
+    | no RDR natpass
+    { result = val }
+    | RDR natpass
+    { result = val }
+    ;
+
+natrule   : nataction interface af proto fromto tag tagged redirpool pool_opts
+    { result = val }
+    | nataction af proto fromto tag tagged redirpool pool_opts
+    { result = val }
+    ;
+
+binatrule : no BINAT natpass interface af proto FROM host TO ipspec tag tagged
+        redirection
+    { result = val }
+    ;
+
+tag   : /* empty */
+    { result = nil }
+    | TAG STRING
+    { result = val }
+    | TAG ID
+    { result = val }
+    ;
+
+tagged    : /* empty */
+    { result = nil }
+    | not TAGGED string
+    { result = val }
+    | not TAGGED ID
+    { result = val }
+    ;
+
+route_host  : id
+    { result = val }
+    | IPADDR
+    { result = begin IPAddr.parse(val[0]) rescue val[0] end }
+    | OPEN_PAREN id host CLOSE_PAREN
+    { result = val }
+    ;
+
+route_host_list : route_host
+    { result = val }
+    | route_host_list comma route_host
+    { result = val }
+    ;
+
+routespec : route_host
+    { result = val }
+    | OPEN_BRACE route_host_list CLOSE_BRACE
+    { result = val }
+    ;
+
+route   : /* empty */
+    { result = nil }
+    | FASTROUTE
+    { result = val }
+    | ROUTETO routespec pool_opts
+    { result = val }
+    | REPLYTO routespec pool_opts
+    { result = val }
+    | DUPTO routespec pool_opts
+    { result = val }
+    ;
+
+timeout_spec  : id number
+    { result = val }
+    ;
+
+timeout_list  : timeout_list comma timeout_spec
+    { result = val }
+    | timeout_spec
+    { result = val }
+    ;
+
+limit_spec  : id number
+    { result = val }
+    ;
+
+limit_list  : limit_list comma limit_spec
+    { result = val }
+    | limit_spec
+    { result = val }
+    ;
+
+comma   : COMMA
+    { result = val }
+    | /* empty */
+    { result = nil }
+    ;
+
+yesno   : NO
+    { result = val }
+    | YES
+    { result = val }
+    | STRING
+    { result = val }
+    ;
+
+unaryop   : EQUALS
+    { result = val }
+    | BANG EQUALS
+    { result = val }
+    | LESS_THAN EQUALS
+    { result = val }
+    | LESS_THAN
+    { result = val }
+    | GREATER_THAN EQUALS
+    { result = val }
+    | GREATER_THAN
+    { result = val }
+    ;
+
+id : ID
+    { result = val[0] }
+    ;
+
+end
+
+---- header
+
+require 'rubygems'
+require 'strscan'
+require 'ipaddr'
+require 'pp'
+load "util.rb"
+
+---- inner
+
+
+  def initialize(parser_opts)
+      @yydebug = parser_opts.fetch(:debug,false)
+        @keywords = {
+            "all"   => :ALL,
+            "allow-opts"  => :ALLOWOPTS,
+            "altq"    => :ALTQ,
+            "anchor"  => :ANCHOR,
+            "antispoof" => :ANTISPOOF,
+            "any"   => :ANY,
+            "bandwidth" => :BANDWIDTH,
+            "binat"   => :BINAT,
+            "binat-anchor"  => :BINATANCHOR,
+            "bitmask" => :BITMASK,
+            "block"   => :BLOCK,
+            "block-policy"  => :BLOCKPOLICY,
+            "cbq"   => :CBQ,
+            "code"    => :CODE,
+            "crop"    => :FRAGCROP,
+            "debug"   => :DEBUG,
+            "drop"    => :DROP,
+            "drop-ovl"  => :FRAGDROP,
+            "dup-to"  => :DUPTO,
+            "fastroute" => :FASTROUTE,
+            "file"    => :FILENAME,
+            "fingerprints"  => :FINGERPRINTS,
+            "flags"   => :FLAGS,
+            "floating"  => :FLOATING,
+            "flush"   => :FLUSH,
+            "for"   => :FOR,
+            "fragment"  => :FRAGMENT,
+            "from"    => :FROM,
+            "global"  => :GLOBAL,
+            "group"   => :GROUP,
+            "hfsc"    => :HFSC,
+            "hostid"  => :HOSTID,
+            "icmp-type" => :ICMPTYPE,
+            "icmp6-type"  => :ICMP6TYPE,
+            "if-bound"  => :IFBOUND,
+            "in"    => :IN,
+            "inet"    => :INET,
+            "inet6"   => :INET6,
+            "keep"    => :KEEP,
+            "label"   => :LABEL,
+            "limit"   => :LIMIT,
+            "linkshare" => :LINKSHARE,
+            "load"    => :LOAD,
+            "log"   => :LOG,
+            "loginterface"  => :LOGINTERFACE,
+            "max"   => :MAXIMUM,
+            "max-mss" => :MAXMSS,
+            "max-src-conn"  => :MAXSRCCONN,
+            "max-src-conn-rate" => :MAXSRCCONNRATE,
+            "max-src-nodes" => :MAXSRCNODES,
+            "max-src-states"=> :MAXSRCSTATES,
+            "min-ttl" => :MINTTL,
+            "modulate"  => :MODULATE,
+            "nat"   => :NAT,
+            "nat-anchor"  => :NATANCHOR,
+            "no"    => :NO,
+            "no-df"   => :NODF,
+            "no-route"  => :NOROUTE,
+            "no-sync" => :NOSYNC,
+            "on"    => :ON,
+            "optimization"  => :OPTIMIZATION,
+            "os"    => :OS,
+            "out"   => :OUT,
+            "overload"  => :OVERLOAD,
+            "pass"    => :PASS,
+            "port"    => :PORT,
+            "priority"  => :PRIORITY,
+            "priq"    => :PRIQ,
+            "probability" => :PROBABILITY,
+            "proto"   => :PROTO,
+            "qlimit"  => :QLIMIT,
+            "queue"   => :QUEUE,
+            "quick"   => :QUICK,
+            "random"  => :RANDOM,
+            "random-id" => :RANDOMID,
+            "rdr"   => :RDR,
+            "rdr-anchor"  => :RDRANCHOR,
+            "realtime"  => :REALTIME,
+            "reassemble"  => :REASSEMBLE,
+            "reply-to"  => :REPLYTO,
+            "require-order" => :REQUIREORDER,
+            "return"  => :RETURN,
+            "return-icmp" => :RETURNICMP,
+            "return-icmp6"  => :RETURNICMP6,
+            "return-rst"  => :RETURNRST,
+            "round-robin" => :ROUNDROBIN,
+            "route"   => :ROUTE,
+            "route-to"  => :ROUTETO,
+            "rule"    => :RULE,
+            "scrub"   => :SCRUB,
+            "set"   => :SET,
+            "skip"    => :SKIP,
+            "source-hash" => :SOURCEHASH,
+            "source-track"  => :SOURCETRACK,
+            "state"   => :STATE,
+            "state-policy"  => :STATEPOLICY,
+            "static-port" => :STATICPORT,
+            "sticky-address"=> :STICKYADDRESS,
+            "synproxy"  => :SYNPROXY,
+            "table"   => :TABLE,
+            "tag"   => :TAG,
+            "tagged"  => :TAGGED,
+            "tbrsize" => :TBRSIZE,
+            "timeout" => :TIMEOUT,
+            "to"    => :TO,
+            "tos"   => :TOS,
+            "ttl"   => :TTL,
+            "upperlimit"  => :UPPERLIMIT,
+            "urpf-failed" => :URPFFAILED,
+            "yes" => :YES,
+            "><" => :PORTRANGE,
+            "<>" => :PORTINVERSERANGE,
+            "<=" => :LESSOREQUAL,
+            ">=" => :GREATEROREQUAL,
+            "->" => :ARROW,
+            "ROUTING" => :ROUTING,
+            "TCP_STATE" => :TCP_STATE,
+            "user"    => :USER
+        }
+
+  end
+
+  def parse(ss)
+      @ss = ss
+      yyparse self, :scan
+  end
+
+  def safe_parse(ss)
+      begin
+          return self.parse(ss)
+      rescue => e
+          return e
+      end
+  end
+
+  def on_error(tok, val, vals)
+      STDERR.puts "Parse error at \"#{val}\" on line: #{@ss}" if @yydebug
+      raise ParseError, "Parse error at \"#{val}\" on line: #{@ss}\""
+  end
+
+  # def scan(*args)
+  #     scam(*args) do |tok|
+  #
+  #       pp "HELLO FROM #{tok}"
+  #       yield tok
+  #   end
+  # end
+
+  class Tablename < String; end
+  class IPTable < Array; end
+  class PortTable < Array; end
+
+  def scan(data="", comments=false)
+      rpf = RalexPf.new(@yydebug,@keywords)
+
+      rpf.tokenize(@ss) { |t, v| 
+          # we skip comments
+          yield t, v unless t.nil? or t == :COMMENT
+      }
+      yield false, '$'
+  end
+
+---- footer
+
+if __FILE__ == $0
+    p = PfParser.new true
+
+    line =<<EOM
+pass in proto tcp from <controldser2k3_srcs> to<controldser2k3_srv> port 7777 tag ROUTED flags S/FSRPAU keep state
+EOM
+    # WALL OF SHAME:
+    #
+    # table <meep > const { foo bar }
+    # pass in reply-to { em3 ,10.100.200.0 } proto udp from <foo> to <bar> port = 161 tag ROUTED keep state
+    # table <foo.bar> const { qux baz }
+    # block in on em0 proto 112 from em0:network to 224.0.0.18
+    # table <internal_networks> const { 10.0.0/24 }
+    # rdr on em0 proto tcp from <foo> to em0 port 8080 -> <bar> port www\n
+    # pass out proto tcp from em1 to <dsts> port = 22 flags S/FSRPAU keep state (no-sync)
+    # table <meep> const { foo.victim.com bar.victim.com }
+
+    if 0
+        s = p.tokenize(line.chop) do |code, tok|
+            print "#{ code.inspect } #{ tok.inspect } "
+        end
+    end
+
+    pp p.parse(line.chop)
+
+    print '\npf> '
+
+    while((str = ARGF.readline().chop) and not str.empty?)
+        begin
+            s = p.parse(str)
+            puts s.inspect
+        rescue
+            pp $!
+            traceback
+        end
+
+        print 'pf> '
+    end
+end

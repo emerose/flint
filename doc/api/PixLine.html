@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+
+	<title>Class: PixLine</title>
+
+	<link rel="stylesheet" href="./rdoc.css" type="text/css" media="screen" />
+
+	<script src="./js/jquery.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="./js/thickbox-compressed.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="./js/quicksearch.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="./js/darkfish.js" type="text/javascript"
+		charset="utf-8"></script>
+
+</head>
+<body class="class">
+
+	<div id="metadata">
+		<div id="file-metadata">
+			<div id="file-list-section" class="section">
+				<h3 class="section-header">In Files</h3>
+				<div class="section-body">
+					<ul>
+					
+						<li><a href="./lib/cisco/pix_line_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+							class="thickbox" title="lib/cisco/pix_line.rb">lib/cisco/pix_line.rb</a></li>
+					
+					</ul>
+				</div>
+			</div>
+
+			
+		</div>
+
+		<div id="class-metadata">
+
+			<!-- Parent Class -->
+			
+			<div id="parent-class-section" class="section">
+				<h3 class="section-header">Parent</h3>
+				
+				<p class="link">Line</p>
+				
+			</div>
+			
+
+			<!-- Namespace Contents -->
+			
+
+			<!-- Method Quickref -->
+			
+			<div id="method-list-section" class="section">
+				<h3 class="section-header">Methods</h3>
+				<ul class="link-list">
+					
+					<li><a href="#M000011">::factory</a></li>
+					
+					<li><a href="#M000012">::new</a></li>
+					
+					<li><a href="#M000013">#find_s_in_t</a></li>
+					
+				</ul>
+			</div>
+			
+
+			<!-- Included Modules -->
+			
+		</div>
+
+		<div id="project-metadata">
+			
+			
+			<div id="fileindex-section" class="section project-section">
+				<h3 class="section-header">Files</h3>
+				<ul>
+				
+					<li class="file"><a href="./LICENSE_txt.html">LICENSE.txt</a></li>
+				
+					<li class="file"><a href="./README.html">README</a></li>
+				
+				</ul>
+			</div>
+			
+
+			<div id="classindex-section" class="section project-section">
+				<h3 class="section-header">Class Index
+					<span class="search-toggle"><img src="./images/find.png"
+						height="16" width="16" alt="[+]"
+						title="show/hide quicksearch" /></span></h3>
+				<form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+				<fieldset>
+					<legend>Quicksearch</legend>
+					<input type="text" name="quicksearch" value=""
+						class="quicksearch-field" />
+				</fieldset>
+				</form>
+
+				<ul class="link-list">
+				
+					<li><a href="./Flint.html">Flint</a></li>
+				
+					<li><a href="./Flint/AnyNetSpec.html">Flint::AnyNetSpec</a></li>
+				
+					<li><a href="./Flint/CidrSet.html">Flint::CidrSet</a></li>
+				
+					<li><a href="./Flint/CiscoFirewall.html">Flint::CiscoFirewall</a></li>
+				
+					<li><a href="./Flint/CiscoLine.html">Flint::CiscoLine</a></li>
+				
+					<li><a href="./Flint/CiscoLineParse.html">Flint::CiscoLineParse</a></li>
+				
+					<li><a href="./Flint/CiscoParse.html">Flint::CiscoParse</a></li>
+				
+					<li><a href="./Flint/EmptyNetSpec.html">Flint::EmptyNetSpec</a></li>
+				
+					<li><a href="./Flint/Firewall.html">Flint::Firewall</a></li>
+				
+					<li><a href="./Flint/Interface.html">Flint::Interface</a></li>
+				
+					<li><a href="./Flint/Line.html">Flint::Line</a></li>
+				
+					<li><a href="./Flint/NetBlockSpec.html">Flint::NetBlockSpec</a></li>
+				
+					<li><a href="./Flint/NetSetSpec.html">Flint::NetSetSpec</a></li>
+				
+					<li><a href="./Flint/NetSpec.html">Flint::NetSpec</a></li>
+				
+					<li><a href="./Flint/NetTableSpec.html">Flint::NetTableSpec</a></li>
+				
+					<li><a href="./Flint/Resolver.html">Flint::Resolver</a></li>
+				
+					<li><a href="./Flint/ResolverCache.html">Flint::ResolverCache</a></li>
+				
+					<li><a href="./Flint/Rule.html">Flint::Rule</a></li>
+				
+					<li><a href="./Flint/RuleChain.html">Flint::RuleChain</a></li>
+				
+					<li><a href="./Flint/RuleChainCache.html">Flint::RuleChainCache</a></li>
+				
+					<li><a href="./Flint/ServiceResolver.html">Flint::ServiceResolver</a></li>
+				
+					<li><a href="./Flint/Table.html">Flint::Table</a></li>
+				
+					<li><a href="./Flint/Test.html">Flint::Test</a></li>
+				
+					<li><a href="./Flint/TestGroup.html">Flint::TestGroup</a></li>
+				
+					<li><a href="./Flint/TestGroupLoader.html">Flint::TestGroupLoader</a></li>
+				
+					<li><a href="./Flint/TestNotApplicable.html">Flint::TestNotApplicable</a></li>
+				
+					<li><a href="./Flint/TestResult.html">Flint::TestResult</a></li>
+				
+					<li><a href="./Flint/TestRunner.html">Flint::TestRunner</a></li>
+				
+					<li><a href="./Ohm.html">Ohm</a></li>
+				
+					<li><a href="./Ohm/Attributes.html">Ohm::Attributes</a></li>
+				
+					<li><a href="./Ohm/Attributes/Collection.html">Ohm::Attributes::Collection</a></li>
+				
+					<li><a href="./Ohm/Model.html">Ohm::Model</a></li>
+				
+					<li><a href="./Cisco.html">Cisco</a></li>
+				
+					<li><a href="./Cisco/PixParser.html">Cisco::PixParser</a></li>
+				
+					<li><a href="./Cisco/RalexPix.html">Cisco::RalexPix</a></li>
+				
+					<li><a href="./Array.html">Array</a></li>
+				
+					<li><a href="./AsaFirewall.html">AsaFirewall</a></li>
+				
+					<li><a href="./CiscoConfigurationSupport.html">CiscoConfigurationSupport</a></li>
+				
+					<li><a href="./CiscoTagger.html">CiscoTagger</a></li>
+				
+					<li><a href="./GenericPixLine.html">GenericPixLine</a></li>
+				
+					<li><a href="./IPAddr.html">IPAddr</a></li>
+				
+					<li><a href="./IosFirewall.html">IosFirewall</a></li>
+				
+					<li><a href="./PfFirewall.html">PfFirewall</a></li>
+				
+					<li><a href="./PfLine.html">PfLine</a></li>
+				
+					<li><a href="./PfLineRenderer.html">PfLineRenderer</a></li>
+				
+					<li><a href="./PixCommentLine.html">PixCommentLine</a></li>
+				
+					<li><a href="./PixFirewall.html">PixFirewall</a></li>
+				
+					<li><a href="./PixLine.html">PixLine</a></li>
+				
+					<li><a href="./Symbol.html">Symbol</a></li>
+				
+				</ul>
+				<div id="no-class-search-results" style="display: none;">No matching classes.</div>
+			</div>
+
+			
+		</div>
+	</div>
+
+	<div id="documentation">
+		<h1 class="class">PixLine</h1>
+
+		<div id="description">
+			<p>
+Parse and analyze Pix rule lines.
+</p>
+
+		</div>
+
+		<!-- Constants -->
+		
+
+		<!-- Attributes -->
+		
+		<div id="attribute-method-details" class="method-section section">
+			<h3 class="section-header">Attributes</h3>
+
+			
+			<div id="tuples-attribute-method" class="method-detail">
+				<a name="tuples"></a>
+				
+				<div class="method-heading attribute-method-heading">
+					<span class="method-name">tuples</span><span
+						class="attribute-access-type">[R]</span>
+				</div>
+
+				<div class="method-description">
+				
+				<p class="missing-docs">(Not documented)</p>
+				
+				</div>
+			</div>
+			
+		</div>
+		
+
+		<!-- Methods -->
+		
+		<div id="public-class-method-details" class="method-section section">
+			<h3 class="section-header">Public Class Methods</h3>
+
+		
+			<div id="factory-method" class="method-detail ">
+				<a name="M000011"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">factory</span><span
+						class="method-args">(line, parser_opts={ })</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p class="missing-docs">(Not documented)</p>
+					
+
+					
+					<div class="method-source-code"
+						id="factory-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/cisco/pix_line.rb, line 11</span>
+11:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">factory</span>(<span class="ruby-identifier">line</span>, <span class="ruby-identifier">parser_opts</span>={ })
+12: 
+13:         <span class="ruby-comment cmt"># line -&gt; 1 line of a pf ruleset</span>
+14:         <span class="ruby-comment cmt">#</span>
+15:         <span class="ruby-comment cmt"># PixParser::safe_parse(line) -&gt; list of terms from the line (tuples)</span>
+16:         <span class="ruby-comment cmt">#</span>
+17:         <span class="ruby-comment cmt"># or not, if the line didn't parse.</span>
+18: 
+19:         <span class="ruby-keyword kw">if</span>((<span class="ruby-identifier">tuples</span> = <span class="ruby-constant">CiscoTagger</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">parser_opts</span>).<span class="ruby-identifier">safe_parse</span>(<span class="ruby-identifier">line</span>)) <span class="ruby-keyword kw">and</span>
+20:            <span class="ruby-identifier">tuples</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">Array</span>)
+21:             <span class="ruby-constant">GenericPixLine</span>.<span class="ruby-identifier">new</span> <span class="ruby-identifier">line</span>, <span class="ruby-identifier">tuples</span>
+22:         <span class="ruby-keyword kw">else</span>
+23:             <span class="ruby-comment cmt"># this line didn't parse.</span>
+24:             <span class="ruby-comment cmt"># special case comments since lexer ignores them</span>
+25:             <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">line</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">line</span>[<span class="ruby-value">0</span>,<span class="ruby-value">1</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;!&quot;</span>
+26:                 <span class="ruby-constant">PixCommentLine</span>.<span class="ruby-identifier">new</span> <span class="ruby-identifier">line</span>
+27:             <span class="ruby-keyword kw">else</span>
+28:                 <span class="ruby-constant">UnknownLine</span>.<span class="ruby-identifier">new</span> <span class="ruby-identifier">line</span>, <span class="ruby-identifier">tuples</span>
+29:             <span class="ruby-keyword kw">end</span>
+30:         <span class="ruby-keyword kw">end</span>
+31:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="new-method" class="method-detail ">
+				<a name="M000012"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">new</span><span
+						class="method-args">(source, tuples)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p class="missing-docs">(Not documented)</p>
+					
+
+					
+					<div class="method-source-code"
+						id="new-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/cisco/pix_line.rb, line 35</span>
+ 35:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">source</span>, <span class="ruby-identifier">tuples</span>)
+ 36:         <span class="ruby-keyword kw">super</span>()
+ 37:         <span class="ruby-ivar">@source</span> = <span class="ruby-identifier">source</span>
+ 38:         <span class="ruby-ivar">@tuples</span> = <span class="ruby-identifier">tuples</span>
+ 39: 
+ 40:         
+ 41:         <span class="ruby-comment cmt">## These multi methods handle rendering of tokens to HTML</span>
+ 42:         <span class="ruby-comment cmt">## subclasses can override these</span>
+ 43:         <span class="ruby-identifier">multi</span>(<span class="ruby-identifier">:render_html</span>, <span class="ruby-constant">IPAddr</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>
+ 44:             <span class="ruby-identifier">cssclass</span> = <span class="ruby-value str">&quot;ipaddr&quot;</span>
+ 45:             <span class="ruby-keyword kw">if</span> <span class="ruby-constant">IPAddr</span><span class="ruby-operator">::</span><span class="ruby-identifier">mask2mlen</span>(<span class="ruby-identifier">s</span>.<span class="ruby-identifier">mask_addr</span>) <span class="ruby-operator">==</span> <span class="ruby-value">32</span>
+ 46:                 <span class="ruby-node">%[&lt;a class=&quot;#{ cssclass }&quot; href=&quot;/search/rules?q=#{ ERB::Util.h s }&quot;&gt;#{ s.to_s }&lt;/a&gt;]</span>
+ 47:             <span class="ruby-keyword kw">else</span>
+ 48:                 <span class="ruby-node">%[&lt;a class=&quot;#{ cssclass }&quot; href=&quot;/search/rules?q=#{ ERB::Util.h s }&quot;&gt;#{ s.to_s } #{ IPAddr.inet_addr(s.mask_addr).to_s }&lt;/a&gt;]</span>
+ 49:             <span class="ruby-keyword kw">end</span>
+ 50: 
+ 51:         }
+ 52: 
+ 53:         <span class="ruby-identifier">multi</span>(<span class="ruby-identifier">:render_html</span>, <span class="ruby-constant">Hostname</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>
+ 54:             <span class="ruby-identifier">cssclass</span> = <span class="ruby-value str">&quot;hostname&quot;</span>
+ 55:             <span class="ruby-node">%[&lt;a class=&quot;#{ cssclass }&quot; href=&quot;/search/rules?q=#{ ERB::Util.h s }&quot;&gt;#{ s }&lt;/a&gt;]</span>
+ 56:         }
+ 57:         
+ 58:         <span class="ruby-identifier">multi</span>(<span class="ruby-identifier">:render_html</span>, <span class="ruby-constant">PortNumber</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>
+ 59:             <span class="ruby-comment cmt">## XXX this needs to come from context</span>
+ 60:             <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">find_s_in_t</span>(<span class="ruby-value str">&quot;tcp&quot;</span>, <span class="ruby-ivar">@tuples</span>)
+ 61:                 <span class="ruby-identifier">proto</span> = <span class="ruby-value str">&quot;tcp-port&quot;</span>
+ 62:             <span class="ruby-keyword kw">else</span>
+ 63:                 <span class="ruby-identifier">proto</span> = <span class="ruby-value str">&quot;udp-port&quot;</span>
+ 64:             <span class="ruby-keyword kw">end</span>
+ 65:             
+ 66:             <span class="ruby-identifier">cssclass</span> = <span class="ruby-value str">&quot;protocols&quot;</span>
+ 67:             
+ 68:             <span class="ruby-node">%[&lt;a href=&quot;/wiki/protocol_by_number/#{ ERB::Util.h s.to_i }?proto=#{ proto }&quot; class=&quot;#{ cssclass }&quot;&gt;#{ ERB::Util.h s.to_i }&lt;/a&gt; ]</span>
+ 69:         }
+ 70:     
+ 71:         <span class="ruby-identifier">multi</span>(<span class="ruby-identifier">:render_html</span>, <span class="ruby-constant">PortName</span>) {  <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>
+ 72:             <span class="ruby-comment cmt">## XXX this needs to come from context</span>
+ 73:             <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">find_s_in_t</span>(<span class="ruby-value str">&quot;tcp&quot;</span>, <span class="ruby-ivar">@tuples</span>)
+ 74:                 <span class="ruby-identifier">proto</span> = <span class="ruby-value str">&quot;tcp-port&quot;</span>
+ 75:             <span class="ruby-keyword kw">else</span>
+ 76:                 <span class="ruby-identifier">proto</span> = <span class="ruby-value str">&quot;udp-port&quot;</span>
+ 77:             <span class="ruby-keyword kw">end</span>
+ 78:             <span class="ruby-identifier">cssclass</span> = <span class="ruby-value str">&quot;protocols&quot;</span>
+ 79: 
+ 80:             <span class="ruby-node">%[&lt;a href=&quot;/wiki/protocol_by_name/#{ ERB::Util.h s.name }?proto=#{ proto }&quot; class=&quot;#{ cssclass }&quot;&gt;#{ ERB::Util.h s.name }&lt;/a&gt; ]</span>
+ 81:         }
+ 82:     
+ 83:         <span class="ruby-identifier">multi</span>(<span class="ruby-identifier">:render_html</span>, <span class="ruby-constant">PortRange</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>
+ 84:             <span class="ruby-comment cmt">## XXX this needs to come from context</span>
+ 85:             <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">find_s_in_t</span>(<span class="ruby-value str">&quot;tcp&quot;</span>, <span class="ruby-ivar">@tuples</span>)
+ 86:                 <span class="ruby-identifier">proto</span> = <span class="ruby-value str">&quot;tcp-port&quot;</span>
+ 87:             <span class="ruby-keyword kw">else</span>
+ 88:                 <span class="ruby-identifier">proto</span> = <span class="ruby-value str">&quot;udp-port&quot;</span>
+ 89:             <span class="ruby-keyword kw">end</span>
+ 90:             <span class="ruby-identifier">cssclass</span> = <span class="ruby-value str">&quot;protocols&quot;</span>
+ 91:             
+ 92:             <span class="ruby-identifier">start_html</span> = <span class="ruby-constant">ERB</span><span class="ruby-operator">::</span><span class="ruby-constant">Util</span>.<span class="ruby-identifier">h</span>(<span class="ruby-identifier">s</span>.<span class="ruby-identifier">start</span>.<span class="ruby-identifier">to_s</span>)
+ 93:             <span class="ruby-identifier">stop_html</span> = <span class="ruby-constant">ERB</span><span class="ruby-operator">::</span><span class="ruby-constant">Util</span>.<span class="ruby-identifier">h</span>(<span class="ruby-identifier">s</span>.<span class="ruby-identifier">start</span>.<span class="ruby-identifier">to_s</span>)
+ 94: 
+ 95:             <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">s</span>.<span class="ruby-identifier">start</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">Fixnum</span>)
+ 96:                 <span class="ruby-identifier">start_html</span> = <span class="ruby-node">%[&lt;a href=&quot;/wiki/protocol_by_number/#{ ERB::Util.h s.start.to_i }?proto=#{ proto }&quot; class=&quot;#{ cssclass }&quot;&gt;#{ ERB::Util.h s.start.to_i }&lt;/a&gt; ]</span>
+ 97:             <span class="ruby-keyword kw">elsif</span> (<span class="ruby-identifier">s</span>.<span class="ruby-identifier">start</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">String</span>)
+ 98:                 <span class="ruby-identifier">start_html</span> = <span class="ruby-node">%[&lt;a href=&quot;/wiki/protocol_by_name/#{ ERB::Util.h s.start }?proto=#{ proto }&quot; class=&quot;#{ cssclass }&quot;&gt;#{ ERB::Util.h s.start }&lt;/a&gt; ]</span>
+ 99:             <span class="ruby-keyword kw">end</span>
+100:             
+101:             <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">s</span>.<span class="ruby-identifier">stop</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">Fixnum</span>)
+102:                 <span class="ruby-identifier">stop_html</span> = <span class="ruby-node">%[&lt;a href=&quot;/wiki/protocol_by_number/#{ ERB::Util.h s.stop.to_i }?proto=#{ proto }&quot; class=&quot;#{ cssclass }&quot;&gt;#{ ERB::Util.h s.stop.to_i }&lt;/a&gt; ]</span>
+103:             <span class="ruby-keyword kw">elsif</span> (<span class="ruby-identifier">s</span>.<span class="ruby-identifier">stop</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">String</span>)
+104:                 <span class="ruby-identifier">stop_html</span> = <span class="ruby-node">%[&lt;a href=&quot;/wiki/protocol_by_name/#{ ERB::Util.h s.stop }?proto=#{ proto }&quot; class=&quot;#{ cssclass }&quot;&gt;#{ ERB::Util.h s.stop }&lt;/a&gt; ]</span>
+105:             <span class="ruby-keyword kw">end</span>
+106:             <span class="ruby-node">&quot;#{start_html} #{stop_html}&quot;</span>
+107:         }
+108: 
+109:         <span class="ruby-identifier">multi</span>(<span class="ruby-identifier">:render_html</span>, <span class="ruby-constant">Keyword</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>
+110:             <span class="ruby-node">%[&lt;span class=&quot;keyword #{ ERB::Util.h s.upcase }&quot;&gt;#{ ERB::Util.h s }&lt;/span&gt;]</span>
+111:         }        
+112: 
+113:         <span class="ruby-comment cmt"># this is the default case, so it must be last</span>
+114:         <span class="ruby-identifier">multi</span>(<span class="ruby-identifier">:render_html</span>, <span class="ruby-constant">Integer</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>
+115:             <span class="ruby-node">%[&lt;span class=&quot;number&quot;&gt;#{ ERB::Util.h s }&lt;/span&gt;]</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">s</span>
+116:         }
+117: 
+118:         <span class="ruby-identifier">multi</span>(<span class="ruby-identifier">:render_html</span>, <span class="ruby-constant">Object</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>
+119:             <span class="ruby-node">%[&lt;span class=&quot;object&quot;&gt;#{ ERB::Util.h s }&lt;/span&gt;]</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">s</span>
+120:         }
+121: 
+122:         
+123:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+		</div>
+	
+		<div id="protected-instance-method-details" class="method-section section">
+			<h3 class="section-header">Protected Instance Methods</h3>
+
+		
+			<div id="find-s-in-t-method" class="method-detail ">
+				<a name="M000013"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">find_s_in_t</span><span
+						class="method-args">(s, t)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p class="missing-docs">(Not documented)</p>
+					
+
+					
+					<div class="method-source-code"
+						id="find-s-in-t-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/cisco/pix_line.rb, line 127</span>
+127:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find_s_in_t</span>(<span class="ruby-identifier">s</span>, <span class="ruby-identifier">t</span>)
+128:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">t</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">Array</span>
+129:         <span class="ruby-identifier">t</span>.<span class="ruby-identifier">detect</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">find_s_in_t</span>(<span class="ruby-identifier">s</span>, <span class="ruby-identifier">i</span>)} <span class="ruby-operator">!=</span> <span class="ruby-keyword kw">nil</span>
+130:       <span class="ruby-keyword kw">else</span>
+131:         <span class="ruby-identifier">s</span><span class="ruby-operator">==</span><span class="ruby-identifier">t</span>
+132:       <span class="ruby-keyword kw">end</span>
+133:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+		</div>
+	
+
+	</div>
+
+
+	<div id="rdoc-debugging-section-dump" class="debugging-section">
+	
+		<p>Disabled; run with --debug to generate this.</p>
+	
+	</div>
+
+	<div id="validator-badges">
+		<p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+		<p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+			Rdoc Generator</a> 1.1.6</small>.</p>
+	</div>
+
+</body>
+</html>
+

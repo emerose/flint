@@ -1,0 +1,130 @@
+title "Device Security"
+code :device
+description "Policies related to access to the firewall device and its management."
+
+
+check :external_ssh, "Cannot ssh into device from external" do
+  firewall.lines.each { |l|
+    if l.ast and l.ast[0] == :ssh
+      if firewall.external?(l.ast.to_hash[:interface])
+        fail(l.number)
+      end
+    end
+  }            
+end
+
+
+check :external_telnet, "Cannot telnet into device from external" do
+  firewall.lines.each { |l|
+    if l.ast and l.ast[0] == :telnet
+      if firewall.external?(l.ast.to_hash[:interface])
+        fail(l.number)
+      end
+    end
+  }            
+end
+
+
+check :external_http, "Cannot access device via http/https from external" do
+  firewall.lines.each { |l|
+    if l.ast and l.ast[0] == :http
+      if firewall.external?(l.ast.to_hash[:interface])
+        fail(l.number)
+      end
+    end
+  }            
+end
+
+check :external_snmp, "Cannot allow snmp access to device from external" do
+  firewall.lines.each { |l|
+    if l.ast and l.ast[0] == :snmp_server_host
+      if firewall.external?(l.ast.to_hash[:interface])
+        fail(l.number)
+      end
+    end
+  }            
+
+end
+
+# dmz checks
+check :dmz_ssh, "Cannot ssh into device from dmz" do
+  firewall.lines.each { |l|
+    if l.ast and l.ast[0] == :ssh
+      if firewall.dmz?(l.ast.to_hash[:interface])
+        fail(l.number)
+      end
+    end
+  }            
+end
+
+check :dmz_telnet, "Cannot telnet into device from dmz" do
+  firewall.lines.each { |l|
+    if l.ast and l.ast[0] == :telnet
+      if firewall.dmz?(l.ast.to_hash[:interface])
+        fail(l.number)
+      end
+    end
+  }            
+end
+
+
+check :dmz_http, "Cannot access device via http/https from dmz" do
+  firewall.lines.each { |l|
+    if l.ast and l.ast[0] == :http
+      if firewall.dmz?(l.ast.to_hash[:interface])
+        fail(l.number)
+      end
+    end
+  }            
+end
+
+check :dmz_snmp, "Cannot allow snmp access to device from dmz" do
+  firewall.lines.each { |l|
+    if l.ast and l.ast[0] == :snmp_server_host
+      if firewall.dmz?(l.ast.to_hash[:interface])
+        fail(l.number)
+      end
+    end
+  }            
+end
+
+check :no_telnet, "Do not allow telnet access to device." do
+  describe "Telnet sends password in the clear, and does not encrypt data.  Use ssh instead."
+  firewall.lines.each { |l|
+    if l.ast and l.ast[0] == :telnet
+      fail(l.number)
+    end
+  }
+end
+
+
+interface_check :device_external_icmp, "Firewall should not respond to ICMP echo on external interfaces" do
+
+  interface_types :external
+
+  default_permit = true
+  effected_interface(interface)
+
+  set_title("Firewall should not respond to ICMP echo-reply on #{interface.name} interface")
+
+  firewall.lines.each do |l|
+    if ( l.ast and l.ast[0] == :icmp and
+         lh = l.ast.to_hash and
+         lh[:interface] == interface.name )
+      if lh[:policy] == "permit"
+        default_permit = false
+        if ["echo-reply", "0", 0].member?(lh[:icmp_type])
+          explain("A rule allows ICMP echo-reply on this external interface")
+          fail(l.number)
+        end
+      elsif lh[:policy] == "deny"
+        default_permit = false
+      end
+    end
+  end
+  
+  if default_permit
+    explain("No icmp command is present for this external interface.  By default, the device will accept all ICMP messages.  If any icmp command is applied to a given interface, it will default to denying ICMP messages.")
+    fail()
+  end
+end

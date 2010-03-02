@@ -1,0 +1,46 @@
+#!/usr/bin/env ruby
+
+flintpath = File.expand_path(File.dirname(__FILE__) + "/../lib")
+$LOAD_PATH.unshift flintpath
+require 'rubygems'
+require 'flint'
+
+
+# Nuke everything that is already there!
+
+if begin; Flint::ServiceResolver.lookup_service("www").empty?; rescue; true; end
+   sfile = FLINT_ROOT + "/lib/flint/services.txt"
+   puts "Loading services from #{sfile}"
+   Flint::ServiceResolver.init_from_file(sfile)
+end
+
+if Flint::ProtocolBlurb.all.empty?
+  include_pattern = /\(\[(.*?):\s*(.*?)\]\)/
+  puts "Loading Protocol blurbs"
+  blob = []
+  data = YAML.load(File.read(FLINT_ROOT + "/lib/flint/protocols.yml"))
+  data.each do |k,v|
+    opts = v.gsub("-","_").scan(include_pattern)
+    opts << ["name", k.downcase]
+    desc = v.split("([")[0].gsub(/\n{1,}/," ")
+    opts << ["description", desc]
+    ret = {}
+    opts.each do |x|
+      if ret.has_key? x[0]
+        ret[x[0]] << ",#{x[1]}"
+      else
+        ret[x[0]] = x[1]
+      end
+    end
+    blob << ret
+  end
+  blob.each do |b|
+    pb = Flint::ProtocolBlurb.create :name => b["name"]
+    pb.save
+    pb.update b
+  end
+end
+
+
+
+

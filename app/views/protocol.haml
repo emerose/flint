@@ -1,0 +1,32 @@
+#nav.protocol
+#overbar
+  .container
+    .span-21
+      %h3
+        Protocol Details
+
+.container
+  #subheader.span-24.last
+    &nbsp;
+    - if @protocols.empty?
+      .span-24.padded
+        No protocols an traverse this firewall from the outside or dmz.
+    - else
+      .span-24.fake_table_header.last
+        .span-1
+          &nbsp;
+        .span-6
+          &nbsp;
+          %a{:href => "?sort_by=name"}
+            Name
+        .span-6.realm
+          &nbsp;
+          From Realms
+        .span-6.realm
+          &nbsp;
+          To Realms
+        .span-4.last.risk
+          %a{:href => "?sort_by=risk"}
+            Risk
+      - @protocols.each do |prot|
+        =haml :protocol_map, :layout => false, :locals => {:protocol_map => prot}

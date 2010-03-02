@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+
+	<title>Class: PfFirewall</title>
+
+	<link rel="stylesheet" href="./rdoc.css" type="text/css" media="screen" />
+
+	<script src="./js/jquery.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="./js/thickbox-compressed.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="./js/quicksearch.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="./js/darkfish.js" type="text/javascript"
+		charset="utf-8"></script>
+
+</head>
+<body class="class">
+
+	<div id="metadata">
+		<div id="file-metadata">
+			<div id="file-list-section" class="section">
+				<h3 class="section-header">In Files</h3>
+				<div class="section-body">
+					<ul>
+					
+						<li><a href="./lib/pf/pf_firewall_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+							class="thickbox" title="lib/pf/pf_firewall.rb">lib/pf/pf_firewall.rb</a></li>
+					
+					</ul>
+				</div>
+			</div>
+
+			
+		</div>
+
+		<div id="class-metadata">
+
+			<!-- Parent Class -->
+			
+			<div id="parent-class-section" class="section">
+				<h3 class="section-header">Parent</h3>
+				
+				<p class="link">Firewall</p>
+				
+			</div>
+			
+
+			<!-- Namespace Contents -->
+			
+
+			<!-- Method Quickref -->
+			
+			<div id="method-list-section" class="section">
+				<h3 class="section-header">Methods</h3>
+				<ul class="link-list">
+					
+					<li><a href="#M000201">#normalize_rules</a></li>
+					
+					<li><a href="#M000192">#parser</a></li>
+					
+					<li><a href="#M000193">#rule_term_list</a></li>
+					
+				</ul>
+			</div>
+			
+
+			<!-- Included Modules -->
+			
+			<div id="includes-section" class="section">
+				<h3 class="section-header">Included Modules</h3>
+				<ul class="link-list">
+				
+				
+					<li><span class="include">ScriptedFirewall</span></li>
+				
+				
+				</ul>
+			</div>
+			
+		</div>
+
+		<div id="project-metadata">
+			
+			
+			<div id="fileindex-section" class="section project-section">
+				<h3 class="section-header">Files</h3>
+				<ul>
+				
+					<li class="file"><a href="./LICENSE_txt.html">LICENSE.txt</a></li>
+				
+					<li class="file"><a href="./README.html">README</a></li>
+				
+				</ul>
+			</div>
+			
+
+			<div id="classindex-section" class="section project-section">
+				<h3 class="section-header">Class Index
+					<span class="search-toggle"><img src="./images/find.png"
+						height="16" width="16" alt="[+]"
+						title="show/hide quicksearch" /></span></h3>
+				<form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+				<fieldset>
+					<legend>Quicksearch</legend>
+					<input type="text" name="quicksearch" value=""
+						class="quicksearch-field" />
+				</fieldset>
+				</form>
+
+				<ul class="link-list">
+				
+					<li><a href="./Flint.html">Flint</a></li>
+				
+					<li><a href="./Flint/AnyNetSpec.html">Flint::AnyNetSpec</a></li>
+				
+					<li><a href="./Flint/CidrSet.html">Flint::CidrSet</a></li>
+				
+					<li><a href="./Flint/CiscoFirewall.html">Flint::CiscoFirewall</a></li>
+				
+					<li><a href="./Flint/CiscoLine.html">Flint::CiscoLine</a></li>
+				
+					<li><a href="./Flint/CiscoLineParse.html">Flint::CiscoLineParse</a></li>
+				
+					<li><a href="./Flint/CiscoParse.html">Flint::CiscoParse</a></li>
+				
+					<li><a href="./Flint/EmptyNetSpec.html">Flint::EmptyNetSpec</a></li>
+				
+					<li><a href="./Flint/Firewall.html">Flint::Firewall</a></li>
+				
+					<li><a href="./Flint/Interface.html">Flint::Interface</a></li>
+				
+					<li><a href="./Flint/Line.html">Flint::Line</a></li>
+				
+					<li><a href="./Flint/NetBlockSpec.html">Flint::NetBlockSpec</a></li>
+				
+					<li><a href="./Flint/NetSetSpec.html">Flint::NetSetSpec</a></li>
+				
+					<li><a href="./Flint/NetSpec.html">Flint::NetSpec</a></li>
+				
+					<li><a href="./Flint/NetTableSpec.html">Flint::NetTableSpec</a></li>
+				
+					<li><a href="./Flint/Resolver.html">Flint::Resolver</a></li>
+				
+					<li><a href="./Flint/ResolverCache.html">Flint::ResolverCache</a></li>
+				
+					<li><a href="./Flint/Rule.html">Flint::Rule</a></li>
+				
+					<li><a href="./Flint/RuleChain.html">Flint::RuleChain</a></li>
+				
+					<li><a href="./Flint/RuleChainCache.html">Flint::RuleChainCache</a></li>
+				
+					<li><a href="./Flint/ServiceResolver.html">Flint::ServiceResolver</a></li>
+				
+					<li><a href="./Flint/Table.html">Flint::Table</a></li>
+				
+					<li><a href="./Flint/Test.html">Flint::Test</a></li>
+				
+					<li><a href="./Flint/TestGroup.html">Flint::TestGroup</a></li>
+				
+					<li><a href="./Flint/TestGroupLoader.html">Flint::TestGroupLoader</a></li>
+				
+					<li><a href="./Flint/TestNotApplicable.html">Flint::TestNotApplicable</a></li>
+				
+					<li><a href="./Flint/TestResult.html">Flint::TestResult</a></li>
+				
+					<li><a href="./Flint/TestRunner.html">Flint::TestRunner</a></li>
+				
+					<li><a href="./Ohm.html">Ohm</a></li>
+				
+					<li><a href="./Ohm/Attributes.html">Ohm::Attributes</a></li>
+				
+					<li><a href="./Ohm/Attributes/Collection.html">Ohm::Attributes::Collection</a></li>
+				
+					<li><a href="./Ohm/Model.html">Ohm::Model</a></li>
+				
+					<li><a href="./Cisco.html">Cisco</a></li>
+				
+					<li><a href="./Cisco/PixParser.html">Cisco::PixParser</a></li>
+				
+					<li><a href="./Cisco/RalexPix.html">Cisco::RalexPix</a></li>
+				
+					<li><a href="./Array.html">Array</a></li>
+				
+					<li><a href="./AsaFirewall.html">AsaFirewall</a></li>
+				
+					<li><a href="./CiscoConfigurationSupport.html">CiscoConfigurationSupport</a></li>
+				
+					<li><a href="./CiscoTagger.html">CiscoTagger</a></li>
+				
+					<li><a href="./GenericPixLine.html">GenericPixLine</a></li>
+				
+					<li><a href="./IPAddr.html">IPAddr</a></li>
+				
+					<li><a href="./IosFirewall.html">IosFirewall</a></li>
+				
+					<li><a href="./PfFirewall.html">PfFirewall</a></li>
+				
+					<li><a href="./PfLine.html">PfLine</a></li>
+				
+					<li><a href="./PfLineRenderer.html">PfLineRenderer</a></li>
+				
+					<li><a href="./PixCommentLine.html">PixCommentLine</a></li>
+				
+					<li><a href="./PixFirewall.html">PixFirewall</a></li>
+				
+					<li><a href="./PixLine.html">PixLine</a></li>
+				
+					<li><a href="./Symbol.html">Symbol</a></li>
+				
+				</ul>
+				<div id="no-class-search-results" style="display: none;">No matching classes.</div>
+			</div>
+
+			
+		</div>
+	</div>
+
+	<div id="documentation">
+		<h1 class="class">PfFirewall</h1>
+
+		<div id="description">
+			
+		</div>
+
+		<!-- Constants -->
+		
+
+		<!-- Attributes -->
+		
+
+		<!-- Methods -->
+		
+		<div id="public-instance-method-details" class="method-section section">
+			<h3 class="section-header">Public Instance Methods</h3>
+
+		
+			<div id="normalize-rules-method" class="method-detail ">
+				<a name="M000201"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">normalize_rules</span><span
+						class="method-args">(rules)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<hr size="10"></hr>
+					
+
+					
+					<div class="method-source-code"
+						id="normalize-rules-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/pf/pf_firewall.rb, line 116</span>
+116:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">normalize_rules</span>(<span class="ruby-identifier">rules</span>)
+117:         <span class="ruby-comment cmt"># convert CRLF encoding from form textarea input, to newline</span>
+118:         <span class="ruby-identifier">newrules</span> = <span class="ruby-identifier">rules</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-value str">&quot;\r\n&quot;</span>,<span class="ruby-value str">&quot;\n&quot;</span>)
+119:         
+120:         <span class="ruby-comment cmt"># if the last char is not a newline, append one</span>
+121:         <span class="ruby-comment cmt"># otherwise pfctl barfs on the last rule</span>
+122:         <span class="ruby-identifier">newrules</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;\n&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">rules</span>.<span class="ruby-identifier">slice</span>(<span class="ruby-value">-1</span>,<span class="ruby-value">1</span>) <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;\n&quot;</span>
+123: 
+124:         <span class="ruby-identifier">newrules</span>
+125:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="parser-method" class="method-detail ">
+				<a name="M000192"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">parser</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p class="missing-docs">(Not documented)</p>
+					
+
+					
+					<div class="method-source-code"
+						id="parser-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/pf/pf_firewall.rb, line 21</span>
+21:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parser</span>
+22:         <span class="ruby-constant">PfLine</span>
+23:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="rule-term-list-method" class="method-detail ">
+				<a name="M000193"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">rule_term_list</span><span
+						class="method-args">(rstr,line_offset=0)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p class="missing-docs">(Not documented)</p>
+					
+
+					
+					<div class="method-source-code"
+						id="rule-term-list-source">
+<pre>
+     <span class="ruby-comment cmt"># File lib/pf/pf_firewall.rb, line 25</span>
+ 25:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rule_term_list</span>(<span class="ruby-identifier">rstr</span>,<span class="ruby-identifier">line_offset</span>=<span class="ruby-value">0</span>)
+ 26:         <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">rstr</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">String</span>)
+ 27:             <span class="ruby-identifier">rule_list</span> = <span class="ruby-identifier">get_rules</span>(<span class="ruby-identifier">rstr</span>) 
+ 28:         <span class="ruby-keyword kw">else</span>
+ 29:             <span class="ruby-identifier">rule_list</span> = <span class="ruby-identifier">rstr</span>
+ 30:         <span class="ruby-keyword kw">end</span>
+ 31: 
+ 32:         <span class="ruby-comment cmt"># each term is of the form [type, term, line]</span>
+ 33:         <span class="ruby-identifier">linenumber</span> = <span class="ruby-identifier">line_offset</span>
+ 34:         <span class="ruby-identifier">terms</span> = []
+ 35:         <span class="ruby-identifier">current_table</span> = <span class="ruby-keyword kw">nil</span>
+ 36:         
+ 37:         (<span class="ruby-identifier">rule_list</span><span class="ruby-operator">||</span>[]).<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span>
+ 38:             <span class="ruby-identifier">linenumber</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span> 
+ 39:             <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">line</span>.<span class="ruby-identifier">respond_to?</span> <span class="ruby-identifier">:tokens</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">tokens</span>)
+ 40:                 <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">current_table</span>
+ 41:                     
+ 42:                 
+ 43:                 <span class="ruby-keyword kw">if</span>((<span class="ruby-identifier">line</span>.<span class="ruby-identifier">tokens</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">Array</span> ) <span class="ruby-operator">&amp;&amp;</span> ( <span class="ruby-identifier">line</span>.<span class="ruby-identifier">tokens</span>[<span class="ruby-value">0</span>][<span class="ruby-value">0</span>].<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">String</span> ) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">tokens</span>[<span class="ruby-value">0</span>][<span class="ruby-value">0</span>] <span class="ruby-operator">==</span><span class="ruby-value str">&quot;table&quot;</span> )
+ 44:                     <span class="ruby-identifier">tuple</span> = <span class="ruby-identifier">line</span>.<span class="ruby-identifier">tokens</span>
+ 45:                     <span class="ruby-identifier">tablename</span> = <span class="ruby-identifier">tuple</span>[<span class="ruby-value">0</span>][<span class="ruby-value">2</span>][<span class="ruby-value">0</span>]
+ 46:                     <span class="ruby-identifier">tree_select</span>(<span class="ruby-identifier">tuple</span>[<span class="ruby-value">0</span>]) { <span class="ruby-operator">|</span><span class="ruby-identifier">element</span><span class="ruby-operator">|</span>
+ 47:                         <span class="ruby-keyword kw">if</span> ( <span class="ruby-identifier">element</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">IPAddr</span> <span class="ruby-keyword kw">or</span>
+ 48:                              <span class="ruby-identifier">element</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">PortNumber</span> <span class="ruby-keyword kw">or</span>
+ 49:                              <span class="ruby-identifier">element</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">Hostname</span> )
+ 50:                             <span class="ruby-identifier">terms</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">:table</span>, [ <span class="ruby-identifier">tablename</span>, <span class="ruby-identifier">element</span>], <span class="ruby-identifier">linenumber</span>]
+ 51:                         <span class="ruby-keyword kw">end</span>
+ 52:                     }
+ 53:                 <span class="ruby-keyword kw">end</span>
+ 54: 
+ 55:                 <span class="ruby-keyword kw">else</span>
+ 56:                     
+ 57:                     
+ 58:                 <span class="ruby-keyword kw">end</span>
+ 59:                 
+ 60: 
+ 61:                     
+ 62:                     
+ 63:                 <span class="ruby-identifier">tree_select</span>(<span class="ruby-identifier">line</span>.<span class="ruby-identifier">tokens</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">tuple</span><span class="ruby-operator">|</span> 
+ 64:                     
+ 65:                     <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">tuple</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">PfTagger</span><span class="ruby-operator">::</span><span class="ruby-constant">TableDefStart</span>)
+ 66:                         <span class="ruby-identifier">current_table</span> = <span class="ruby-identifier">tuple</span>.<span class="ruby-identifier">table</span>.<span class="ruby-identifier">name</span>
+ 67:                     <span class="ruby-keyword kw">end</span>
+ 68:                     
+ 69:                     <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">tuple</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">PfTagger</span><span class="ruby-operator">::</span><span class="ruby-constant">TableDefEnd</span>)
+ 70:                         <span class="ruby-identifier">current_table</span> = <span class="ruby-keyword kw">nil</span>
+ 71:                     <span class="ruby-keyword kw">end</span>
+ 72:                     
+ 73:                     <span class="ruby-comment cmt">#</span>
+ 74:                     <span class="ruby-comment cmt"># This is where you add new types of stuff to generate search indexes for.</span>
+ 75:                     <span class="ruby-comment cmt"># Here.  This is the only place we should be doing crap with line-by-line</span>
+ 76:                     <span class="ruby-comment cmt"># tokens.</span>
+ 77:                     <span class="ruby-comment cmt">#</span>
+ 78:                     <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">tuple</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">IPAddr</span>)
+ 79:                         <span class="ruby-comment cmt"># mask address of zero means EVERYTHING</span>
+ 80:                         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">tuple</span>.<span class="ruby-identifier">mask_addr</span> <span class="ruby-operator">!=</span> <span class="ruby-value">0</span>
+ 81:                             <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">current_table</span>
+ 82:                                 <span class="ruby-identifier">terms</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">:table</span>, 
+ 83:                                           [<span class="ruby-identifier">current_table</span>, <span class="ruby-identifier">tuple</span>],
+ 84:                                           <span class="ruby-identifier">linenumber</span>]
+ 85:                                 <span class="ruby-keyword kw">end</span>
+ 86:                                 <span class="ruby-identifier">terms</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">:address</span>, <span class="ruby-identifier">tuple</span>, <span class="ruby-identifier">linenumber</span>]
+ 87:                             <span class="ruby-keyword kw">end</span>
+ 88:                     <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">tuple</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">Hostname</span>
+ 89:                         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">current_table</span>
+ 90:                             <span class="ruby-identifier">terms</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">:table</span>, 
+ 91:                                       [<span class="ruby-identifier">current_table</span>, <span class="ruby-identifier">tuple</span>],
+ 92:                                       <span class="ruby-identifier">linenumber</span>]
+ 93:                         <span class="ruby-keyword kw">end</span>
+ 94: 
+ 95:                         <span class="ruby-identifier">terms</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">:host</span>, <span class="ruby-identifier">tuple</span>, <span class="ruby-identifier">linenumber</span>]
+ 96:                     <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">tuple</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">PortNumber</span>
+ 97:                         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">current_table</span>
+ 98:                             <span class="ruby-identifier">terms</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">:table</span>, 
+ 99:                                       [<span class="ruby-identifier">current_table</span>, <span class="ruby-identifier">tuple</span>],
+100:                                       <span class="ruby-identifier">linenumber</span>]
+101:                         <span class="ruby-keyword kw">end</span>
+102:                         <span class="ruby-identifier">terms</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">:port</span>, <span class="ruby-identifier">tuple</span>, <span class="ruby-identifier">linenumber</span>]
+103:                     <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">tuple</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">PfTagger</span><span class="ruby-operator">::</span><span class="ruby-constant">PfTableRef</span>
+104:                         <span class="ruby-identifier">terms</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">tuple</span>.<span class="ruby-identifier">table_type</span>, <span class="ruby-identifier">tuple</span>.<span class="ruby-identifier">name</span>, <span class="ruby-identifier">linenumber</span>]
+105:                     <span class="ruby-keyword kw">end</span>
+106:                     
+107: 
+108:                 }
+109:                 
+110:             <span class="ruby-keyword kw">end</span>
+111:         }
+112:         <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">terms</span>
+113:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+		</div>
+	
+
+	</div>
+
+
+	<div id="rdoc-debugging-section-dump" class="debugging-section">
+	
+		<p>Disabled; run with --debug to generate this.</p>
+	
+	</div>
+
+	<div id="validator-badges">
+		<p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+		<p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+			Rdoc Generator</a> 1.1.6</small>.</p>
+	</div>
+
+</body>
+</html>
+

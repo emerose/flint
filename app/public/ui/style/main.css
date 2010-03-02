@@ -1,0 +1,232 @@
+body {
+  margin: 0;
+  background-color: #ffffff;
+  font-family: 'Tahoma';
+  color: #252626;
+  font-size: 12px;
+  font-weight: normal;
+  line-height: 18px;
+  width: auto; }
+
+a {
+  text-decoration: underline;
+  color: #1d81dd; }
+
+a:hover {
+  color: #0d4f8d;
+  cursor: pointer; }
+
+p {
+  margin-top: 5px;
+  margin-bottom: 5px; }
+
+#toggle:hover {
+  cursor: pointer; }
+
+#header {
+  background-image: url("/assets/blue_grad.png");
+  background-repeat: repeat-x;
+  width: auto; }
+
+#header h1 {
+  font-family: 'Tahoma';
+  font-size: 18px;
+  line-height: 36px;
+  color: white; }
+
+#header h2 {
+  text-transform: allcaps;
+  color: #919191; }
+
+.nav {
+  position: relative;
+  left: 95px; }
+
+.nav ul {
+  margin: 0;
+  margin-top: 1.4em;
+  list-style-type: none; }
+.nav li {
+  display: inline;
+  float: left;
+  margin: 0 2px 0 0;
+  height: 29px;
+  min-width: 80px;
+  text-align: center;
+  background-image: url("/assets/tab.png"); }
+  .nav li a {
+    text-decoration: none;
+    color: white;
+    display: block;
+    margin: 5px; }
+.nav li.active {
+  background-image: url("/assets/active_tab.png");
+  color: #252626; }
+  .nav li.active a {
+    color: #252626; }
+
+#subheader h3 {
+  font-family: 'Tahoma';
+  font-size: 18px;
+  line-height: 18px;
+  padding-top: 18px;
+  margin-bottom: 0px; }
+
+#overbar {
+  background-image: url("/assets/gray_grad.png");
+  background-repeat: repeat-x;
+  border-bottom: #c6c6c6;
+  width: auto;
+  height: 72px; }
+  #overbar img {
+    vertical-align: middle; }
+  #overbar a {
+    text-decoration: none; }
+
+#overbar h3 {
+  font-family: 'Tahoma';
+  font-size: 18px;
+  line-height: 33px;
+  padding-top: 20px; }
+
+.fake_table_row {
+  border-bottom: 1px solid;
+  border-color: #cce1f0;
+  margin-top: 5px;
+  margin-bottom: 5px; }
+
+.fake_table_row_header {
+  padding-bottom: 3px; }
+
+.fake_table_header {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  border-color: #cce1f0;
+  color: #cce1f0;
+  background-color: #f1f9ff;
+  padding-top: 5px;
+  padding-bottom: 5px; }
+
+.margin_bump {
+  margin-bottom: 18px; }
+
+.inner_heading {
+  text-transform: allcaps;
+  color: #919191;
+  border-bottom: 1px solid #F0F0F0; }
+
+.hidden {
+  display: none; }
+
+.passes {
+  color: #57a100;
+  font-weight: bold; }
+  .passes img {
+    vertical-align: middle; }
+
+.failies {
+  color: #bc0000;
+  font-weight: bold; }
+  .failies img {
+    vertical-align: middle; }
+
+.warnies {
+  color: #c79b00;
+  font-weight: bold; }
+
+.dull {
+  color: #c6c6c6;
+  font-weight: normal; }
+
+.new_report_button {
+  position: relative;
+  left: 800px;
+  width: 150px; }
+
+.logo {
+  position: absolute;
+  top: 16px; }
+
+.grade_a {
+  background-image: url("/assets/rating-a.png");
+  background-repeat: no-repeat; }
+
+.grade_b {
+  background-image: url("/assets/rating-b.png");
+  background-repeat: no-repeat; }
+
+.grade_c {
+  background-image: url("/assets/rating-c.png");
+  background-repeat: no-repeat; }
+
+.grade_d {
+  background-image: url("/assets/rating-d.png");
+  background-repeat: no-repeat; }
+
+.grade_f {
+  background-image: url("/assets/rating-f.png");
+  background-repeat: no-repeat; }
+
+.pass {
+  background-image: url("/assets/tick-shield.png");
+  background-repeat: no-repeat;
+  background-position: 1% 12%; }
+  .pass a {
+    color: #57a100; }
+
+.pass.selected {
+  background-color: #EEF6E6; }
+
+.fail {
+  background-image: url("/assets/slash.png");
+  background-repeat: no-repeat;
+  background-position: 1% 12%; }
+  .fail a {
+    color: #bc0000; }
+
+.fail.selected {
+  background-color: #F6E7E6; }
+
+.warning {
+  background-image: url("/assets/exclamation-diamond.png");
+  background-repeat: no-repeat; }
+  .warning a {
+    color: #c79b00; }
+
+.notice {
+  background: #A7D0F9; }
+
+.error {
+  background: #FFD0D0; }
+
+.realm {
+  color: #252626; }
+
+.risk {
+  color: #252626;
+  text-align: right;
+  margin-right: 5px;
+  float: right; }
+
+.subleft {
+  text-align: right;
+  color: #c6c6c6;
+  margin-right: 5px; }
+
+.padded {
+  padding: 5px; }
+
+.business {
+  float: right;
+  margin: 8px; }
+  .business img {
+    vertical-align: middle; }
+  .business a {
+    color: #FFFFFF;
+    text-decoration: none; }
+
+.eighteen {
+  line-height: 18px;
+  padding-top: 18px; }

@@ -1,0 +1,2156 @@
+--- 
+SNMP: |
+  SNMP is the Simple Network Management Protocol.  SNMP was designed to provide
+  a standardized protocol for the management of devices on the network.
+  By separating management information from the implementation of the management 
+  tools themselves, a highly extensible protocol was developed that has survived 
+  15 years, and 3 major revisions, without significantly altering the concepts 
+  behind the protocol. [RFC1157, RFC1158]
+  
+  SNMP has the ability to both read and alter settings on managed devices.
+  Bulk and walking methods allow users to grab large swaths of data quickly
+  and easily.  Most implementations allow for the ability to limit access
+  to read-only.
+  
+  The SNMP-Trap mechanism exists to allow SNMP managed devices,
+  called agents, to autonomously send information to a management device,
+  referred to as a manager.
+  
+  Currently deployed versions of SNMP include SNMPv1, SNMPv2c and SNMPv3.
+  v1 and v2c use whats referred to as community based authentication, while
+  v3 provides for more robust, cryptographically sound authentication
+  methods.  While all versions of SNMP have security implications, the use
+  of v1 and v2c are of particular concern when arbitrary users have access to
+  these services.  As they are UDP, however, filtering with firewall rules is
+  only of limited effectivity.
+  
+  ([udp-port: 161])
+  ([alias: SNMP])
+  ([is: DeviceManagementProtocol])
+  
+  ([exposes-data: 1 can disclose network topography and control])
+  ([exposes-integrity: 2 ])
+  ([exposes-connectivity: 2])
+  
+  ([risk: medium])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  
+  ([setting: BackChannel])
+  ([exotic: no])
+  ([is: protocol])
+
+BGP4: |+
+  BGP4 is the Internet's "exterior" routing protocol. In essence, it publishes
+  to the entire Internet the IP address ranges, or "netblocks", owned by a 
+  particular entity, or "autonomous system". Though heavily scrutinized and
+  sanitized by upstream service providers, disruptions in BGP4 can have a
+  catastrophic impact on connectivity to individual enterprises.
+  
+  Enterprises run BGP4 if they "multi-home" to more than one service provider. 
+  BGP4 is spoken almost exclusively between core routers. Unlike "interior"
+  routing protocols, only a few designated routers are normally BGP4-enabled.
+  There is therefore no reason to allow arbitrary IP speakers to make connections
+  on the BGP4 port.
+  
+  ([tcp-port: 179])
+  ([alias: BGP])
+  ([is: RoutingProtocol])
+  
+  ([exposes-data: 2 can disclose customers])
+  ([exposes-integrity: 2])
+  ([exposes-connectivity: 4])
+  
+  ([risk: high])
+  
+  ([strong-encryption: no])
+  ([strong-auth: maybe])
+  
+  ([setting: BackChannel])
+  ([exotic: no])
+  
+  ([lockdown: yes])
+  ([is: protocol])
+  
+BOOTPS: |+
+  BOOTstrap Protocol Server (BOOTPS), is a network protocol used by a server to distribute IP addresses automatically. Computers configured to obtain addresses dynamcally usually request one from the server during the bootstrap process. The BOOTP servers assign the IP address from a pool of addresses to each client. The BOOTP protocol was originally defined in RFC 951. See DHCP.
+  
+  ([tcp-port: 67])
+  ([udp-port: 67])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+  
+NNTP: |
+  Network News Transfer Protocol (NNTP) is the primary protocol used to distribute Usenet posts.  It can be used to distribute Usenet posts between a news reader and a news server, as well as distributing articles between news servers.
+  
+  ([tcp-port: 119])
+  ([is: NewsServices])
+  
+  ([exposes-data: 1]) 
+  ([exposes-integrity: 1])
+  ([exposes-connectivity: 2])
+  ([risk: low])
+  
+  ([strong-encryption: no])
+  ([strong-auth: no])
+  
+  ([complexity: low])
+  ([history: mediocre])
+  ([setting: external])
+  ([exotic: no])
+  
+  ([is: protocol])
+
+DNS: |+
+  The Domain Name System (DNS) is used to associate all kinds of information with domain names. Information is organized into resource records which may be distributed among many different name servers.
+  
+  The DNS protocol allows clients to issue queries (often via UDP port 53) to DNS servers which either have the required resource records, or can forward the query to a server who may have it (recursive queries).
+  
+  Portions of the DNS resource database can be replicated by deploying master and slave servers for a given zone. Slaves regularly update against the master by performing a zone transfer over TCP port 53.
+  
+  ([tcp-port: 53])
+  ([udp-port: 53])
+  ([alias: domain])
+  
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+  
+PORTMAP: |+
+  Portmap or portmapper is server software (a daemon) on Unix systems that converts Remote Procedure Call (RPC) program numbers into DARPA protocol port numbers. Services use RPC register their port and protocol numbers with the portmap. Before a client can call a given RPC program number, it must contacts portmap on the server machine to determine the port number to which RPC packets should be sent. Described in RFC 1057.
+  
+  ([tcp-port: 111])
+  ([udp-port: 111])
+  ([alias: sunrpc, portmapper])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+  
+XDMCP: |
+  The X Display Manager Control Protocol (XDMCP) 
+  
+  XDMCP is used by X terminals (and X servers in general) to set up an X session with a remote system over the network.
+  	
+  ([tcp-port: 177])
+  ([udp-port: 177])
+  ([alias: XDMCP])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([rfc: http://www.apps.ietf.org/rfc/rfc1198.html])
+  ([is: protocol])
+
+Oracle: |
+  
+  It is suggested to change your TNS listener port from one of the common 
+  values.  This will stop naive attacks (i.e.: replicating malware) but 
+  not human operated port scanners.  Edit listener.ora and restart to 
+  change the value.
+  
+  Ports
+  
+   - 1521: Most common Oracle TNS listener port
+   - 1526: Most popular TNS listener port
+   - 1575: Oracle Names (deprecated in 9i for LDAP and SLDAP)
+   - 1630: Oracle Connection Manager
+   - 1830: Oracle Connection Manager (administration)
+   - 2481: Oracle Java VM listener / SSL (default port)
+   - 2482: Oracle TTC (future default home of TNS listener)
+   - 2483: Oracle TTC
+   - 2484: Oracle TTC / SSL
+  
+  Other Oracle-related ports
+  
+   - 66: Unused but IANA registered sql*net
+   - 1571: Oracle Remote Database
+   - 1701: JDBC for Rdb Thin Server
+  
+  ([tcp-port: 1521])
+  ([udp-port: 1521])
+  ([tcp-port: 1526])
+  ([udp-port: 1526])
+  ([tcp-port: 1575])
+  ([udp-port: 1575])
+  ([tcp-port: 1630])
+  ([udp-port: 1630])
+  ([tcp-port: 1830])
+  ([udp-port: 1830])
+  ([tcp-port: 2481])
+  ([tcp-port: 2482])
+  ([tcp-port: 2483])
+  ([udp-port: 2483])
+  ([tcp-port: 2484])
+  ([udp-port: 2484])
+  
+  ([tcp-port: 66])
+  ([udp-port: 66])
+  ([tcp-port: 1571])
+  ([udp-port: 1571])
+  ([tcp-port: 1701])
+  ([udp-port: 1701])
+  
+  ([is: DatabaseProtocol])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+
+IPP: |-
+  Internet Printing Protocol (IPP) is used for printing and managing the printing
+  of documents.  While it is similar in purpose to LPD it is implemented over HTTP.  It also supports authentication and encryption, making it a wiser choice than LPD.
+  
+  ([tcp-port: 80])
+  ([tcp-port: 631])
+  ([udp-port: 631])
+  ([is: PrintServices])
+  
+  ([exposes-data: 5 Printers can store the most critical business information])
+  ([exposes-integrity: 1])
+  ([exposes-connectivity: 2])
+  ([risk: medium])
+  
+  ([strong-encryption: yes])
+  ([strong-auth: no])
+  
+  ([complexity: medium])
+  ([history: mediocre])
+  ([setting: internal])
+  ([exotic: no])
+  ([is: protocol])
+DHCP: |
+  Dynamic Host Configuration Protocol (DHCP)
+  
+  The DHCP protocol is used by network devices to otbain information 
+  necessary for operation on a IP network with little or no manual 
+  configuration of clients.  This protocol supercedes BOOTPS
+  
+  The information retrieved by a client via DHCP includes:
+  
+  * IP address
+  * lease (the length of time for which this assignment is valid)
+  * subnet mask
+  * default gateway
+  
+  Methods of attacking DHCP take advantage of naive implementations of the 
+  protocol.  Given that there is no authentication between client and 
+  server, an opening is created for many possible attack vectors.
+  
+  A server could be placed on the network that transmits invalid 
+  information would prevent legitimate users from connecting to your 
+  network.  A rogue client on the network could spoof its MAC address to 
+  make an unlimited amount of lease requests, eventually exhausting the 
+  lease pool and also causing a denial of service for legitimate users.
+  
+  [rfc 3118](http://www.ietf.org/rfc/rfc3118.txt) was published in 2001 
+  which provides a method of authenticating DHCP requests.  However, this 
+  standard is not widely deployed and, if deployed, will tend to be 
+  ackward compatible and not require authentication if a client doesn't 
+  support it.
+  
+  ([udp-port: 67])
+  ([udp-port: 68])
+  ([is: DeviceManagementProtocol])
+  ([islike: BOOTP])
+  
+  ([exposes-data: 1])
+  ([exposes-integrity: 3])
+  ([exposes-connectivity: 4])
+  ([risk: medium])
+  
+  ([strong-encryption: no])
+  ([strong-auth: no])
+  ([rfc: http://www.ietf.org/rfc/rfc2131.txt])
+  ([is: protocol])
+
+IGMP: |
+  Internet Group Management Protocol (IGMP)
+  
+  IGMP is a protocol used by IP hosts to join, leave and query information 
+  about IP multicast groups.
+  
+  ([ip-protocol: 2])
+  ([alias: ])
+  ([is: GroupManagement])
+  ([islike: ])
+  
+  ([complexity: medium])
+  
+  ([exposes-data: 1])
+  ([exposes-integrity: 1])
+  ([exposes-connectivity: 3])
+  ([risk: low])
+  
+  ([strong-encryption: no])
+  ([strong-auth: no])
+  
+  ([rfc: http://www.ietf.org/rfc/rfc2236.txt])
+  ([is: protocol])
+
+IKE: |
+  Internet Key Exchange (IKE) is a protocol that uses a Diffie-Hellman exchange
+  that allows two end points to negotiate a shared secret and cryptographic session keys.
+  
+  ([udp-port: 500])
+  ([alias: ])
+  ([is: KeyExchange])
+  ([islike: Photuris])
+  
+  ([exposes-data: 1])
+  ([exposes-integrity: 1])
+  ([exposes-connectivity: 1])
+  ([risk: low])
+  
+  ([strong-encryption: yes])
+  ([strong-auth: yes])
+  ([complexity: high])
+  
+  ([rfc: http://www.ietf.org/rfc/rfc2409.txt])
+  ([is: protocol])
+
+BLANK: |
+  Replace this text with a description of your protocol.
+  
+  The following tags are optional, with the exception of the `([is: protocol])` tag, which indicates this is a protocol page.
+  	
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+
+DIAMETER: |
+  DIAMETER (DIAMETER)
+  
+  DIAMETER is an AAA protocol derived from RADIUS which is primarily used 
+  as part of the IP Multimedia Subsystem (IMS) [3GPP wireless networking].
+  
+  Some advantages of using DIAMETER over RADIUS include:
+  * use if reliable delivery protocols (SCTP and TCP)
+  * uses transport level security and encryption (IPSEC and 
+  TLS).
+  * Easier to extend with new Attribute Value Pairs (AVP) which are the 
+  building blocks of DIAMETER messages.
+  
+  ([tcp-port: 3868])
+  ([is: AuthenticationProtocol])
+  
+  ([exposes-data: 2])
+  ([exposes-integrity: 4])
+  ([exposes-connectivity: 3])
+  ([risk: low])
+  
+  ([strong-encryption: yes])
+  ([strong-auth: yes])
+  ([complexity: medium])
+  ([rfc: http://www.ietf.org/rfc/rfc3588.txt])
+  ([is: protocol])
+
+MSSQL: |
+  Microsoft SQL Server remote database access
+  
+  ([tcp-port: 1433])Microsoft SQL Server
+  ([tcp-port: 1434])Microsoft SQL Monitor
+  ([is: DatabaseProtocol])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+
+PWDGEN: |
+  Password Generator Protocol (PWDGEN)
+  
+      An antiquated password generation protocol. Very simple in implementation
+  with little to no message structure, this protocol generated 6 "english sounding"
+  words that were then CRLF-delimited and sent back to the client. These words
+  were intended to be "easy to pronounce" password suggestions.
+   
+  ([tcp-port: 129])
+  ([udp-port: 129])
+  ([is: PasswordGeneration])
+  
+  ([exposes-data: 5])
+  ([exposes-integrity: 5])
+  ([exposes-connectivity: 5])
+  ([risk: 5])
+  
+  ([strong-encryption: no])
+  ([strong-auth: no])
+  
+  ([rfc: http://www.ietf.org/rfc/rfc972.txt])
+  ([is: protocol])
+
+VNC: |+
+  Virtual Network Computing (VNC) allows administrators to remotely 
+  control another computer.  
+  
+  ([tcp-port: 5800])
+  ([tcp-port: 5900])
+  ([alias: RFB])
+  ([is: RemoteAdministrationProtocol])
+  ([islike: RDP])
+  
+  ([exposes-data: 1])
+  ([exposes-integrity: 4])
+  ([exposes-connectivity: 2])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+  
+BOOTPC: |+
+  BOOTstrap Protocol Client (BOOTPC), is a network protocol used by a network client to obtain its IP address dynamically from a BOOTPS or DHCP server. A computer configured to obtain an address dynamically usually makes this request during the bootstrap process. The servers assigns this client an IP address from a pool of addresses. 
+  
+  ([tcp-port: 68])
+  ([udp-port: 68])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+  
+Citrix: |+
+  Citrix Independent Computing Architecture (IDP) protocol (Citrix)
+  
+  ICA is a protocol devloped for use by Citrix WinFrame and MetaFrame 
+  products.  The protocol allows supported clients to connect to Windows 
+  servers over a network.
+  
+  ICA protocol clients connect to a server on tcp/1484.  The server then 
+  assigns the client an ephemeral port (range 1025-65534) to which the 
+  client then connects using source port 1484.
+  
+  ([tcp-port: 1484])ICA traffic port
+  ([udp-port: 1604])deprecated ICA browsing.  Now uses tcp/80 and tcp/443
+  ([alias: ICA])
+  ([is: RemoteAdministrationProtocol])
+  ([islike: VNC, RDP])
+  
+  ([exposes-data: 1])
+  ([exposes-integrity: 4])
+  ([exposes-connectivity: 2])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+  
+NetBIOS-SSN: |+
+  \NetBIOS Session Service (\NetBIOS-SSN) is the NetBIOS service that runs over TCP/IP for connection-oriented communications between applications. File and printer services are the primary user of the \NetBIOS Session service, comprising the bulk of all \NetBIOS traffic.
+  
+  ([tcp-port: 139])
+  ([udp-port: 139])
+  
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+  
+Photuris: |
+  Photuris (Photuris)
+  
+  Photuris is a protocol developed to established cryptographic session
+  keys between two hosts.
+  
+  ([udp-port: 468])
+  ([alias: Firefly])
+  ([is: SessionKeyManagement])
+  ([islike: ISAKMP, GSAKMP, IKE, GKMP])
+  
+  ([exposes-data: 1])
+  ([exposes-integrity: 1])
+  ([exposes-connectivity: 1])
+  ([risk: low])
+  
+  ([strong-encryption: yes])
+  ([strong-auth: yes])
+  ([complexity: high])
+  
+  ([rfc: http://www.ietf.org/rfc/rfc2522.txt])
+  ([is: protocol])
+
+SMUX: |
+  SNMP Multiplexing protocol (SMUX) defines communications between the SNMP Agent and other processes. Defined in RFC 1227.
+  	
+  ([tcp-port: 199])
+  ([udp-port: 199])
+  ([alias: smux])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+
+AIM: |+
+  The de facto standard instant messaging protocol in North America, controlled
+  by America Online. Relays small HTML-formatted messages to and from a central
+  cluster of servers at AOL. 
+  
+  A pundit favorite "next major malware disaster" pick.
+  
+  ([tcp-port: 5190])
+  ([alias: OSCAR])
+  ([alias: AOL])
+  ([is: ProprietaryProtocol])
+  ([is: IMProtocol])
+  
+  ([app: AOL])
+  ([app: GAIM])
+  ([app: iChat])
+  
+  ([exposes-data: 2])
+  ([exposes-integrity: 2])
+  ([exposes-connectivity: 3 Links one client to a buddy list of others])
+  ([risk: medium])
+  
+  ([strong-encryption: no])
+  ([strong-auth: no])
+  
+  ([complexity: medium])
+  ([is: protocol])
+  
+PCAnywhere: |
+  PCAnywhere
+  
+  Symantec's PCAnywhere is the oldest and longest lived of the remote 
+  access protocols.
+  
+  ([tcp-port: 65301])data port prior to version 7.52
+  ([tcp-port: 5631])data port for version 7.52 and later
+  ([udp-port: 22])status port prior to version 7.52
+  ([udp-port: 5632])status port for version 7.52 and later
+  ([is: RemoteAdministrationProtocol])
+  ([islike: RDP, Citrix, VNC, X11])
+  
+  ([exposes-data: 1])
+  ([exposes-integrity: 4])
+  ([exposes-connectivity: 2])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+
+AT-RTMP: |
+  The \AppleTalk Routing Table Maintenance Protocol (AT-RTMP) manages routing information for AppleTalk networks. RTMP communicates known network numbers and data concerning accessibility between networks. 
+  	
+  ([tcp-port: 201])
+  ([udp-port: 201])
+  ([alias: at-rtmp])
+  
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+
+SRTCP: |
+  Secure RTCP (SRTCP)
+      Secure Real-time Transport Control Protocol (SRTCP) is the more secure version of
+  Real-time Transport Control Protocol (RTCP). RTCP is the "control" protocol for 
+  for RTP (Real-time Transport Protocol) which is used for the streaming of
+  multimedia content such as video or audio. SRTCP is functionally identical to
+  RTCP with some additional functionality to provide encryption and
+  authentication. It also provides some message integrity (preventing attacks such
+  as "replay attacks" against the protocol). Just as RTCP is the control protocol
+  for the RTP protocol so to is SRTCP the control protocol for SRTP 
+  
+  ([udp-port: 5005])
+  ([is: Secure RTCP])
+  ([islike: SRTP RTCP])
+  
+  ([exposes-data: 1])
+  ([exposes-integrity: 1])
+  ([exposes-connectivity: 1])
+  ([risk: low])
+  
+  ([strong-encryption: yes])
+  ([strong-auth: yes])
+  
+  ([rfc: http://www.ietf.org/rfc/rfc3711.txt])
+  ([is: protocol])
+
+MySQL: |
+  MySQL remote database access
+  
+  ([tcp-port: 3306])
+  ([udp-port: 3306])
+  ([is: DatabaseProtocol])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+
+L2TP: |
+  Layer 2 Tunneling Protocol (L2TP) is a tunneling protocol used to support virtual private networks. The L2TP Protocol is used for integrating multi-protocol dial-up services into existing Internet Service Providers Point of Presence (hereafter referred to as ISP and POP, respectively). This protocol may also be used to solve the "multilink hunt-group splitting" problem. Multilink PPP, often used to aggregate ISDN B channels, requires that all channels composing a multilink bundle be grouped at a single Network Access Server (NAS). Because L2TP makes a PPP session appear at a location other than the physical point at which the session was physically received, it can be used to make all channels appear at a single NAS, allowing for a multilink operation even when the physical calls are spread across distinct physical NASs.
+  
+  ([tcp-port: 1701])
+  ([udp-port: 1701])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+
+X_Window: |
+  X Window System core protocol (X Window)
+  
+  The X Window System core protocol is part of the of the X Window System, which is a networked client-server application for a graphical user interface on a bitmapped display (windowing). The X protocol is usually implemented as a layer on top of another transport layer such as TCP/IP. The X server provides a set of services that are used by client applications, such as input handling from keyboard and mouse, window operations, graphics text and font. The X applications act as clients, interacting with the user and other X clients via the X server. The need for network-transparent windowing systems has declined in recent decades, but the X Window System retains its ability for remote displays of client applications.
+  
+  The X Window System is considered very insecure, particularly when run remotely. Don't use it.
+  
+  ([tcp-port: 6000])
+  ([alias: xlib])
+  
+  ([exposes-data: yes])
+  ([exposes-integrity: yes])
+  ([exposes-connectivity: yes])
+  ([risk: high])
+  
+  ([strong-encryption: no])
+  ([strong-auth: no])
+  
+  ([rfc: http://www.ietf.org/rfc/rfc1013.txt])
+  ([is: protocol])
+
+NTP: |+
+  Network Time Protocol (NTP) is used to synchronize the time across multiple
+  computers.  NTP is commonly used on internal network to ease administration
+  and troubleshooting tasks across multiple computers and timezones.
+  
+  ([udp-port: 123])
+  ([is: TimeSynchronizationService])
+  
+  ([exposes-data: 2 Time information may be useful against poorly implemented cryptosystems])
+  ([exposes-integrity: 1])
+  ([exposes-connectivity: 2])
+  ([risk: low])
+  
+  ([strong-encryption: no])
+  ([strong-auth: no])
+  
+  ([complexity: medium])
+  ([history: mediocre])
+  ([setting: external])
+  ([setting: internal])
+  ([exotic: no])
+  ([is: protocol])
+  
+MPLS: |
+  Multi-Protocol Label Switching (MPLS)
+  
+  A "data carrying" protocol, MPLS, is a protocol found on "packet switched"
+  networks. Functionally it exists somewhere between the "data link" (OSI Layer 2)
+  and the "nework link layer" (OSI Layer 3). The inclination maybe to compare it
+  to protocols such as IP, but in reality it is difficult to compare it to IP
+  because of MPLS's partial reliance upon IP. It is perhaps more appropriate to
+  compare MPLS to ATM, T1, or Frame Relay
+  
+  ([is: DataCarrying])
+  ([islike: IP, T1, ATM, Frame Relay, IPSEC])
+  
+  ([exposes-data: 1])
+  ([exposes-integrity: 1])
+  ([exposes-connectivity: 1])
+  ([risk: low])
+  
+  ([strong-encryption: maybe ])
+  ([strong-auth: no ])
+  
+  ([rfc: http://www.ietf.org/rfc/rfc4461.txt])
+  ([is: protocol])
+
+AT-ECHO: |
+  The \AppleTalk Echo Protocol (AT-ECHO) provides an echo service to AppleTalk hosts. It can specify up to 585 bytes of data for an echo transaction.
+  	
+  ([tcp-port: 204])
+  ([udp-port: 204])
+  
+  ([exposes-data: ])
+  ([exposes-integrity: ])
+  ([exposes-connectivity: ])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+
+OSPF: |+
+  OSPF is the de facto standard routing protocol for large enterprise
+  networks. In a nutshell, OSPF allows routers to synchronize a shared
+  database of which routers have direct connections to which IP addresses,
+  and by doing so make decisions about how to route traffic.
+  
+  OSPF is spoken exclusively between routers. No end system needs to speak
+  this protocol for OSPF routing to function. An attacker who can create a 
+  valid OSPF connection (or "adjacency") can completely rewrite the routing
+  tables of an entire network. Keep this one locked down.
+  
+  ([ip-protocol: 89])
+  ([is: RoutingProtocol])
+  
+  ([exposes-data: 2 discloses topology of network])
+  ([exposes-integrity: 2])
+  ([exposes-connectivity: 4])
+  
+  ([risk: high])
+  
+  ([strong-encryption: no])
+  ([strong-auth: maybe])
+  
+  ([setting: BackChannel])
+  ([exotic: no])
+  
+  ([lockdown: yes])
+  ([is: protocol])
+  
+GOPHER: |+
+  Gopher is a distributed document search and retrieval system using text-based menus intended to be an improvement over FTP. The gopher protocol protocol is described in RFC 1436. Gopher has largely been replaced by the web and HTTP, though some browsers still offer minimal support for it.
+  
+  ([tcp-port: 70])
+  ([udp-port: 70])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+  
+TFTP: |
+  Trivial File Transfer Protocol (TFTP)
+  
+  The "trivial" file transfer protocol is almost never used for generic file transfer, but rather as a way of bootstrapping configuration and system images onto machines without requiring a full TCP/IP stack, which
+  solves a chicken-and-egg problem for older systems whose flash storage couldn't store a fully-functional OS. Certain older Cisco appliances use TFTP for configuration. Some network-based OS installation systems, such as Solaris JumpStart and Apple NetBoot, use TFTP to boot remote workstations during their process.
+  
+  TFTP is considered an archaic protocol. Almost everything that used to rely on it can now use alternatives such as SSH. Try to get rid of it, or keep it locked down.
+  
+  ([udp-port: 69])
+  ([udp-port: 1758])
+  ([is: FileTransferProtocol])
+  
+  ([exposes-data: 2])
+  ([exposes-integrity: 4 Usually used to store configs and boot images])
+  ([exposes-connectivity: 3 Often controls routers and switches])
+  ([risk: medium])
+  
+  ([strong-encryption: no])
+  ([strong-auth: no])
+  
+  ([complexity: low])
+  ([history: weak])
+  ([setting: internal])
+  ([exotic: no])
+  ([rfc: http://www.ietf.org/rfc/rfc3617.txt])
+  ([is: protocol])
+
+RIP: |
+  Routing Information Protocol (RIP)
+  
+  RIP is a LAN and WAN dynamic routing protocol. Like other similar routing
+  protocols RIP uses a distance vector algorithm to build its routing tables.
+  Both RIP and RIPv2 are considered obseleted by newer dynamic routing protocols
+  such as OSPF. Unlike its successors, the original RIP does not support any
+  authentication mechanisms, making it an easy target for attackers. RIPv2 supports
+  MD5 authentication. 
+  
+  ([udp-port: 520])
+  ([is: RoutingProtocol])
+  ([islike: IGRP, OSPF, RIPng])
+  
+  ([exposes-data: 2])
+  ([exposes-integrity: 2])
+  ([exposes-connectivity: 3])
+  ([risk: high])
+  
+  ([strong-encryption: no])
+  ([strong-auth: maybe])
+  
+  ([rfc: http://www.ietf.org/rfc/rfc2453.txt])
+  ([is: protocol])
+
+SAMBA: |+
+  Samba is a free implementation of SMB, often used for interoperability between Windows and non-Windows hosts.
+  
+  ([tcp-port: 445])
+  ([udp-port: 445])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+  
+LDAP: |+
+  Lightweight Directory Access Protocol (LDAP)
+  
+  LDAP was designed to provide access to an X.500 Directory over TCP/IP 
+  instead of using the (obsolete) DAP protocol.  LDAP defines both the 
+  protocol for accessing directories and their structure.
+  
+  ([tcp-port: 389])
+  ([is: AuthenticationProtocol])
+  ([islike: DAP])
+  
+  ([exposes-data: 2])
+  ([exposes-integrity: 4])
+  ([exposes-connectivity: 3])
+  ([risk: medium])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: yes])
+  ([rfc: http://www.ietf.org/rfc/rfc4510.txt])
+  ([is: protocol])
+  
+SMTP: |
+  SMTP is the Simple Mail Transport Protocol.  The defacto standard for mail
+  over the internet -- while other systems exist (such as x.400),
+  none has even a fraction of the deployed systems that SMTP does.  If you
+  receive email, its almost definitely been received over SMTP.
+  
+  As a protocol, SMTP has remained largely unchanged since its definition.  
+  A number of extensions have been added as the protocol has gained in popularity,
+  including those supporting MIME encoding and decoding, and authenticated and 
+  encrypted access.  Some of these extensions have been the source of 
+  vulnerabilities in specific implementations of the SMTP protocol.
+  
+  The most popular SMTP agents, or Mail Transport Agents (MTA) are Sendmail and
+  Exchange.  
+  
+  In Sendmail's close to 25 year history, it has had numerous, severe 
+  vulnerabilities.  Improvements over that time have reduced the rate of
+  vulnerabilities being reported to a trickle.  Its long history of problems,
+  however, make many question its security.  Sendmail is responsible for the
+  belief that SMTP is an inherently insecure protocol.  While the protocol 
+  itself has flaws (a traditional lack of authentication or encryption, for one),
+  a majority of the problems people associated with SMTP have in fact been
+  Sendmail issues.
+  
+  Exchange has also had a number of severe vulnerabilities in its history.  Its
+  codebase, much like Sendmail, has been thoroughly audited, and the rate of
+  vulnerabilities being disclosed is low.  Its closed source nature is a source
+  of concern for some.
+  
+  Alternate MTA's which were designed with security in mind include qmail and
+  postfix.  Both have had minor vulnerabilities reported, but have withstood
+  scrutiny.  Neither have anywhere near the number of deployments of Sendmail or
+  Exchange, and as such, calling them 'better' or 'more secure' may be misguided.
+  
+  As a critical component of modern business, SMTP must be accessible to users
+  both on the inside, and outside, of networks.  External users should only
+  be allowed to use the external SMTP servers to deliver mail destined for the
+  inside of the network.
+  
+  ([tcp-port: 25])
+  ([is: MailProtocol])
+  
+  ([exposes-data: 3])
+  ([exposes-integrity: 2])
+  ([exposes-connectivity: 2])
+  ([risk: low])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  
+  ([complexity: low])
+  ([history: weak])
+  ([is: protocol])
+
+GRE: |
+  Generic Routing Encapsulation (GRE)
+  
+  GRE is a stateless tunneling protocol used to encapsulate other packets over
+  an IP network. GRE offers no traffic security and thus is not reccomended for
+  remote WAN connections. GRE is typically used to encapsulate traffic such as
+  PPTP or routing protocols over an IPSec tunnel.
+  
+  ([alias: ])
+  ([is: Tunneling])
+  ([islike: ])
+  
+  ([exposes-data: yes])
+  ([exposes-integrity: yes])
+  ([exposes-connectivity: yes])
+  ([risk: high])
+  
+  ([strong-encryption: no])
+  ([strong-auth: no])
+  
+  ([rfc: http://www.ietf.org/rfc/rfc2784.txt])
+  ([is: protocol])
+
+SIP: |+
+  The Session Initiation Protocol (SIP) is an application-layer signaling protocol used to set up and tear down voice and video calls over IP networks.
+  
+  ([tcp-port: 5060])
+  ([udp-port: 5060])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+  
+IRC: |+
+  Internet Relay Chat (IRC) is a messaging protocol that allows users to communicate with each other in chat rooms called 'channels'.  While there
+  are many legitimate purposes for IRC, it is also commonly used to distribute
+  pirated material.  In recent years, Worms and other forms of malware often
+  use IRC to communicate with each other, or their 'owner'.
+  
+  ([tcp-port: 6666])
+  ([tcp-port: 6667])
+  ([is: ChatService])
+  
+  ([exposes-data: 2 usernames are exposed])
+  ([exposes-integrity: 2])
+  ([exposes-connectivity: 2])
+  ([risk: low])
+  
+  ([strong-encryption: no])
+  ([strong-auth: no])
+  
+  ([complexity: low])
+  ([history: poor])
+  ([setting: internal])
+  ([setting: external])
+  ([exotic: no])
+  ([is: protocol])
+  
+ESP: |
+  Encapsulating Security Payload (ESP)
+  
+  ESP is a protocol designed for IP-Sec communications. ESP provides data integrity,
+  authentication and confidentiality. ESP guarantees that the traffic has not been 
+  modified in transit.
+  
+  ([is: Authentication, Integrity, Confidentiality])
+  ([islike: AH])
+  
+  ([exposes-data: 1])
+  ([exposes-integrity: 1])
+  ([exposes-connectivity: 1])
+  ([risk: low])
+  
+  ([strong-encryption: yes])
+  ([strong-auth: yes])
+  ([complexity: medium])
+  
+  ([rfc: http://www.ietf.org/rfc/rfc2406.txt])
+  ([is: protocol])
+
+PostgreSQL: |
+  PostgreSQL remote database access
+  
+  ([tcp-port: 5432])
+  ([udp-port: 5432])
+  ([is: DatabaseProtocol])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+
+ISAKMP: |
+  Internet Security Association and Key Management Protocol (ISAKMP)
+  
+  ISAKMP is a protocol developed to established security associations
+  between two hosts. ISAKMP implementations typically use IKE to exchange
+  cryptographic keys during initialization.
+  
+  ([udp-port: 500])
+  ([is: SecurityAssociationManagement])
+  ([islike: Photuris, GSAKMP, GKMP])
+  
+  ([exposes-data: 1])
+  ([exposes-integrity: 1])
+  ([exposes-connectivity: 1])
+  ([risk: low])
+  
+  ([strong-encryption: yes])
+  ([strong-auth: yes])
+  ([complexity: high])
+  
+  ([rfc: http://www.ietf.org/rfc/rfc2408.txt])
+  ([is: protocol])
+
+NetBIOS: |+
+  Network Basic Input/Output System (\NetBIOS) is a session layer service that allows applications to communicate over a local area network. \NetBIOS usually runs over TCP/IP. Each device typically has a \NetBIOS name in addition to an IP address and a hostname. The \NetBIOS application programming interface (API) provides three services: NetBIOS-NS, NetBIOS-DGM over UDP, and NetBIOS-SSN over TCP.  
+  
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+  
+MGCP: |+
+  Media Gateway Control Protocol (MGCP) is a signaling and call control protocol used within a distributed Voice over IP system. MGCP is defined in RFC 3435, which obsoletes an earlier definition in RFC 2705. It superseded the Simple Gateway Control Protocol (SGCP). Another protocol for the same purpose is Megaco, a co-production of IETF (RFC 3525) and ITU (Recommendation H.248-1). Both protocols follow the guidelines of the API Media Gateway Control Protocol Architecture and Requirements at RFC 2805.
+  
+  ([tcp-port: 2427])
+  ([udp-port: 2427])
+  ([alias: Media Gateway Control Protocol ])
+  ([is: VOIP ])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+  
+RADIUSAccounting: |+
+  A simple protocol that reports the details of login and access events for
+  servers and infrastructure that check clients with RADIUS.
+  
+  ([udp-port: 1813])
+  ([tcp-port: 1813])
+  ([is: LoggingProtocol])
+  
+  ([exposes-data: 2])
+  ([exposes-integrity: 1])
+  ([exposes-connectivity: 1])
+  ([risk: low])
+  
+  ([strong-encryption: no])
+  ([strong-auth: yes])
+  
+  ([complexity: low])
+  ([is: protocol])
+  
+POP3: |+
+  The original remote mailbox access protocol. The major (and more popular)
+  alternative is IMAP. The big difference between the two is that IMAP clients
+  tend to leave their messages on the server; POP clients almost never do.
+  
+  You probably use one or the other. This is the simpler protocol.
+  
+  APOP is an extension to POP that allows digest authentication. It has
+  spotty support. You should assume that POP users are transmitting their
+  passwords in cleartext.
+  
+  ([tcp-port: 110])
+  ([is: MailProtocol])
+  
+  ([exposes-data: 3])
+  ([exposes-integrity: 2])
+  ([exposes-connectivity: 2])
+  ([risk: medium])
+  
+  ([strong-encryption: no])
+  ([strong-auth: maybe])
+  
+  ([complexity: medium])
+  ([history: weak])
+  ([is: protocol])
+  
+RTCP: |
+  RTP Control Protocol (RTCP)
+  
+      RTCP or Real-time Transport Control Protocol is a UDP based protocol that us used as a
+  control channel for the RTP (Real-time Transport Protocol). The Real-time
+  Transport Protocol is used for the transmission of streaming multimedia content
+  such as audio and video. RTCP is an optional 'out-of-band' protocol that is used
+  to control content streamed over RTP. It is also used to transmit QoS (Quality
+  of Service) information about the RTP stream. RTP and RTCP use employ no 
+  data protection (such as encryption) Secure Real-time Transport Protocol (SRTP)
+  must be used to accomplish this.
+  
+  ([udp-port: 5005])
+  ([is: Streaming Media])
+  ([islike: Internet Protocol Television])
+  
+  ([exposes-data: 5])
+  ([exposes-integrity: 5])
+  ([exposes-connectivity: i5])
+  ([risk: medium])
+  
+  ([strong-encryption: no])
+  ([strong-auth: no])
+  
+  ([rfc: http://www.ietf.org/rfc/rfc3711.txt])
+  ([is: protocol])
+
+GSAKMP: |
+  Group Secure Association Key Management Protocol (GSAKMP)
+  
+  GSAKMP is similar to ISAKMP except that is intended to create and
+  distribute security policy amongst a group of hosts. GSAKMP is a
+  relatively new protocol compared to ISAKMP, there are also far
+  fewer GSAKMP implementations available. Like ISAKMP, GSAKMP allows
+  for the use of a diffie-hellman exchange in order to protect
+  direct network traffic between two hosts.
+  
+  ([tcp-port: 3761])
+  ([udp-port: 3761])
+  ([is: SecurityAssociationManagement])
+  ([islike: ISAKMP, Photuris, IKE, GKMP])
+  
+  ([exposes-data: 1])
+  ([exposes-integrity: 1])
+  ([exposes-connectivity: 1])
+  ([risk: low])
+  
+  ([strong-encryption: yes])
+  ([strong-auth: yes])
+  ([complexity: high])
+  
+  ([rfc: http://www.ietf.org/rfc/rfc4535.txt])
+  ([is: protocol])
+
+SNMP-Trap: |+
+  SNMP-Trap is a component of SNMP, designed to allow SNMP
+  managed devices, called agents, to autonomously send information to a 
+  management device, referred to as a manager.
+  
+  Currently deployed versions of SNMP include SNMPv1, SNMPv2c and SNMPv3.
+  v1 and v2c use whats referred to as community based authentication, while
+  v3 provides for more robust, cryptographically sound authentication
+  methods.  While all versions of SNMP have security implications, the use
+  of v1 and v2c are of particular concern when arbitrary users have access to
+  these services.  As they are UDP, however, filtering with firewall rules is
+  only of limited effectivity.
+  
+  ([udp-port: 162])
+  ([is: DeviceManagementProtocol])
+  
+  ([exposes-data: 1 can expose information about an individual machine])
+  ([exposes-integrity: 2 ])
+  ([exposes-connectivity: 1])
+  
+  ([risk: low])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  
+  ([setting: BackChannel])
+  ([exotic: no])
+  ([is: protocol])
+  
+UUCP: |
+  Unix To Unix Copy (UUCP)
+  
+  UUCP is the protocol used by the suite of UUCP tools that allowed for the remote execution of commands and transfer of files, email and news from one UNIX system to another. UUCP protocol has now mostly been replaced by TCP/IP-based protocols SMTP and NNTP.
+  
+  ([tcp-port: 117])
+  
+  ([exposes-data: 5])
+  ([risk: high])
+  
+  ([strong-encryption: no])
+  ([strong-auth: no])
+  
+  ([rfc: http://www.ietf.org/rfc/rfc976.txt])
+  ([is: protocol])
+
+RTP: |
+  The Real-time Transport Protocol (RTP) is used to deliver audio and video content over IP networks. RTP is often used in combination with RTSP to control the streaming of media, and SIP or H_323 for \VoIP call setup and tear down.
+  
+  ([tcp-port: random?])
+  ([udp-port: random?])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+
+SMB: |-
+  Server Message Block (SMB) also known as \NetBIOS Session Service NetBIOS-SSN is a network protocol primarily used for file and printer sharing, although it can provide generic and authenticated communication for any service across a network. See also Samba, NetBIOS-NS, and NetBIOS-DGM.
+  
+  ([tcp-port: 139])
+  ([udp-port: 139])
+  ([alias: samba])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+SOAP: |+
+  Simple Object Access Protocol (SOAP) is an application layer protocol for exchanging XML-based messages that makes use of another application layer protocol, such as HTTP or HTTPS, as a transport layer. As such, SOAP typically does not have an associated port number. A SOAP message uses the Multipart/Related media type defined in RFC 2387. 
+  
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+  
+Z39_50: |
+  Z39.50 (Z39.50)
+  
+  Z39.50 is a client-server protocol for searching and retrieving information from remote computer databases. It is covered by ANSI/NISO standard Z39.50, and ISO standard 23950. The standard's maintenance agency is the Library of Congress. Z39.50 is widely used in library environments and is often incorporated into integrated library systems and personal bibliographic reference software. Interlibrary catalogue searches for interlibrary loan are often implemented with Z39.50 queries. Endnote (www.endnote.com) is an example of a software that uses the Z39.50 protocol
+  
+  ([tcp-port: 210])
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  
+  ([rfc: http://www.ietf.org/rfc/rfc2056.txt])
+  ([is: protocol])
+
+GIOP: |+
+  As the OSI protocols are to IP, CORBA is to lightweight HTTP-style RPC.
+  Alternatively, think of GIOP as the HTTP of CORBA. At each end of a GIOP
+  connection is an ORB (think of that as a web server). Attached to each 
+  ORB is one or more applications, just as a CGI application attaches to 
+  a web server.
+  
+  The security of CORBA depends on the security of the applications built on
+  it, the same way the security of a web app depends on not accidentally allowing
+  for SQL injection. There is one important addenda: CORBA has its own 
+  name service. If an arbitrary client can connect to an ORB running the
+  name service, it can rebind names and hijack whole applications. 
+  
+  Keep this one locked down.
+  
+  ([tcp-port: 683])
+  ([alias: CORBA])
+  ([alias: IIOP])
+  ([is: RPCProtocol])
+  
+  ([exposes-data: 1])
+  ([exposes-integrity: 3])
+  ([exposes-connectivity: 3])
+  ([risk: medium])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  
+  ([complexity: high])
+  ([setting: internal])
+  ([exotic: no])
+  ([is: protocol])
+  
+TIME: |+
+  The timeserver provides a site-independent, machine readable date and
+  time.  The Time service sends back to the originating source the time in
+  seconds since midnight on January first 1900. Described in RFC 868.
+  
+  ([tcp-port: 37])
+  ([udp-port: 37])
+  ([alias: time])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+  
+MAILQ: |
+  Mailq is the Zmailer transport queue scheduler daemon. Mailq accepts TCP connections to process the delivery of messages for ZMailer, acting as a mail transport agent. There are two versions of the mailq protocol. If set to use version 1, mailq simply dumps data into the tcp stream using a simple format and closes the connection. If set to use version 2, mailq connections will prompt for authentication interactively.
+  	
+  ([tcp-port: 174])
+  ([udp-port: 174])
+  ([alias: mailq])
+  ([is: MailTransportAgent])
+  ([islike: SMTP])
+  
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+
+SOCKS: |
+  SOCKS (SOCKS)
+  
+  SOCKS is designed to facilitate internal clients communicating with 
+  external servers through a firewall.
+  
+  SOCKS proxies are often used to provide anonymous and secure access to 
+  internet resources.  Some resources retrieved in this manner may fall 
+  outside your acceptable use policy.
+  
+  ([tcp-port: 1080])
+  ([udp-port: 1080])
+  ([alias: Authenticated Firewall Traversal])
+  ([is: ProxyProtocol])
+  
+  ([exposes-data: 1])
+  ([exposes-integrity: 3])
+  ([exposes-connectivity: 1])
+  ([risk: medium])
+  
+  ([strong-encryption: yes])
+  ([strong-auth: yes])
+  
+  ([rfc: http://www.ietf.org/rfc/rfc1928.txt])
+  ([is: protocol])
+
+SAP: |+
+  The Session Announcement Protocol (SAP) is a protocol for advertising information about multicast multimedia sessions. SAP announcements are multicast periodically by a SAP announcer.
+  SAP typically uses Session Description Protocol SDP to describe the format of the session descriptions, and the multicast sessions typically use Real-time Transport Protocol RTP as transport.
+  
+  ([tcp-port: 9875])
+  ([udp-port: 9875])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+  
+X500: |
+  X.500 (X.500)
+  
+  X.500 is a set of protoocols and standards implementing directory services to support the requirements of X.400 electronic mail exchange and name lookup. 
+  
+  ([alias: DAP])
+  ([alias: DSP])
+  ([alias: DISP])
+  ([alias: DOP])
+  ([is: Directory Information])
+  ([islike: LDAP])
+  
+  ([exposes-data: yes])
+  ([exposes-integrity: yes])
+  ([exposes-connectivity: maybe])
+  ([risk: medium])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: yes])
+  
+  ([rfc: http://www.ietf.org/rfc/rfc2693.txt])
+  ([is: protocol])
+
+xAP: |
+  eXtensible Automation Protocol (xAP)
+  
+  xAP is an open source protocol for home automation devices. The xAP enabled device is connected to a network  via ethernet (can be wireless), RS232 or RS485 (serial). Devices can be senders or receivers. An xAP-enabled sender broadcasts messages identifying itself as the source. An xAP-enabled receiver listens for broadcasted messages, only processing the messages intended for itself. For more information, see http://www.xapautomation.org
+  
+  ([udp-port: 3639])
+  
+  ([exposes-data: maybe])
+  ([exposes-integrity: maybe])
+  ([exposes-connectivity: maybe])
+  ([risk: unknown])
+  
+  ([strong-encryption: no])
+  ([strong-auth: no])
+  ([is: protocol])
+
+X11: |
+  X Windows System protocol (X11)
+  
+  Traffic between the X server and remote clients is not encryted by 
+  default.  You should be using ssh port forwarding for all X Windows 
+  applications that need to go over the network.
+  
+  If a DISPLAY (which consists of the client's screen, keyboard and mouse) 
+  is not properly secured, an attacker that can connect to it can take 
+  complete control.
+  
+  ([tcp-port: 6000])
+  ([is: RemoteAdministrationProtocol])
+  
+  ([exposes-data: 3])
+  ([exposes-integrity: 5])
+  ([exposes-connectivity: 3])
+  ([risk: high])
+  
+  ([strong-encryption: no])
+  ([strong-auth: no])
+  ([is: protocol])
+
+SILC: |-
+  Secure Internet Live Conferencing (SILC) is a messaging protocol that provides
+  a chat room environment similar to IRC.  The primary feature that
+  makes SILC more appealing to users is that its use of encryption for all communications.
+  
+  
+  ([tcp-port: 706])
+  ([is: ChatService])
+  
+  ([exposes-data: 2 usernames are exposed])
+  ([exposes-integrity: 2])
+  ([exposes-connectivity: 2])
+  ([risk: low])
+  
+  ([strong-encryption: yes])
+  ([strong-auth: no])
+  
+  ([complexity: medium])
+  ([history: good])
+  ([setting: internal])
+  ([setting: external])
+  ([exotic: no])
+  ([is: protocol])
+KERBEROS: |+
+  Kerberos is a network authentication protocol used on physically insecure networks that allows principals to establish their identity by acting as a trusted third-party authentication service using conventional (shared secret key) cryptography. Version 5 of Kerberos is described in RFC 4120.
+  
+  ([tcp-port: 88])
+  ([udp-port: 88])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+  
+SSH: |+
+  The de facto standard management protocol for Unix machines and 
+  infrastructure devices. Allows secure remote login.
+  
+  ([tcp-port: 22])
+  ([is: RemoteShellProtocol])
+  ([is: SecureProtocol])
+  
+  ([exposes-data: 1])
+  ([exposes-integrity: 5 Runs shell commands])
+  ([exposes-connectivity: 2])
+  ([risk: medium])
+  
+  ([strong-encryption: yes])
+  ([strong-auth: yes])
+  ([is: protocol])
+  
+AH: |
+  Authentication Header (AH)
+  
+  AH is a protocol designed for IP-Sec communications. AH provides data integrity
+  and authentication but not data confidentiality. AH guarantees that the traffic
+  has not been modified in transit but is not ideal for end-to-end security that
+  is provided by ESP in tunnel mode.
+  
+  ([is: DataAuthentication, DataIntegrity])
+  ([islike: ESP])
+  
+  ([exposes-data: 5])
+  ([exposes-integrity: 1])
+  ([exposes-connectivity: 5])
+  ([risk: medium])
+  
+  ([strong-encryption: no])
+  ([strong-auth: yes])
+  ([complexity: medium])
+  
+  ([rfc: http://www.ietf.org/rfc/rfc4302.txt])
+  ([is: protocol])
+
+HTTPS: |+
+  Hypertext Transfer Protocol over Secure Socket Layer (HTTPS) is HTTP over SSL. See also TLS.
+  
+  ([tcp-port: 443])
+  ([udp-port: 443])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+  
+XOT: |
+  X.25 over TCP (XOT)
+  
+  XOT is a Cisco Systems protocool that encapsulates X.25 packets to be routed through TCP/IP connections instead of Link Access Procedure, Balanced (LAPB) links, as a means of connecting two X.25 clouds with a TCP tunnel through the IP cloud.
+  
+  ([tcp-port: 1998])
+  ([is: ProprietaryProtocol])
+  
+  ([exposes-data: maybe])
+  ([exposes-integrity: maybe])
+  ([exposes-connectivity: maybe])
+  ([risk: low])
+  
+  ([strong-encryption: no])
+  ([strong-auth: maybe])
+  
+  ([rfc: http://www.ietf.org/rfc/rfc1613.txt])
+  ([is: protocol])
+
+LPD: |+
+  Line Printer Daemon (LPD) is a common mechanism for printing to and from UNIX
+  systems.  LPD support exists in all modern operating systems and networked printers.
+  
+  ([tcp-port: 515])
+  ([is: PrintServices])
+  
+  ([exposes-data: 5 Printers can store the most critical business information])
+  ([exposes-integrity: 1])
+  ([exposes-connectivity: 2])
+  ([risk: medium])
+  
+  ([strong-encryption: no])
+  ([strong-auth: no])
+  
+  ([complexity: low])
+  ([history: mediocre])
+  ([setting: internal])
+  ([exotic: no])
+  ([is: protocol])
+  
+NetBIOS-DGM: |
+  \NetBIOS Datagram (\NetBIOS-DGM) runs over UDP and is used by Microsoft Windows and services on UNIX such as SAMBA. Part of the set of NetBIOS services, the \NetBIOS datagram service provides delivery of datagrams that are connectionless, nonsequenced, and unreliable. Datagrams can be directed to a specific NetBIOS name or broadcast to a group of names. Delivery is unreliable in that only the users who are logged on to the network receive the message. The datagram service can initiate and receive both broadcast and directed messages. Specially crafted messages sent to this service can trick the Windows operating system into accepting that traffic as "local", thereby circumventing some of Microsoft's security settings that differentiate between "local" and "internet" zones. 
+  
+  ([tcp-port: 138])
+  ([udp-port: 138])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+
+GKMP: |
+  Group Key Management Protocol (GKMP)
+  
+  GKMP is a protocol designed to create and distribute cryptographic
+  keys between network group members. GKMP also defines and enforces
+  rule based access to those keys. GKMP can be used to deny access
+  to known compromised hosts by revoking keys.
+  
+  ([is: GroupKeyManagement, KeyManagement])
+  ([islike: ISAKMP, GSAKMP, Photuris, IKE])
+  
+  ([exposes-data: 1])
+  ([exposes-integrity: 1])
+  ([exposes-connectivity: 1])
+  ([risk: low])
+  
+  ([complexity: high])
+  
+  ([strong-encryption: yes])
+  ([strong-auth: yes])
+  ([rfc: http://www.ietf.org/rfc/rfc2093.txt])
+  ([is: protocol])
+
+NetBIOS-NS: |
+  \NetBIOS Name Service (\NetBios-NS) query packets are sent to this port, usually of Windows machines but also of any other system running Samba or SMB, to ask the receiving machine to disclose and return its current set of NetBIOS names.
+  
+  ([tcp-port: 137])
+  ([udp-port: 137])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+
+XMPP: |
+  eXtensible Messaging and Presence Protocol (XMPP)
+  
+  XMPP is a protocol that was originally developed by the Jabber open source community for near real-time instant messaging and presence information using XML-formatted messages (think XML streaming). An XMPP client will communicate via TCP to a server on port 5222. XMPP server to server messages use port 5269. In 2002, An independent workgroup, XMPP WG, was founded for the continued development of XMPP as a full-on standard protocol for presence and instant messaging as outlined in RFC 2779. As defined, XMPP should make use of Transport Layer Security TLS for channel encryption. The XMPP specification also supports an XMPP-specific method for  Simple Authentication and Security Layer SASL. 
+  
+  ([tcp-port: 5222])
+  ([tcp-port: 5269])
+  ([alias: Jabber])
+  ([is: xmpp-client])
+  ([is: xmpp-server])
+  ([islike: OSCAR])
+  
+  ([exposes-data: maybe])
+  ([exposes-integrity: maybe])
+  ([exposes-connectivity: maybe])
+  ([risk: medium])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  
+  ([rfc: http://www.ietf.org/rfc/rfc3920.txt])
+  ([is: protocol])
+
+SCCP: |-
+  The Skinny Client Control Protocol (SCCP) is a messaging protocol for communications between Cisco's \CallManager and its skinny clients.
+  
+  ([tcp-port: 2000])
+  ([udp-port: ])
+  ([alias: Skinny])
+  ([is: VOIP service])
+  ([islike: Ethernet Phone])
+  
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+IMAP: |
+  The most popular remote mailbox access protocol. The major 
+  alternative is POP3. Unlike in POP3, IMAP clients
+  usually leave their messages on the server.
+  
+  You probably use one or the other. This is the more complex protocol. 
+  Also, IMAP servers are slightly more attractive targets.
+  
+  There are extensions to IMAP to support digest authentication and SSL. You 
+  should not assume they are being used; IMAP clients are probably
+  transmitting their passwords in cleartext.
+  
+  ([tcp-port: 143])
+  ([tcp-port: 585])
+  ([tcp-port: 993])
+  ([is: MailProtocol])
+  
+  ([exposes-data: 3])
+  ([exposes-integrity: 2])
+  ([exposes-connectivity: 2])
+  ([risk: medium])
+  
+  ([strong-encryption: no])
+  ([strong-auth: maybe])
+  
+  ([complexity: medium])
+  ([history: weak])
+  ([is: protocol])
+
+WINS: |
+  Windows Internet Name Service (WINS)
+  
+  WINS is a protocol that is used to resolve names for Netbios. It maps
+  host names to network addresses. In recent years WINS is often replaced 
+  by DNS in most network environments. By design any client can register
+  a name with a WINS server, which leaves it open for attack. 
+  
+  ([tcp-port: 1512])
+  ([udp-port: 1512])
+  ([is: NameResolution])
+  ([islike: DNS])
+  
+  ([exposes-data: 1])
+  ([exposes-integrity: 1])
+  ([exposes-connectivity: 2])
+  ([risk: low])
+  
+  ([strong-encryption: no])
+  ([strong-auth: no])
+  ([is: protocol])
+
+AT-NBP: |
+  The \AppleTalk Name Binding Protocol (AT-NBP) manages the use of names on AppleTalk networks. AT-NBP maintains a names directory that includes names registered by hosts and bound to socket addresses. After a name is registered, the AppleTalk host can perform a name lookup to find the socket address associated with the name.
+  	
+  ([tcp-port: 202])
+  ([udp-port: 202])
+  ([alias: at-nbp])
+  
+  ([exposes-data: ])
+  ([exposes-integrity: ])
+  ([exposes-connectivity: ])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+
+HSRP: |+
+  HSRP is the Hot Standby Router Protocol. This is a Cisco proprietary protocol,
+  which spurred the creation of the open, standardized protocol VRRP.
+  HSRP is used as a mechanism to allow for the failover of routing devices
+  without causing service disruption at the IP layer.
+  
+  HSRP authentication is done using a cleartext password.  This password is
+  'cisco' by default.
+  
+  HSRP messages are sent to multicast address 224.0.0.2.
+  
+  Transmissions to HSRP should not be allowed by end-user machines.  Filtering
+  this protocol, and limiting its use to dedicated management networks is highly
+  recommended.
+  
+  ([tcp-port: 1985])
+  ([udp-port: 1985])
+  ([is: HighAvailabilityProtocol])
+  
+  ([exposes-data: 2 may expose information about network topology])
+  ([exposes-integrity: 2])
+  ([exposes-connectivity: 3 may allow for the disruption of network traffic])
+  ([risk: low])
+  
+  ([strong-encryption: no])
+  ([strong-auth: no])
+  
+  ([complexity: medium])
+  ([setting: BackChannel])
+  ([setting: internal])
+  ([exotic: no])
+  ([is: protocol])
+  
+NFS: |+
+  NFS is the Network File System protocol.  NFS is a distributed file system,
+  that allows for file systems residing on remote machines to be accessed as
+  if they were local drives. 
+  
+  NFS is an RPC based protocol.
+  
+  NFS has a history of vulnerabilities, some of which are related to its use of
+  RPC as a transport, and some of which are directly related to the protocol
+  itself.  A number of the authentication mechanisms utilized by RPC are
+  considered weak; some may be observed by sniffing the network, while others
+  may be attacked via a man-in-the-middle attack.  Even in situations where
+  stronger authentication may be applied, downgrade attacks may be possible
+  which can cause a lesser algorithm to be applied.
+  
+  Other attacks exist whereby an attacker can access files directly, without being subject to normal filesystem mounting restrictions, by guessing the handles
+  NFS uses to provide file access.
+  
+  A number of the flaws in NFS have been addressed in NFSv4, including
+  improved authenticatio mechanisms, and optional data encryption.
+  
+  
+  ([tcp-port: 2049])
+  ([udp-port: 2049])
+  ([is: FileSystemServices])
+  
+  ([exposes-data: 5 Filesystems can information critical to the business])
+  ([exposes-integrity: 1])
+  ([exposes-connectivity: 2])
+  ([risk: medium])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  
+  ([complexity: low])
+  ([history: mediocre])
+  ([setting: internal])
+  ([exotic: no])
+  ([is: protocol])
+  
+UDP-Lite: |
+  Lightweight User Datagram Protocol (UDP-Lite)
+  
+  UDP-Lite is a Transport Layer Protocol that is identical to UDP (User Datagram
+  Protocol) and with the slight difference that UDP-Lite can support "partial
+  checksums". In traditional UDP the "checksum" field is calculated for the full
+  contents of the "data" field of a packet. In UDP-Lite, the checksum is only
+  calculated over partial parts of the datagram. While support for this modified
+  version of UDP is not universal, it is currently being supported in recent Linux
+  kernels. 
+  
+  ([is: UserDatagramProtocol])
+  ([islike: UDP])
+  
+  ([exposes-data: 5])
+  ([exposes-integrity: 5])
+  ([exposes-connectivity: 5])
+  ([risk: low])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  
+  ([rfc: http://www.ietf.org/rfc/rfc4019.txt])
+  ([is: protocol])
+
+XTP: |
+  Xpress Transport Protocol (XTP)
+  
+  XTP is a transport layer protocol developed by the non-profit XTP Forum to provide all of the functionality found in TCP and UDP in a single transport protocol. XTP reportedly can run over any network layer, though typically implemented over IP. XTP has packet formats to implement different models, such as multicast and reliable datagrams. 
+  
+  ([rfc: http://www.ietf.org/rfc/rfc1458.txt])
+  ([is: protocol])
+
+HTTP: |+
+  Hypertext Transfer Protocol (HTTP) is an application layer protocol used to retrieve and publish documents formatted in Hypertext Markup Language (HTML). HTTP is a request/response standard between a client and a server. A client is the end-user, the server is the web site. The client making an HTTP request - using a web browser, spider, or other end-user tool - is referred to as the user agent. The responding server - which stores or creates resources such as HTML files and images - is called the origin server. In between the user agent and origin server may be several intermediaries, such as proxies, gateways, and tunnels. HTTP is not constrained to using TCP/IP and its supporting layers, although this is its most popular application on the Internet. See also HTTPS.
+  
+  ([tcp-port: 80])
+  ([udp-port: 80])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+  
+H_323: |
+  H.323 (H.323)
+  
+  H.323 is an umbrella Recommendation from the ITU Telecommunication Standardization Sector (ITU-T) that defines the protocols of a system for multimedia communications services over packet based networks. See also 
+  
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  
+  ([rfc: http://www.ietf.org/rfc/rfc3508.txt])
+  ([is: protocol])
+
+SCTP: |
+  Stream Control Transmission Protocol (SCTP)
+  
+  SCTP is an alternative reliable transport protocol to TCP designed 
+  primarily to support telephony applications on IP networks (SS7 
+  signalling and reliable stream delivery).  Unlike TCP, SCTP can 
+  guarantee the complete and concurrent delivery of multiple streams of 
+  data between two connected endpoints.
+  
+  Security considerations for SCTP are described in rfc5062
+  
+  ([ip-protocol: 132])
+  (is: VOIP])
+  ([islike: TCP])
+  
+  ([risk: low])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: no])
+  ([rfc: http://www.ietf.org/rfc/rfc4960.txt])
+  ([is: protocol])
+
+tn3270: |+
+  Telnet 3270 (tn3270) is a plaintext protocol provides mainframe application access to end users.  Allow us to repeat the words "plaintext" and "mainframe application access".
+  
+  ([tcp-port: 23])
+  ([is: RemoteShellProtocol])
+  ([islike: telnet])
+  
+  ([exposes-data: 5 Exposes mainframe data])
+  ([exposes-integrity: 3 Runs mainframe application commands])
+  ([exposes-connectivity: 2])
+  ([risk: high])
+  
+  ([strong-encryption: no])
+  ([strong-auth: no])
+  
+  ([complexity: medium])
+  ([history: weak])
+  ([exotic: no])
+  ([setting: external])
+  ([is: protocol])
+  
+PPTP: |+
+  PPTP (Point to Point Tunneling Protocol) allows PPP to be channeled through an IP network. It uses a client-server architecture to decouple functions which exist in current Network Access Servers and support Virtual Private Networks. It specifies a call-control and management protocol which allows the server to control access for dial-in circuit switched calls originating from a public switched telephone network (PSTN) or Integrated Services Digital Network (ISDN), or to initiate outbound circuit switched connections. PPTP uses a GRE-like (Generic Routing Encapsulation) mechanism to provide a flow- and congestion-controlled encapsulated datagram service for carrying PPP packets.
+  
+  ([tcp-port: 1723])
+  ([udp-port: 1723])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+  
+AT-ZIS: |
+  The \AppleTalk Zone Information Service (AT-ZIS) manages the relationship between network numbers and zone names. AppleTalk networks primarily implement ZIS in routers that gather network number information by monitoring RTMP frames.
+  	
+  ([tcp-port: 206])
+  ([udp-port: 206])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+
+iSCSI: |+
+  iSCSI remotes entire hard disks over the network, giving a client the 
+  illusion of a directly-attached block device it can format and mount 
+  filesystems on.
+  
+  ([tcp-port: 3260])
+  ([alias: Internet SCSI Protocol])
+  ([is: BlockStorageProtocol])
+  ([is: DisasterRecoveryProtocol])
+  
+  ([exposes-data: 5 Used for storage of critical data])
+  ([exposes-integrity: 2])
+  ([exposes-connectivity: 2])
+  ([risk: high])
+  
+  ([strong-encryption: no])
+  ([strong-auth: no])
+  
+  ([is: protocol])
+  
+CMIP-AGENT: |
+  Common Management Information Protocol (CMIP) is a protocol for network management and an implementation for the services defined by the Common management information service (CMIS). CMIP allows communication between network management applications and management agents. CMIS/CMIP emerged out of the ISO/OSI Network management model and is defined by the ITU-T X.700 series of recommendations. CMIP is less common than the more popular SNMP designed by the IETF. See also CMIP-MAN.
+  	
+  ([tcp-port: 164])
+  ([udp-port: 164])
+  ([alias: cmip-agent])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+
+FTP: |+
+  The File Transfer Protocol (FTP) provides the basic elements of file sharing between hosts. FTP uses TCP to create a virtual connection for control information and then creates a separate TCP connection for data transfers. The control connection uses an image of the TELNET protocol to exchange commands and messages between hosts.
+  
+  ([tcp-port: 21])
+  ([udp-port: 21])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+  
+syslog: |
+  Syslog (syslog)
+  
+  Syslog is the industry standard protocol for distributed logging mechanisms.  
+  Many embedded network devices use syslog to send log messages to remote hosts
+  often referred to as 'loghosts'.  In the past, open syslog ports have allowed
+  attackers to send arbitrary log messages and to attempt to fill up a loghost's
+  hard drive.
+  
+  ([udp-port: 514])
+  ([is: LoggingService])
+  
+  ([exposes-data: 1])
+  ([exposes-integrity: 1])
+  ([exposes-connectivity: 2])
+  ([risk: low])
+  
+  ([strong-encryption: no])
+  ([strong-auth: no])
+  
+  ([complexity: low])
+  ([history: mediocre])
+  ([setting: internal])
+  ([exotic: no])
+  
+  ([rfc: http://tools.ietf.org/html/rfc3164])
+  ([is: protocol])
+
+YahooMessenger: |+
+  Yahoo! Messenger protocol (YMSG)
+  
+  Yahoo! Messenger is a proprietary instant messanger protocol developed 
+  by Yahoo!
+  
+  ([tcp-port: 5050])
+  ([alias: YMSG])
+  ([is: ProprietaryProtocol])
+  ([is: IMProtocol])
+  ([islike: OSCAR])
+  
+  ([app: Yahoo Messenger])
+  ([app: Adium])
+  
+  ([exposes-data: 2])
+  ([exposes-integrity: 2])
+  ([exposes-connectivity: 3 Links one client to a buddy list of others])
+  ([risk: medium])
+  
+  ([strong-encryption: no])
+  ([strong-auth: no])
+  
+  ([complexity: medium])
+  ([is: protocol])
+  
+AppleTalk: |-
+  \AppleTalk is a multi-layered protocol providing inter-network routing, transaction and data stream service, naming service, and comprehensive file and print sharing developed by Apple Computer, using the \LocalTalk interface built into Apple hardware. \AppleTalk ports to other network media such as Ethernet by the use of \LocalTalk to ethernet bridges or by ethernet add-in boards for Apple machines. The \AppleTalk Protocol suite includes the following protocols:
+  
+   
+  * AARP: \AppleTalk Address Resolution Protocol
+  * DDP: Datagram Delivery Protocol
+  * AT-RTMP: Routing Table Maintenance Protocol
+  * AT-ECHO: \AppleTalk Echo Protocol
+  * ATP: \AppleTalk Transaction Protocol
+  * AT-NBP: Name-Binding Protocol
+  * AT-ZIS: Zone Information Service
+  * ASP: \AppleTalk Session Protocol
+  * PAP: Printer Access Protocol
+  * ADSP: \AppleTalk Data Stream Protocol
+  * AFP: \AppleTalk Filing Protocol
+  
+  ([is: protocol])
+RTSP: |+
+  The Real Time Streaming Protocol (RTSP) is used to control the streaming of media such as audio and video over IP networks. RTSP is often used in combination with RTP since RTSP is not a streaming protocol.
+  
+  ([tcp-port: 554])
+  ([udp-port: 554])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+  
+WHOIS: |
+  Whois (Whois)
+  
+  is a TCP-based query/response protocol which is widely used for querying an official database in order to determine the owner of a domain name, an IP address, or an autonomous system number on the Internet. 
+  
+  ([tcp-port: 43])
+  
+  ([rfc: http://www.ietf.org/rfc/rfc3912.txt])
+  ([is: protocol])
+
+RDP: |+
+  Remote Desktop Protocol (RDP)
+  
+  RDP allows clients to remotely log into networked Windows servers 
+  running terminal services.  Clients are available for most modern 
+  operating systems including Windows, Windows handeld versions, Linux
+  and Mac OS X.
+  
+  Note: Not to be confused with the Reliable Data Protocol rfc908
+  
+  ([tcp-port: 3889])
+  ([alias: TSC])
+  ([is: RemoteProtocol])
+  ([islike: VNC, Citrix])
+  
+  ([exposes-data: 1])
+  ([exposes-integrity: 4])
+  ([exposes-connectivity: 2])
+  ([risk: ihigh])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+  
+Telnet: |+
+  The classic remote management protocol; used to interact with command shells
+  (the Unix shell, Windows CMD.EXE, or the IOS CLI, for example). Almost always
+  a bad idea. Replace with SSH.
+  
+  ([tcp-port: 23])
+  ([is: RemoteShellProtocol])
+  
+  ([exposes-data: 1])
+  ([exposes-integrity: 5 Runs shell commands])
+  ([exposes-connectivity: 2])
+  ([risk: high])
+  
+  ([strong-encryption: no])
+  ([strong-auth: no])
+  
+  ([complexity: medium])
+  ([history: weak])
+  ([exotic: no])
+  ([is: protocol])
+  
+FINGER: |+
+  The Finger User Information Protocol is an application layer, ASCII-based protocol used by a finger client and server to exchange information about user accounts on that server. Sending a null string to a finger server will return all user information for that server. Disabled on most servers. Described in RFC 1288.
+  
+  ([tcp-port: 79])
+  ([udp-port: 79])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+  
+CMIP-MAN: |
+  Common Management Information Protocol (CMIP) is a protocol for network management and an implementation for the services defined by the Common management information service (CMIS). CMIP allows communication between network management applications and management agents. CMIS/CMIP emerged out of the ISO/OSI Network management model and is defined by the ITU-T X.700 series of recommendations. CMIP is less common than the more popular SNMP designed by the IETF.  See also CMIP-AGENT.
+  
+  	
+  ([tcp-port: 163])
+  ([udp-port: 163])
+  ([alias: cmip-man])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  ([is: protocol])
+
+RADIUS: |+
+  Allows servers, routers, and infrastructure to verify the identity of clients
+  without needing to store everyone's password locally; instead, the RADIUS
+  server verifies authentication.
+  
+  The default authentication protocol for environments that use SecureID 
+  tokens. Popular on infrastructure devices (the successor to TACACS.
+  
+  RADIUS has an undeserved reputation as a highly secure protocol. It isn't;
+  RADIUS can be dictionary attacked and virtually none of it is encrypted. Be
+  careful with it.
+  
+  ([udp-port: 1812])
+  ([tcp-port: 1812])
+  ([is: AuthenticationProtocol])
+  
+  ([exposes-data: 2])
+  ([exposes-integrity: 4 Controls authentication decisions])
+  ([exposes-connectivity: 3 Often controls routers and switches])
+  ([risk: medium])
+  
+  ([strong-encryption: no])
+  ([strong-auth: yes])
+  
+  ([complexity: low])
+  ([is: protocol])
+  
+Ident: |
+  The Ident protocol allows one side of a TCP connection to determine the
+  username associated with the remote side of the connection.  Today, the
+  Ident protocol is primarily used by IRC servers as a trivial form of authentication.
+  
+  ([tcp-port: 113])
+  ([is: InformationService])
+  
+  ([exposes-data: 2 usernames are exposed])
+  ([exposes-integrity: 1])
+  ([exposes-connectivity: 2])
+  ([risk: low])
+  
+  ([strong-encryption: no])
+  ([strong-auth: no])
+  
+  ([complexity: low])
+  ([history: mediocre])
+  ([setting: internal])
+  ([exotic: no])
+  ([is: protocol])
+
+Megaco: |
+  Media Gateway Control Protocol (Megaco)
+  
+  Megaco is a result of joint efforts of the IETF and the ITU-T Study Group 16. The protocol definition of this protocol is common text with ITU-T Recommendation H.248. It is similar to MGCP.
+  
+  The Megaco protocol is used between elements of a physically decomposed multimedia gateway. There are no functional differences from a system view between a decomposed gateway, with distributed sub-components potentially on more than one physical device, and a monolithic gateway such as described in H.246. This protocol creates a general framework suitable for gateways, multipoint control units and interactive voice response units (IVRs).
+  
+  Packet network interfaces may include IP, ATM or possibly others. The interfaces support a variety of SCN signalling systems, including tone signalling, ISDN, ISUP, QSIG and GSM. National variants of these signalling systems are supported where applicable.
+  
+  All messages are in the format of ASN.1 text messages.
+  
+  ([tcp-port: 2944])
+  ([udp-port: 2944])
+  ([tcp-port: 2945])
+  ([udp-port: 2945])
+  
+  ([rfc: http://www.ietf.org/rfc/rfc3435.txt])
+  ([is: protocol])
+
+AFP: |
+  Apple Filing Protocol (AFP) provides file services for Macintosh computers, 
+  giving a client the appearance of an additional filesystem it can store
+  files on.
+  
+  ([tcp-port: 548])
+  ([tcp-port: 427])
+  ([alias: Apple Filing Protocol])
+  ([is: StorageProtocol])
+  ([is: AppleProtocol])
+  
+  ([exposes-data: 5 Used for storage of critical data])
+  ([exposes-integrity: 2])
+  ([exposes-connectivity: 2])
+  ([risk: high])
+  
+  ([strong-encryption: maybe])
+  ([strong-auth: maybe])
+  
+  ([is: protocol])
+
+eDonkey: |
+  eDonkey
+  
+  eDonkey is a popular peer to peer file sharing protocol.
+  
+  The eDonkey file transfer default port is tcp/4662 outbound.  File 
+  search use a random UDP port and are difficult to filter.
+  
+  The Storm Worm used an eDonkey derived protocol to propagate and allow 
+  for distributed command and control.
+  
+  ([tcp-port: 4662])
+  ([is: PeerToPeerProtocol])
+  
+  ([exposes-data: 5])
+  ([exposes-integrity: 1])
+  ([exposes-connectivity: 2])
+  ([risk: high])
+  
+  ([strong-encryption: no])
+  ([strong-auth: no])
+  ([is: protocol])
+
+RIPng: |
+  RIPng (RIPng)
+  
+  RIP (Routing Information Protocol) Next Generation was designed to
+  extend the RIP/RIPv2 protocol to support IPv6.
+  
+  ([udp-port: 521])
+  ([is: RoutingProtocol])
+  ([islike: IGRP, OSPF, RIP])
+  
+  ([exposes-data: 2])
+  ([exposes-integrity: 1])
+  ([exposes-connectivity: 3])
+  ([risk: low])
+  
+  ([strong-encryption: no])
+  ([strong-auth: maybe])
+  
+  ([rfc: http://www.ietf.org/rfc/rfc2080.txt])
+  ([is: protocol])
+

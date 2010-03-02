@@ -1,0 +1,31 @@
+.inner_heading DESCRIPTION
+%p.tr_description
+  :markdown 
+    #{r.description}
+- unless r.summary.empty?
+  %p.tr_summary
+    :markdown
+      #{r.summary}
+
+- unless r.affected_rules.empty?
+  .inner_heading FIREWALL RULES
+  %table.tr_rules 
+    - r.affected_rules.each do |x|
+      %tr
+        %td= x
+        %td= begin; Flint::CiscoLine.find(:sha => r.sha, :number => x).first.source; rescue; "unknown line"; end
+
+- unless r.affected_interfaces.empty?
+  .inner_heading FIREWALL INTERFACES
+  %table.tr_interfaces
+    - r.affected_interfaces.each do |x|
+      %tr
+        %td= x
+
+- unless r.affected_netblocks.empty?
+  .inner_heading NETWORK BLOCKS
+  %table.tr_interfaces
+    - r.affected_netblocks.each do |x|
+      %tr
+        %td= x
+

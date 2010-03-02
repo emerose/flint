@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+
+	<title>Class: Flint::TestRunner</title>
+
+	<link rel="stylesheet" href="../rdoc.css" type="text/css" media="screen" />
+
+	<script src="../js/jquery.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="../js/thickbox-compressed.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="../js/quicksearch.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="../js/darkfish.js" type="text/javascript"
+		charset="utf-8"></script>
+
+</head>
+<body class="class">
+
+	<div id="metadata">
+		<div id="file-metadata">
+			<div id="file-list-section" class="section">
+				<h3 class="section-header">In Files</h3>
+				<div class="section-body">
+					<ul>
+					
+						<li><a href="../lib/flint/test_runner_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+							class="thickbox" title="lib/flint/test_runner.rb">lib/flint/test_runner.rb</a></li>
+					
+					</ul>
+				</div>
+			</div>
+
+			
+		</div>
+
+		<div id="class-metadata">
+
+			<!-- Parent Class -->
+			
+			<div id="parent-class-section" class="section">
+				<h3 class="section-header">Parent</h3>
+				
+				<p class="link">Object</p>
+				
+			</div>
+			
+
+			<!-- Namespace Contents -->
+			
+
+			<!-- Method Quickref -->
+			
+			<div id="method-list-section" class="section">
+				<h3 class="section-header">Methods</h3>
+				<ul class="link-list">
+					
+					<li><a href="#M000166">::new</a></li>
+					
+					<li><a href="#M000170">#errors</a></li>
+					
+					<li><a href="#M000171">#failures</a></li>
+					
+					<li><a href="#M000169">#results</a></li>
+					
+					<li><a href="#M000167">#run</a></li>
+					
+					<li><a href="#M000172">#successes</a></li>
+					
+				</ul>
+			</div>
+			
+
+			<!-- Included Modules -->
+			
+		</div>
+
+		<div id="project-metadata">
+			
+			
+			<div id="fileindex-section" class="section project-section">
+				<h3 class="section-header">Files</h3>
+				<ul>
+				
+					<li class="file"><a href="../LICENSE_txt.html">LICENSE.txt</a></li>
+				
+					<li class="file"><a href="../README.html">README</a></li>
+				
+				</ul>
+			</div>
+			
+
+			<div id="classindex-section" class="section project-section">
+				<h3 class="section-header">Class Index
+					<span class="search-toggle"><img src="../images/find.png"
+						height="16" width="16" alt="[+]"
+						title="show/hide quicksearch" /></span></h3>
+				<form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+				<fieldset>
+					<legend>Quicksearch</legend>
+					<input type="text" name="quicksearch" value=""
+						class="quicksearch-field" />
+				</fieldset>
+				</form>
+
+				<ul class="link-list">
+				
+					<li><a href="../Flint.html">Flint</a></li>
+				
+					<li><a href="../Flint/AnyNetSpec.html">Flint::AnyNetSpec</a></li>
+				
+					<li><a href="../Flint/CidrSet.html">Flint::CidrSet</a></li>
+				
+					<li><a href="../Flint/CiscoFirewall.html">Flint::CiscoFirewall</a></li>
+				
+					<li><a href="../Flint/CiscoLine.html">Flint::CiscoLine</a></li>
+				
+					<li><a href="../Flint/CiscoLineParse.html">Flint::CiscoLineParse</a></li>
+				
+					<li><a href="../Flint/CiscoParse.html">Flint::CiscoParse</a></li>
+				
+					<li><a href="../Flint/EmptyNetSpec.html">Flint::EmptyNetSpec</a></li>
+				
+					<li><a href="../Flint/Firewall.html">Flint::Firewall</a></li>
+				
+					<li><a href="../Flint/Interface.html">Flint::Interface</a></li>
+				
+					<li><a href="../Flint/Line.html">Flint::Line</a></li>
+				
+					<li><a href="../Flint/NetBlockSpec.html">Flint::NetBlockSpec</a></li>
+				
+					<li><a href="../Flint/NetSetSpec.html">Flint::NetSetSpec</a></li>
+				
+					<li><a href="../Flint/NetSpec.html">Flint::NetSpec</a></li>
+				
+					<li><a href="../Flint/NetTableSpec.html">Flint::NetTableSpec</a></li>
+				
+					<li><a href="../Flint/Resolver.html">Flint::Resolver</a></li>
+				
+					<li><a href="../Flint/ResolverCache.html">Flint::ResolverCache</a></li>
+				
+					<li><a href="../Flint/Rule.html">Flint::Rule</a></li>
+				
+					<li><a href="../Flint/RuleChain.html">Flint::RuleChain</a></li>
+				
+					<li><a href="../Flint/RuleChainCache.html">Flint::RuleChainCache</a></li>
+				
+					<li><a href="../Flint/ServiceResolver.html">Flint::ServiceResolver</a></li>
+				
+					<li><a href="../Flint/Table.html">Flint::Table</a></li>
+				
+					<li><a href="../Flint/Test.html">Flint::Test</a></li>
+				
+					<li><a href="../Flint/TestGroup.html">Flint::TestGroup</a></li>
+				
+					<li><a href="../Flint/TestGroupLoader.html">Flint::TestGroupLoader</a></li>
+				
+					<li><a href="../Flint/TestNotApplicable.html">Flint::TestNotApplicable</a></li>
+				
+					<li><a href="../Flint/TestResult.html">Flint::TestResult</a></li>
+				
+					<li><a href="../Flint/TestRunner.html">Flint::TestRunner</a></li>
+				
+					<li><a href="../Ohm.html">Ohm</a></li>
+				
+					<li><a href="../Ohm/Attributes.html">Ohm::Attributes</a></li>
+				
+					<li><a href="../Ohm/Attributes/Collection.html">Ohm::Attributes::Collection</a></li>
+				
+					<li><a href="../Ohm/Model.html">Ohm::Model</a></li>
+				
+					<li><a href="../Cisco.html">Cisco</a></li>
+				
+					<li><a href="../Cisco/PixParser.html">Cisco::PixParser</a></li>
+				
+					<li><a href="../Cisco/RalexPix.html">Cisco::RalexPix</a></li>
+				
+					<li><a href="../Array.html">Array</a></li>
+				
+					<li><a href="../AsaFirewall.html">AsaFirewall</a></li>
+				
+					<li><a href="../CiscoConfigurationSupport.html">CiscoConfigurationSupport</a></li>
+				
+					<li><a href="../CiscoTagger.html">CiscoTagger</a></li>
+				
+					<li><a href="../GenericPixLine.html">GenericPixLine</a></li>
+				
+					<li><a href="../IPAddr.html">IPAddr</a></li>
+				
+					<li><a href="../IosFirewall.html">IosFirewall</a></li>
+				
+					<li><a href="../PfFirewall.html">PfFirewall</a></li>
+				
+					<li><a href="../PfLine.html">PfLine</a></li>
+				
+					<li><a href="../PfLineRenderer.html">PfLineRenderer</a></li>
+				
+					<li><a href="../PixCommentLine.html">PixCommentLine</a></li>
+				
+					<li><a href="../PixFirewall.html">PixFirewall</a></li>
+				
+					<li><a href="../PixLine.html">PixLine</a></li>
+				
+					<li><a href="../Symbol.html">Symbol</a></li>
+				
+				</ul>
+				<div id="no-class-search-results" style="display: none;">No matching classes.</div>
+			</div>
+
+			
+		</div>
+	</div>
+
+	<div id="documentation">
+		<h1 class="class">Flint::TestRunner</h1>
+
+		<div id="description">
+			
+		</div>
+
+		<!-- Constants -->
+		
+
+		<!-- Attributes -->
+		
+		<div id="attribute-method-details" class="method-section section">
+			<h3 class="section-header">Attributes</h3>
+
+			
+			<div id="test-group-attribute-method" class="method-detail">
+				<a name="test_group"></a>
+				
+				<div class="method-heading attribute-method-heading">
+					<span class="method-name">test_group</span><span
+						class="attribute-access-type">[R]</span>
+				</div>
+
+				<div class="method-description">
+				
+				<p class="missing-docs">(Not documented)</p>
+				
+				</div>
+			</div>
+			
+		</div>
+		
+
+		<!-- Methods -->
+		
+		<div id="public-class-method-details" class="method-section section">
+			<h3 class="section-header">Public Class Methods</h3>
+
+		
+			<div id="new-method" class="method-detail ">
+				<a name="M000166"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">new</span><span
+						class="method-args">(test_group)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p class="missing-docs">(Not documented)</p>
+					
+
+					
+					<div class="method-source-code"
+						id="new-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/flint/test_runner.rb, line 9</span>
+ 9:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">test_group</span>)
+10:       <span class="ruby-ivar">@test_group</span> = <span class="ruby-identifier">test_group</span>
+11:       <span class="ruby-ivar">@firewall</span> = <span class="ruby-keyword kw">nil</span>
+12:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+		</div>
+	
+		<div id="public-instance-method-details" class="method-section section">
+			<h3 class="section-header">Public Instance Methods</h3>
+
+		
+			<div id="errors-method" class="method-detail ">
+				<a name="M000170"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">errors</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+returns an array of <a href="TestResult.html">TestResult</a> objects that
+are errors
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="errors-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/flint/test_runner.rb, line 53</span>
+53:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">errors</span>
+54:       <span class="ruby-keyword kw">return</span> [] <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@firewall</span>
+55:       <span class="ruby-constant">TestResult</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">:sha</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@firewall</span>.<span class="ruby-identifier">sha</span>,
+56:                       <span class="ruby-identifier">:group</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@test_group</span>.<span class="ruby-identifier">code</span>,
+57:                       <span class="ruby-identifier">:result</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:error</span>)
+58:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="failures-method" class="method-detail ">
+				<a name="M000171"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">failures</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+returns an array of <a href="TestResult.html">TestResult</a> objects that
+are failures
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="failures-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/flint/test_runner.rb, line 61</span>
+61:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">failures</span>
+62:       <span class="ruby-keyword kw">return</span> [] <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@firewall</span>
+63:       <span class="ruby-constant">TestResult</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">:sha</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@firewall</span>.<span class="ruby-identifier">sha</span>,
+64:                       <span class="ruby-identifier">:group</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@test_group</span>.<span class="ruby-identifier">code</span>,
+65:                       <span class="ruby-identifier">:result</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:fail</span>)
+66:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="results-method" class="method-detail ">
+				<a name="M000169"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">results</span><span
+						class="method-args">(tcode = nil)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+returns an array of <a href="TestResult.html">TestResult</a> objects. if
+tcodes is a test code, like :syntax_check, then it will return just the
+results for that test. If tcodes is a string, it returns the results for
+the test with that title. If it is an array of test codes it returns the
+results for all those tests.
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="results-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/flint/test_runner.rb, line 37</span>
+37:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">results</span>(<span class="ruby-identifier">tcode</span> = <span class="ruby-keyword kw">nil</span>)
+38:       <span class="ruby-keyword kw">return</span> [] <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@firewall</span>
+39:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">tcode</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">Symbol</span>
+40:         <span class="ruby-constant">TestResult</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">:sha</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@firewall</span>.<span class="ruby-identifier">sha</span>,
+41:                         <span class="ruby-identifier">:group</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@test_group</span>.<span class="ruby-identifier">code</span>,
+42:                         <span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">tcode</span>)
+43:       <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">tcode</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">String</span>
+44:         <span class="ruby-constant">TestResult</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">:sha</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@firewall</span>.<span class="ruby-identifier">sha</span>,
+45:                         <span class="ruby-identifier">:group</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@test_group</span>.<span class="ruby-identifier">code</span>,
+46:                         <span class="ruby-identifier">:title</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">tcode</span>)
+47:       <span class="ruby-keyword kw">else</span>
+48:         <span class="ruby-constant">TestResult</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">:sha</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@firewall</span>.<span class="ruby-identifier">sha</span>, <span class="ruby-identifier">:group</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@test_group</span>.<span class="ruby-identifier">code</span>)
+49:       <span class="ruby-keyword kw">end</span>
+50:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="run-method" class="method-detail ">
+				<a name="M000167"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">run</span><span
+						class="method-args">(firewall, opts={})</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p class="missing-docs">(Not documented)</p>
+					
+
+					
+					<div class="method-source-code"
+						id="run-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/flint/test_runner.rb, line 14</span>
+14:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">run</span>(<span class="ruby-identifier">firewall</span>, <span class="ruby-identifier">opts</span>={})
+15:       <span class="ruby-ivar">@firewall</span> = <span class="ruby-identifier">firewall</span>
+16:       <span class="ruby-constant">TestResult</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">:sha</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@firewall</span>.<span class="ruby-identifier">sha</span>,
+17:                       <span class="ruby-identifier">:group</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@test_group</span>.<span class="ruby-identifier">code</span>).<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span> <span class="ruby-identifier">r</span>.<span class="ruby-identifier">delete</span> }
+18: 
+19:       <span class="ruby-ivar">@test_group</span>.<span class="ruby-identifier">tests</span>.<span class="ruby-identifier">values</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span>
+20:         <span class="ruby-comment cmt"># make sure it's test group is set</span>
+21:         <span class="ruby-identifier">t</span>.<span class="ruby-identifier">group_code</span> = <span class="ruby-ivar">@test_group</span>.<span class="ruby-identifier">code</span>
+22:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">t</span>.<span class="ruby-identifier">interface_only?</span>
+23:           <span class="ruby-identifier">firewall</span>.<span class="ruby-identifier">interfaces</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">iface</span><span class="ruby-operator">|</span>
+24:             (<span class="ruby-identifier">tif</span> = <span class="ruby-identifier">t</span>.<span class="ruby-identifier">clone</span>).<span class="ruby-identifier">run_iface</span>(<span class="ruby-identifier">iface</span>.<span class="ruby-identifier">last</span>, <span class="ruby-identifier">firewall</span>)
+25:           <span class="ruby-keyword kw">end</span>
+26:         <span class="ruby-keyword kw">else</span>
+27:           <span class="ruby-identifier">t</span>.<span class="ruby-identifier">run</span>(<span class="ruby-identifier">firewall</span>)
+28:         <span class="ruby-keyword kw">end</span>
+29:       <span class="ruby-keyword kw">end</span>
+30:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="successes-method" class="method-detail ">
+				<a name="M000172"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">successes</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p>
+returns an array of <a href="TestResult.html">TestResult</a> objects that
+are successes
+</p>
+					
+
+					
+					<div class="method-source-code"
+						id="successes-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/flint/test_runner.rb, line 69</span>
+69:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">successes</span>
+70:       <span class="ruby-keyword kw">return</span> [] <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@firewall</span>
+71:       <span class="ruby-constant">TestResult</span>.<span class="ruby-identifier">find</span>(<span class="ruby-identifier">:sha</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@firewall</span>.<span class="ruby-identifier">sha</span>,
+72:                       <span class="ruby-identifier">:group</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@test_group</span>.<span class="ruby-identifier">code</span>,
+73:                       <span class="ruby-identifier">:result</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:pass</span>)
+74:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+		</div>
+	
+
+	</div>
+
+
+	<div id="rdoc-debugging-section-dump" class="debugging-section">
+	
+		<p>Disabled; run with --debug to generate this.</p>
+	
+	</div>
+
+	<div id="validator-badges">
+		<p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+		<p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+			Rdoc Generator</a> 1.1.6</small>.</p>
+	</div>
+
+</body>
+</html>
+

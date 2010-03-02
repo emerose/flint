@@ -1,0 +1,1522 @@
+## Every time you modify this file, you have to regenerate pix_parser.rb by
+## running the following command:
+##
+## rake playbook:pix_parser
+##
+## racc is in the third party build, so make sure to set your
+## environment accordingly Just in case, you might wanna save a copy
+## of the existing pix_parser.rb
+##
+## Make sure to add new identifiers to the token list, also the id.
+## pattern on line 966.  You will also need to add it to the
+## ralex_pix.rl keyword list.
+
+class Cisco::PixParser
+    
+    token CLASS_MAP REMARK FTP ROUTER_ADVERTISEMENT ECHO COMPILED TIMESTAMP NETMASK PASSIVE TIMESTAMP_REQUEST BUFFERED INTERACT_BLOCK PERMIT TRANSPARENT OBJECT_GROUP_SEARCH NEQ ALLOW LT NAT_REWRITE MOBILE_REDIRECT LOGGING SERVICE_OBJECT ICMP_TYPE RENAME LINE INTER_INTERFACE UNREACHABLE EXCEPT REJECT CONVERSION_ERROR MASK_REQUEST FILTER CGI_TRUNCTATE INACTIVE INFORMATION_REPLY CONSOLE NETWORK LOG QUEUE DESCRIPTION ACTIVEX ETHERTYPE MESSAGE MPLS_MULTICAST URL GT OUT TYPE TIMESTAMP_REPLY ACCESS_LIST MASK_REPLY CLEAR ALTERNATE_ADDRESS REDIRECT ANY DISABLE SOURCE_QUENCH EMBLEM DENY_FLOW_MAX IPX SYSOPT STATIC LONGURL_TRUNCATE HOST GLOBAL OBJECT_GROUP DEVICE_ID UDP MONITOR FIXUP FORMAT PORT_OBJECT EQ JAVA BOTH MPLS_UNICAST INSPECT CLASS EXTENDED WEBTYPE DENY CONTROL_PLANE TRAP PROTOCOL NETWORK_OBJECT TCP NO GROUP_OBJECT ACCESS_GROUP TIME_RANGE INFORMATION_REQUEST BURST_SIZE RATE_LIMIT INSIDE MODE OUTSIDE INTERFACE ICMP_OBJECT INTRA_INTERFACE PROTOCOL_OBJECT CDP NORANDOMSEQ URL_SERVER NAT SAME_SECURITY_TRAFFIC ICMP BPDU FIREWALL FLOODGUARD STANDBY FACILITY ECHO_REPLY PARAMETER_PROBLEM HISTORY TCP_UDP IN RANGE SET ENABLE DNS STANDARD CONDUIT ROUTER_SOLICITATION POLICY PROXY_BLOCK TIME_EXCEEDED IP POLICY_MAP SERVICE ALERT_INTERVAL NAT_CONTROL MATCH PER_USER_OVERRIDE NUMBER HEX_NUMBER ID IPADDR PORTSET INTERVAL DEFAULT OPEN_PAREN CLOSE_PAREN IPSET CGI_TRUNCATE LONGURL_DENY BUFFER_SIZE COMMA STRING NAME PORT NAMEIF ADDRESS SECURITY_LEVEL SHUTDOWN SSH RIP SNMP_SERVER HTTP TFTP TELNET TRAP VERSION COPY SCOPY CONTACT LOCATION LISTEN_PORT TRAPS AUTHENTICATION_CERTIFICATE SERVER TIMEOUT COMMUNITY ROUTE
+
+    start rule_line
+
+    rule
+
+    rule_line : commands
+    {  result = val[0]  }
+    # we assume all commands can have the NO prefix, which is generally true
+    | NO commands                  
+    {  result = ["no", val[1]] }
+
+    ##################################################################
+    # top-level patterns
+    ##################################################################
+    commands : clear
+    { result = val[0] }
+    | access_list
+    {  result = val[0]  }
+    | access_group
+    {  result = val[0]  }
+    | conduit
+    {  result = val[0]  }
+    | nat
+    {  result = val[0]  }
+    | static
+    {  result = val[0]  }
+    | global 
+    {  result = val[0]  }
+    | logging
+    { result = val[0] }
+    | sysopt
+    { result = val[0] }
+    | fixup
+    { result = val[0] }
+    | floodguard
+    { result = val[0] }
+    | filter
+    { result = val[0] }
+    | object_group
+    { result = val[0] }
+    | firewall
+    { result = val[0] }
+    | class_map
+    { result = val[0] }
+    | policy_map
+    { result = val[0] }
+    | icmp
+    { result = val[0] }
+    | same_security_traffic
+    { result = val[0] }
+    | ftp_mode_passive
+    { result = val[0] }
+    | name_spec
+    { result = val[0] }
+    | nameif
+    { result = val[0] }
+    | interface_definition
+    { result = val[0] }
+    | interface_address
+    { result = val[0] }
+    | interface_security_level
+    { result = val[0] }
+    | interface_shutdown
+    { result = val[0] }
+    | ssh_cmd
+    { result = val[0] }
+    | http_cmd
+    { result = val[0] }
+    | telnet_cmd
+    { result = val[0] }
+    | snmp_server_cmd
+    { result = val[0] }
+    | route_cmd
+    { result = val[0] }
+    ;
+
+    
+    ##################################################################
+    # general tokens
+    ##################################################################
+    number : NUMBER
+    {  result = val[0] }
+    ;
+    
+    name_spec : NAME IPADDR id
+    { result = [val[0], val[1], Hostname.new(val[2])] }
+    ;
+
+    hex_number : HEX_NUMBER   # lexer does nto recognize hex numbers yet
+    {  result = val[0] }
+    ;
+    # a single host specification
+    host : HOST IPADDR
+    { result = val }
+    | HOST id
+    { result = ["host", Hostname.new(val[1]) ] }
+    | HOST object_group_ref
+    { result = val }
+    ;
+
+    # a network address range, specifix with an address netmask
+    iprange: IPADDR IPADDR
+    {  result = IPAddr.parse("#{val[0].to_s}/#{val[1].to_s}") }
+    | id IPADDR
+    {  result = [Hostname.new(val[0]), val[1].to_s ] }
+    | number number
+    {  result = [IPAddr.parse("#{val[0].to_s}/#{val[1].to_s}") ] }
+    ;
+
+    # handles 88 and 80-8080 sets, used in filter and other commands.
+    # This is distinct from teh "RANGE 80 8080" pattern used in ACLs
+    portset : number
+    {  result = val[0]}
+    | PORTSET
+    {  result = val[0]}
+    ;    
+
+    
+    # a reference to an ACCESS-LIST
+    acl_id : id
+    {  result = [:acl_id, val[0]]  }
+    | number
+    {  result = [:acl_id, val[0]]  }
+    ;
+
+    # A reference to an OBJECT-GROUP
+    object_group_ref : OBJECT_GROUP id
+    { result = [:object_group_ref, ObjectGroupName.new(val[1])] }
+    | OBJECT_GROUP number
+    { result = [:object_group_ref, ObjectGroupName.new(val[1].to_s)] }
+    ;
+
+    policy : DENY
+    {  result = [:policy, val[0]] }
+    | PERMIT
+    {  result = [:policy, val[0]] }
+    ;
+
+    direction_spec: IN
+    { result = [:direction, val[0]] }
+    | OUT
+    { result = [:direction, val[0]] }
+    ;
+
+    protocol_spec : id
+    {  result = [:protocol, val[0]] }
+    | NUMBER
+    {  result = [:protocol, val[0]] }
+    | IP
+    { result = [:protocol, val[0]] }
+    | TCP
+    { result = [:protocol, val[0]] }
+    | UDP
+    { result = [:protocol, val[0]] }
+    | ICMP
+    { result = [:protocol, val[0]] }
+    | ICMP number
+    {  result = [:protocol, val] }
+    | ICMP number
+    {  result = [:protocol, val] }
+    | object_group_ref 
+    {  result = [:protocol, val[0]] }
+    ;
+    
+    
+
+    
+    ##################################################################
+    # ACCESS-GROUP commands
+    ##################################################################
+    access_group : ACCESS_GROUP acl_id direction_spec interface_spec o_agspec
+    { result = val.compact! }
+    ;
+    
+    interface_spec: INTERFACE id
+    { result = [:interface, val[1]] }
+
+    o_agspec: # E
+    { result = nil}
+    | CONTROL_PLANE
+    {  result = val[0] }
+    | PER_USER_OVERRIDE
+    { result = val[0] }
+    ;
+    
+
+
+    ##################################################################
+    # ACCESS-LIST commands
+    ##################################################################
+    access_list : ACCESS_LIST ALERT_INTERVAL number
+    { result = val}
+    | ACCESS_LIST DENY_FLOW_MAX number
+    { result = val}
+    | ACCESS_LIST acl_id OBJECT_GROUP_SEARCH
+    { result = val}
+    | ACCESS_LIST acl_id COMPILED
+    { result = val}
+    | ACCESS_LIST acl_id ETHERTYPE policy ethertype_spec
+    { result = val }
+    | ACCESS_LIST acl_id RENAME acl_id
+    { result = val }
+    | ACCESS_LIST acl_id REMARK remark
+    { result = val }
+    | access_list_extended
+    { result = val[0] }
+    | access_list_standard
+    { result = val[0] }
+    | access_list_webtype
+    { result = val[0] }
+    ;
+    
+    remark : id
+    {  result = val.flatten }
+    | id remark
+    {  result = val.flatten }
+    | number
+    {  result = val.flatten }
+    | number remark
+    {  result = val.flatten }
+    ;
+    
+    text : remark
+    { result = val[0] }
+    ;
+
+    access_list_extended : ACCESS_LIST acl_id o_acl_line EXTENDED policy protocol_spec acl_body o_logspec o_timespec
+    {  result = [val[0], val[1], val[2], val[3], val[4],
+                 val[5] ]
+       result.concat(val[6])
+       result << val[7]
+       result << val[8]
+       result.compact! }
+    | ACCESS_LIST acl_id o_acl_line policy protocol_spec acl_body o_logspec o_timespec o_icmptype
+    {  result = [val[0],val[1],val[2],val[3],
+                 val[4]]
+       result.concat(val[5])
+       result << val[6]
+       result << val[7]
+       result << val[8]
+       result.compact! }
+    ;
+    
+    access_list_standard : ACCESS_LIST acl_id STANDARD policy o_acl_host
+    { result = [val[0], val[1], val[2], val[3], [:spec, val[4]]].compact! }
+    ;    
+
+    # access-list id webtype {deny | permit} url [url_string | any] [log [[disable | default] | level] [interval secs] [time_range name]]
+
+    #access-list id webtype {deny | permit} tcp [host ip_address | ip_address subnet_mask | any] [oper port [port]] [log [[disable | default] | level] [interval secs] [time_range name]]
+
+    access_list_webtype : ACCESS_LIST acl_id WEBTYPE policy URL acl_url o_logspec o_timespec
+    {  result = val }
+    | ACCESS_LIST acl_id WEBTYPE policy TCP acl_host o_portspec o_logspec o_timespec
+    {  result = val }
+    ;
+    
+    acl_url : ANY
+    { result = val[0] }
+    | URL
+    { result = val[0] }
+    ;    
+
+    port_operator : LT
+    { result = val[0] }
+    | GT
+    { result = val[0] }
+    | EQ
+    { result = val[0] }
+    | NEQ
+    { result = val[0] }
+    ;
+
+    acl_term_base : host
+    {  result = val[0] }
+    | iprange
+    {  result = val[0] }
+    | object_group_ref
+    {  result = val[0]}
+    | INTERFACE id
+    {  result = [:interface, val[1]] }
+    | ANY
+    {  result = val[0] }
+    ;
+
+    portspec : port_operator number
+    { result = [val[0],  PortNumber.new(val[1].to_i)]}
+    | port_operator id
+    { result = [val[0],  PortName.new(val[1])] }
+    | RANGE number number
+    { result = [PortRange.new(val[1].to_i, val[2].to_i)]}
+    | RANGE number id
+    { result = [PortRange.new(val[1].to_i, val[2])]} 
+    | RANGE id number
+    { result = [PortRange.new(val[1], val[2].to_i)]}
+    | RANGE id id
+    { result = [PortRange.new(val[1], val[2])]}
+    | object_group_ref
+    {  result = val[0] }
+    ;
+    
+    o_portspec : #E
+    { result = nil }
+    | portspec
+    {  result = val[0] }
+    ;
+
+    
+    ethertype_spec : ANY
+    { result = [:ethertype, val[0]] }
+    | MPLS_UNICAST
+    { result = [:ethertype, val[0]] }
+    | MPLS_MULTICAST
+    { result = [:ethertype, val[0]] }
+    | IPX
+    { result = [:ethertype, val[0]] }
+    | BPDU
+    { result = [:ethertype, val[0]] }
+    | hex_number
+    { result = [:ethertype, val[0]] }
+    ;
+
+    o_log_interval_spec : # E
+        {  result = nil }
+    | INTERVAL number
+    {  result = val }
+    ;
+    
+    
+    o_timespec : # E
+        {  result = nil }
+    | TIME_RANGE id
+    {  result = [:time_spec, val] }
+    | INACTIVE
+    {  result = [:time_spec, val] }
+    
+    ;
+    
+    o_logspec : # E
+        {  result = nil}
+    | LOG number o_log_interval_spec 
+    {  result = [:log, val] }
+    | LOG number DISABLE
+    {  result = [:log, val] }
+    | LOG number DEFAULT
+    {  result = [:log, val] }
+    | LOG DISABLE
+    {  result = [:log, val] }
+    | LOG DEFAULT
+    {  result = [:log, val] }
+    ;
+
+    o_icmptype : # E
+    {  }
+    | ECHO_REPLY
+    { result = [:icmp_type, val] }
+    | UNREACHABLE
+    { result = [:icmp_type, val] }
+    | SOURCE_QUENCH
+    { result = [:icmp_type, val] }
+    | REDIRECT
+    { result = [:icmp_type, val] }
+    | ALTERNATE_ADDRESS 
+    { result = [:icmp_type, val] }
+    | ECHO
+    { result = [:icmp_type, val] }
+    | ROUTER_ADVERTISEMENT
+    { result = [:icmp_type, val] }
+    | ROUTER_SOLICITATION
+    { result = [:icmp_type, val] }
+    | TIME_EXCEEDED
+    { result = [:icmp_type, val] }
+    | PARAMETER_PROBLEM
+    { result = [:icmp_type, val] }
+    | TIMESTAMP_REQUEST
+    { result = [:icmp_type, val] }
+    | TIMESTAMP_REPLY
+    { result = [:icmp_type, val] }
+    | INFORMATION_REQUEST
+    { result = [:icmp_type, val] }
+    | INFORMATION_REPLY
+    { result = [:icmp_type, val] }
+    | MASK_REQUEST
+    { result = [:icmp_type, val] }
+    | MASK_REPLY
+    { result = [:icmp_type, val] }
+    | CONVERSION_ERROR
+    { result = [:icmp_type, val] }
+    | MOBILE_REDIRECT
+    { result = [:icmp_type, val] }
+    | object_group_ref
+    { result = [:icmp_type, val[0]] }
+    ;
+
+    
+    acl_body : acl_term_base acl_term_base
+    {  result = [[:source_net, val[0]],[:destination_net, val[1]]] }
+    | acl_term_base acl_term_base portspec
+    {  result = [[:source_net, val[0]], [:destination_net, val[1]],
+                                        [:destination_port, val[2]]] }
+    | acl_term_base portspec acl_term_base 
+    {  result = [[:source_net, val[0]],
+                 [:source_port, val[1]],
+                 [:destination_net, val[2]]] }
+    | acl_term_base portspec acl_term_base portspec
+    {  result = [[:source_net, val[0]],
+                  [:source_port, val[1]],
+		  [:destination_net, val[2]],
+                  [:destination_port,val[3]]]  }
+    ;
+    
+    acl_term : acl_term_base
+    { result = val }
+    | acl_term_base portspec
+    { result = val }
+    ;
+    
+    acl_host : host
+    {  result = val[0] }
+    | iprange
+    {  result = val[0] }
+    | ANY
+    {  result = val[0] }
+    ;
+
+    o_acl_host : #E
+    { result = nil }
+    | acl_host
+    {  result = val[0] }
+    
+    o_acl_line  : # E
+    { result = nil }
+    | LINE number
+    {  result = val }
+    ;
+
+    
+    ##################################################################
+    # CONDUIT commands
+    ##################################################################
+    conduit : CONDUIT policy protocol_spec acl_body
+    {  result =  [val[0], val[1], val[2], val[3][0]] }
+    ;
+    
+    
+    ##################################################################
+    # NAT commands
+    ##################################################################
+    nat : NAT OPEN_PAREN id CLOSE_PAREN number nat_range o_nat_option_list
+    {  result = val }
+    | NAT OPEN_PAREN id CLOSE_PAREN number ACCESS_LIST acl_id o_nat_option_list
+    {  result = val }
+    | NAT_CONTROL
+    {  result = val }
+    | NAT_REWRITE
+    {  result = val }
+    ;
+    
+    nat_range : IPADDR
+    {  result = val[0]}
+    | iprange
+    {  result = val[0]}
+    ;
+    
+    nat_option : DNS
+    {  result = val[0] }
+    | OUTSIDE
+    {  result = val[0] }
+    | TCP number
+    {  result = val }
+    | TCP number number
+    {  result = val }
+    | UDP number
+    {  result = val }
+    | NORANDOMSEQ
+    {  result = val[0] }
+    | number
+    { result = val[0] }
+    ;
+    
+    nat_option_list: nat_option
+    { result = val[0] }
+    | nat_option nat_option
+    { result = val }
+    | nat_option nat_option nat_option
+    { result = val }
+    | nat_option nat_option nat_option nat_option
+    { result = val }
+    ;
+
+    o_nat_option_list : #E
+    {  result = [] }
+    |  nat_option_list
+    {  result = val[0] }
+    ;
+    
+    nat_src_range : INTERFACE
+    { result = val }
+    | IPSET
+    { result = val }
+    | IPADDR
+    { result = val }
+    ;
+
+    ##################################################################
+    # GLOBAL commands
+    ##################################################################
+    global : GLOBAL OPEN_PAREN id CLOSE_PAREN number nat_src_range
+    { result =  val }
+    | GLOBAL OPEN_PAREN id CLOSE_PAREN number nat_src_range NETMASK IPADDR
+    { result = val }
+    ;
+    
+    ##################################################################
+    # FILTER commands
+    # filter activex | java <port> [-<port>] | except <local_ip> <mask> <foreign_ip> <foreign_mask> 
+    # filter ftp <port> [-<port>] | except <local_ip> <mask> <foreign_ip> <foreign_mask> [allow] [interact-block] 
+    # filter url <port> [-<port>] | except <local_ip> <mask> <foreign_ip> <foreign_mask> [allow] [cgi-truncate] [longurl-truncate | longurl-deny] [proxy-block] 
+    ##################################################################
+    filter : FILTER ACTIVEX o_portset o_except iprange iprange
+    {  result = val }
+    | FILTER JAVA o_portset o_except iprange iprange
+    {  result = val }
+    | FILTER FTP o_portset o_except iprange iprange o_filter_ftp_options
+    {  result = val }
+    | FILTER URL o_portset o_except iprange iprange o_filter_url_options
+    {  result = val }
+    ;
+    
+    o_portset : #E
+    { result = nil }
+    | portset
+    { result = val[0] }
+    ;
+    
+    o_except : #E
+    {  result = nil }
+    | EXCEPT
+    {  result = val[0] }
+    ;
+    
+    filter_ftp_options : ALLOW
+    {  result = val }
+    | INTERACT_BLOCK
+    {  result = val }
+    | filter_ftp_options filter_ftp_options
+    {  result = val }
+    ;
+    
+    o_filter_ftp_options : #E
+    { result = nil }
+    | filter_ftp_options
+    { result = val.flatten }
+    ;
+    
+    filter_url_options : ALLOW
+    {  result = val }
+    | CGI_TRUNCATE
+    {  result = val }
+    | LONGURL_TRUNCATE
+    {  result = val }
+    | LONGURL_DENY
+    {  result = val }
+    | PROXY_BLOCK
+    {  result = val }
+    | filter_url_options filter_url_options
+    {  result = val }
+    ;    
+    
+    o_filter_url_options : #E
+    { result = nil }
+    | filter_url_options
+    {  result = val.flatten }
+    ;
+    ##################################################################
+    # FIXUP commands
+    ##################################################################
+    fixup : FIXUP PROTOCOL id id portset
+    { result = val }
+    | FIXUP PROTOCOL id portset
+    { result = val }
+    ;
+    ##################################################################
+    # FLOODGUARD commands
+    ##################################################################
+    floodguard : FLOODGUARD ENABLE
+    {  result = val }
+    | FLOODGUARD DISABLE
+    { result = val }
+    ;
+    
+    ##################################################################
+    # LOGGING commands
+    ##################################################################
+    logging : LOGGING logging_options
+    { result = val }
+    | LOGGING logging_subcomm
+    {  result = val }
+    | LOGGING logging_subcomm logging_options
+    {  result = val }
+    | LOGGING logging_options
+    {  result = val }
+    ;   
+    
+    logging_subcomm : HOST
+    { result = val }
+    | BUFFERED
+    { result = val }
+    | CONSOLE
+    { result = val }
+    | DEVICE_ID
+    { result = val }
+    | FACILITY
+    { result = val }
+    | HISTORY
+    { result = val }
+    | MESSAGE
+    { result = val }
+    | MONITOR
+    { result = val }
+    | QUEUE
+    { result = val }
+    | STANDBY
+    { result = val }
+    | TIMESTAMP
+    { result = val }
+    | TRAP
+    { result = val }
+    | FORMAT
+    { result = val }
+    | EMBLEM
+    { result = val }
+    | BUFFER_SIZE
+    { result = val }
+    | CLASS
+    { result = val }
+    ;
+    
+    logging_options : logging_option e_more_logging_options
+    { result = val } 
+    ;
+ 
+    e_more_logging_options: #E
+    { result = val } 
+    | logging_option e_more_logging_options
+    { result = val } 
+    ; 
+
+    logging_option : id
+    { result = val }
+    | number
+    { result = val }
+    | IPADDR
+    { result = val }
+    | iprange
+    { result = val }
+    | logging_subcomm	
+    { result = val }
+    | IPSET
+    { result = val }
+    | logging_options logging_options
+    { result = val.flatten }
+    ;
+
+    ##################################################################
+    # STATIC commands
+    ##################################################################
+    
+    # static (real_ifc,mapped_ifc) {mapped_ip | interface} {real_ip [netmask mask] | access-list access_list_name} [dns] [[tcp] max_conns [emb_lim]] [udp udp_max_conns] [norandomseq [nailed]]
+
+
+    # static (real_ifc,mapped_ifc) {tcp | udp} {mapped_ip | interface} mapped_port {real_ip real_port [netmask mask] | access-list access_list_name} [dns] [[tcp] max_conns [emb_lim]] [udp udp_max_conns] [norandomseq [nailed]]
+
+    static : STATIC static_interfaces mapped_ip real_ip o_nat_option_list
+    { result = [:static]
+      result.concat(val[1])
+      result.concat(val[2])
+      result.concat(val[3])
+      result.concat(val[4])
+    }
+    | STATIC static_interfaces static_proto pat_mapped_ip pat_real_ip o_nat_option_list
+    { result = [:static_port]
+      result.concat(val[1])
+      result.concat(val[2])
+      result.concat(val[3])
+      result.concat(val[4])
+      result.concat(val[5])
+    }     
+    ;
+
+    mapped_ip : option_host
+    { result = [[:mapped_ip, val[0]]] }
+    | INTERFACE
+    { result = [[:interface, true]] }
+    ;
+
+    pat_port : id
+    { result = val[0] }
+    | number
+    { result = val[0] }
+    ;
+
+    pat_real_ip : option_host pat_port
+    { result = [[:real_ip, val[0]], [:real_port, val[1]]] }
+    | option_host pat_port NETMASK IPADDR
+    { result = [[:real_ip, val[0]], [:real_port, val[1]],
+                [:real_netmask, val[3]]] }
+    | ACCESS_LIST id
+    { result = [[:real_acl, val[1]]] }
+    ;
+
+    pat_mapped_ip : option_host pat_port
+    { result = [[:mapped_ip, val[0]], [:mapped_port, val[1]]] }
+    ;
+
+    real_ip : option_host
+    { result = [[:real_ip, val[0]]] }
+    | option_host NETMASK IPADDR
+    { result = [[:real_ip, val[0]], [:real_netmask, val[2]]] }
+    | ACCESS_LIST id
+    { result = [[:real_acl, val[1]]] }
+    ;
+    static_interfaces : OPEN_PAREN id COMMA id CLOSE_PAREN
+    { result = [[:real_interface, val[1]], [:mapped_interface, val[3]]] }
+    ;
+    
+    static_proto : TCP
+    { result = [[:protocol, val[0]]] }
+    | UDP
+    { result = [[:protocol, val[0]]] }
+    ;
+    
+    static_global_set : IPADDR
+    { result = val }
+    | IPADDR NETMASK IPADDR
+    { result = val }
+    | INTERFACE
+    { result = val }
+    ;
+    
+    static_local_set : IPADDR
+    { result = val }
+    | IPADDR NETMASK IPADDR
+    { result = val }
+    | ACCESS_LIST acl_id
+    { result = val }
+    ;
+
+    static_port : NUMBER
+    { result = val }
+    | id
+    { result = val }
+    ;
+    
+    static_local_port : IPADDR static_port
+    { result = val }
+    | IPADDR static_port NETMASK IPADDR
+    { result = val }
+    ;
+
+    ##################################################################
+    # SYSOPT commands
+    ##################################################################
+    sysopt : SYSOPT id id
+    {  result = val }
+    | SYSOPT id id number
+    {  result = val }
+    | SYSOPT id id id number
+    {  result = val }
+    ;
+    
+    ##################################################################
+    # URL-SERVER commands
+    ##################################################################
+
+    ##################################################################
+    # OBJECT-GROUP commands
+    ##################################################################
+    object_group : OBJECT_GROUP og_type og_id
+    { result = val }
+    | OBJECT_GROUP og_type og_id og_service_type
+    { result = val }
+    | NETWORK_OBJECT host
+    { result = val }    
+    | NETWORK_OBJECT iprange
+    { result = val }
+    | ICMP_OBJECT number
+    { result = val }
+    | ICMP_OBJECT id
+    { result = val }
+    | port_object
+    { result = val[0] }	
+    | service_object
+    { result = val[0] }	
+    | GROUP_OBJECT id
+    { result = ["group-object", ObjectGroupName.new(val[1])] }
+    | GROUP_OBJECT number
+    { result = ["group-object", ObjectGroupName.new(val[1])] }
+    | PROTOCOL_OBJECT id
+    { result = ["protocol-object", val[1]] }
+    | PROTOCOL_OBJECT number
+    { result = ["protocol-object", val[1]] }
+    | DESCRIPTION remark
+    { result = ["group-description", val] }
+    ;
+    
+    og_type : PROTOCOL
+    { result = val[0] }
+    | NETWORK
+    { result = val[0] }
+    | ICMP_TYPE
+    { result = val[0] }
+    | SERVICE
+    { result = val[0] }
+    | PORT
+    { result = val[0] }
+    ;   
+    
+    og_id : id
+    { result = [:group_id, val[0]] }
+    | number
+    { result = [:group_id, val[0]] }
+    ;
+
+    og_service_type : TCP
+    { result = [:service_type, val[0]] }
+    | UDP
+    { result = [:service_type, val[0]] }
+    | TCP_UDP
+    { result = [:service_type, val[0]] }
+    ;  
+
+    port_object : PORT_OBJECT EQ port_id_or_num
+    { result = val }
+    | PORT_OBJECT RANGE port_id_or_num port_id_or_num
+    { result = [val[0], val[1], PortRange.new(val[1].to_i, val[2].to_i)] }
+    ;   
+
+    service_object : SERVICE_OBJECT protocol_spec EQ port_id_or_num
+    { result = val }
+    | SERVICE_OBJECT protocol_spec RANGE port_id_or_num port_id_or_num
+    { result = val }
+    ;   
+
+    port_id_or_num : number
+    { result = PortNumber.new(val[0]) }
+    | id
+    { result = PortName.new(val[0]) }
+    ;   
+
+    ##################################################################
+    # FIREWALL commands
+    ##################################################################
+    firewall: FIREWALL TRANSPARENT
+    { result = val }
+    ;
+
+    ##################################################################
+    # CLEAR commands
+    ##################################################################
+    clear: CLEAR OBJECT_GROUP
+    { result = val }
+    | CLEAR ACCESS_LIST
+    { result = val }
+    | CLEAR LOGGING
+    { result = val }
+    | CLEAR NAT
+    { result = val }
+    | CLEAR STATIC
+    { result = val }
+    | CLEAR GLOBAL
+    { result = val }
+    | CLEAR SYSOPT
+    { result = val }
+    | CLEAR FIXUP
+    { result = val }
+    | CLEAR FLOODGUARD
+    { result = val }
+    | CLEAR FILTER
+    { result = val }
+    | CLEAR URL_SERVER
+    { result = val }
+    | CLEAR ACCESS_GROUP
+    { result = val }
+    | CLEAR CONDUIT
+    { result = val }
+    | CLEAR CLASS_MAP
+    { result = val }
+    | CLEAR POLICY_MAP
+    { result = val }
+    | CLEAR ICMP
+    { result = val }
+    | CLEAR SAME_SECURITY_TRAFFIC
+    { result = val }
+    ;
+    
+    ##################################################################
+    # CLASS-MAP commands
+    # TODO: FULL SUPPORT FOR MATCH COMMANDS!
+    ##################################################################
+    class_map: CLASS_MAP id
+    { result = val }
+    | CLASS id
+    { result = val }
+    | DESCRIPTION STRING
+    { result = val }
+    | MATCH ACCESS_LIST id
+    { result = val }
+    | MATCH id
+    { result = val }
+    ;   
+
+    ##################################################################
+    # POLICY-MAP commands
+    # TODO: FULL SUPPORT FOR SET COMMANDS!
+    ##################################################################
+    policy_map: POLICY_MAP id
+    { result = val }
+    | POLICY_MAP TYPE INSPECT id
+    { result = val }
+    | POLICY_MAP TYPE INSPECT id id
+    { result = val }
+    | CLASS id
+    { result = val }
+    | DESCRIPTION STRING
+    { result = val }
+    | INSPECT id
+    { result = val }
+    | INSPECT id id
+    { result = val }
+    | policy_set
+    { result = val[0] }
+    | POLICY STATIC
+    { result = val }
+    | POLICY CDP
+    { result = val }
+    | POLICY BOTH
+    { result = val }
+    ;   
+
+    policy_set: SET id number
+    { result = val }
+    | SET id id number
+    { result = val }
+    ;
+    
+
+    ##################################################################
+    # ICMP commands
+    ##################################################################
+    icmp: ICMP policy iprange id id
+    { result = [:icmp, val[1], [:source_net, val[2]],
+      	       	      	      [:icmp_type, val[3]],
+			      [:interface, val[4]]] }
+    | ICMP policy iprange number id
+    { result = [:icmp, val[1], [:source_net, val[2]],
+      	       	      	      [:icmp_type, val[3]],
+			      [:interface, val[4]]] }
+    | ICMP policy iprange id
+    { result = [:icmp, val[1], [:source_net, val[2]],
+			      [:interface, val[3]]] }
+    | ICMP UNREACHABLE RATE_LIMIT number BURST_SIZE number
+    { result = [:icmp_unreachable, [:rate_limit, val[3]],
+      	       			   [:burst_size, val[5]]] }
+    ;
+
+    ##################################################################
+    # SAME-SECURITY-TRAFFIC commands
+    ##################################################################
+    same_security_traffic: SAME_SECURITY_TRAFFIC policy INTRA_INTERFACE
+    { result = val }
+    | same_security_traffic: SAME_SECURITY_TRAFFIC policy INTER_INTERFACE
+    { result = val }	   
+    ;
+
+    ##################################################################
+    # FTP MODE PASSIVE commands
+    ##################################################################
+    ftp_mode_passive: FTP MODE PASSIVE
+    { result = val }
+    ; 
+    
+
+    ##################################################################
+    # NAMEIF
+    ##################################################################
+    nameif: NAMEIF id id id
+    { result = [:nameif, [:physical, val[1]],
+                         [:name, val[2]],
+                         [:security_level, val[3]]] }
+    | NAMEIF id
+    { result = [:interface_name, val[1]] }
+    ;
+
+    ##################################################################
+    # Interface configuration
+    ##################################################################
+    interface_definition: INTERFACE id
+    { result = [:interface_config_block, val[1..-1]] }
+    interface_definition: INTERFACE id id
+    { result = [:interface_config_block, val[1..-1]] }
+    ;
+
+    interface_address: IP ADDRESS IPADDR IPADDR
+    { result = [:interface_address, [:address, val[2]],
+                                    [:netmask, val[3]]] }
+    | IP ADDRESS id IPADDR IPADDR
+    { result = [:interface_address_assignment,
+                [:name, val[2]], [:address, val[3]],
+                [:netmask, val[4]]] }
+    ;
+
+    interface_security_level: SECURITY_LEVEL number
+    { result = [:interface_security_level, val[1]] }
+    ;
+
+    interface_shutdown: SHUTDOWN
+    { result = [:interface_shutdown] }
+    ;
+
+    option_host: id
+    { result = Hostname.new(val[0].to_s) }
+    | IPADDR
+    { result = val[0] }
+    ;
+
+    ssh_cmd: SSH iprange id
+    { result = [:ssh, [:source_net, val[1]],
+                     [:interface, val[2]]] }
+    | SSH VERSION number
+    { result = [:ssh_version, val[1].to_i] }
+    | SSH COPY ENABLE
+    { result = [:ssh_copy_enable] }
+    | SSH SCOPY ENABLE
+    { result = [:ssh_copy_enable] }
+    | SSH TIMEOUT number
+    { result = [:ssh_timeout, val[1].to_i] }
+    ;
+
+    telnet_cmd: TELNET iprange id
+    { result = [:telnet, [:source_net, val[1]],
+                        [:interface, val[2]]] }
+    | TELNET TIMEOUT number
+    { result = [:telnet_timeout, val[1].to_i] }
+    ;
+
+    http_cmd: HTTP iprange id
+    { result = [:http, [:source_net, val[1]],
+                        [:interface, val[2]]] }
+    | HTTP REDIRECT id
+    { result = [:http_redirect, [:interface, val[2]]] }
+    | HTTP REDIRECT id number
+    { result = [:http_redirect, [:interface, val[2]],
+                                [:port, val[3]]] }
+    | HTTP AUTHENTICATION_CERTIFICATE id
+    { result = [:http_authentication_certificate, val[2]] }
+    | HTTP SERVER ENABLE
+    { result = [:http_server_enable] }
+    | HTTP SERVER ENABLE id
+    { result = [:http_server_enable, val[3]] }
+    ;
+    
+    snmp_server_cmd: SNMP_SERVER COMMUNITY text
+    { result = [:snmp_server_community, val[2]] }
+    | SNMP_SERVER CONTACT text
+    { result = [:snmp_server_contact, val[2]] }
+    | SNMP_SERVER LOCATION text
+    { result = [:snmp_server_location, val[2]] }
+    | SNMP_SERVER ENABLE
+    { result = [:snmp_server_enable] }
+    | SNMP_SERVER ENABLE TRAPS text
+    { result = [:snmp_server_enable_traps, val[3]] }
+    | SNMP_SERVER ENABLE TRAPS
+    { result = [:snmp_server_enable_traps] }
+    | SNMP_SERVER HOST id option_host
+    { result = [:snmp_server_host, [:host, val[3]],
+      	                           [:interface, val[2]]] }
+    | SNMP_SERVER LISTEN_PORT number
+    { result = [:snmp_server_listen_port, val[2]] }
+    ;
+
+    route_cmd: ROUTE id iprange option_host o_route_option_list
+    { result = [:route, [:interface, val[1]],
+      	       		[:network, val[2]],
+			[:gateway, val[3]],
+			[:options, val[4]]] }
+    ;
+    
+
+    o_route_option_list : #E
+    {  result = [] }
+    |  route_option
+    {  result = val.flatten }
+    |  route_option route_option
+    {  result = val.flatten }
+    |  route_option route_option route_option
+    {  result = val.flatten }
+    ;
+
+    route_option: id
+    { result = val[0] }
+    | number
+    { result = val[0] }
+    ;
+
+    # We include both lexemes tagged as ID, and some keywords which
+    # are likely to be used as identifiers.
+    id : ID
+    { result = val[0] }
+    | CLASS_MAP
+    { result = val[0] }
+    | REMARK
+    { result = val[0] }
+    | FTP
+    { result = val[0] }
+    | ROUTER_ADVERTISEMENT
+    { result = val[0] }
+    | ECHO
+    { result = val[0] }
+    | COMPILED
+    { result = val[0] }
+    | TIMESTAMP
+    { result = val[0] }
+    { result = val[0] }
+    | NETMASK
+    { result = val[0] }
+    | PASSIVE
+    { result = val[0] }
+    | TIMESTAMP_REQUEST
+    { result = val[0] }
+    | BUFFERED
+    { result = val[0] }
+    | INTERACT_BLOCK
+    { result = val[0] }
+    | PERMIT
+    { result = val[0] }
+    | TRANSPARENT
+    { result = val[0] }
+    | OBJECT_GROUP_SEARCH
+    { result = val[0] }
+    | NEQ
+    { result = val[0] }
+    | ALLOW
+    { result = val[0] }
+    | LT
+    { result = val[0] }
+    | NAT_REWRITE
+    { result = val[0] }
+    | MOBILE_REDIRECT
+    { result = val[0] }
+    | LOGGING
+    { result = val[0] }
+    | SERVICE_OBJECT
+    { result = val[0] }
+    | ICMP_TYPE
+    { result = val[0] }
+    | RENAME
+    { result = val[0] }
+    | LINE
+    { result = val[0] }
+    | INTER_INTERFACE
+    { result = val[0] }
+    | UNREACHABLE
+    { result = val[0] }
+    | EXCEPT
+    { result = val[0] }
+    | REJECT
+    { result = val[0] }
+    | CONVERSION_ERROR
+    { result = val[0] }
+    | MASK_REQUEST
+    { result = val[0] }
+    { result = val[0] }
+    | FILTER
+    { result = val[0] }
+    | CGI_TRUNCTATE
+    { result = val[0] }
+    | INACTIVE
+    { result = val[0] }
+    | INFORMATION_REPLY
+    { result = val[0] }
+    | CONSOLE
+    { result = val[0] }
+    | NETWORK
+    { result = val[0] }
+    | LOG
+    { result = val[0] }
+    | QUEUE
+    { result = val[0] }
+    | DESCRIPTION
+    { result = val[0] }
+    | ACTIVEX
+    { result = val[0] }
+    | ETHERTYPE
+    { result = val[0] }
+    | MESSAGE
+    { result = val[0] }
+    | MPLS_MULTICAST
+    { result = val[0] }
+    | URL
+    { result = val[0] }
+    | GT
+    { result = val[0] }
+    | OUT
+    { result = val[0] }
+    | TYPE
+    { result = val[0] }
+    | TIMESTAMP_REPLY
+    { result = val[0] }
+    | ACCESS_LIST
+    { result = val[0] }
+    | MASK_REPLY
+    { result = val[0] }
+    { result = val[0] }
+    | CLEAR
+    { result = val[0] }
+    | ALTERNATE_ADDRESS
+    { result = val[0] }
+    | REDIRECT
+    { result = val[0] }
+    | ANY
+    { result = val[0] }
+    | DISABLE
+    { result = val[0] }
+    | SOURCE_QUENCH
+    { result = val[0] }
+    | EMBLEM
+    { result = val[0] }
+    | DENY_FLOW_MAX
+    { result = val[0] }
+    | IPX
+    { result = val[0] }
+    | SYSOPT
+    { result = val[0] }
+    | STATIC
+    { result = val[0] }
+    | LONGURL_TRUNCATE
+    { result = val[0] }
+    | HOST
+    { result = val[0] }
+    | GLOBAL
+    { result = val[0] }
+    | OBJECT_GROUP
+    { result = val[0] }
+    | DEVICE_ID
+    { result = val[0] }
+    | UDP
+    { result = val[0] }
+    { result = val[0] }
+    | MONITOR
+    { result = val[0] }
+    | FIXUP
+    { result = val[0] }
+    | FORMAT
+    { result = val[0] }
+    | PORT_OBJECT
+    { result = val[0] }
+    | EQ
+    { result = val[0] }
+    | JAVA
+    { result = val[0] }
+    | BOTH
+    { result = val[0] }
+    | MPLS_UNICAST
+    { result = val[0] }
+    | INSPECT
+    { result = val[0] }
+    | CLASS
+    { result = val[0] }
+    | EXTENDED
+    { result = val[0] }
+    | WEBTYPE
+    { result = val[0] }
+    | DENY
+    { result = val[0] }
+    | CONTROL_PLANE
+    { result = val[0] }
+    | TRAP
+    { result = val[0] }
+    | PROTOCOL
+    { result = val[0] }
+    | NETWORK_OBJECT
+    { result = val[0] }
+    | TCP
+    { result = val[0] }
+    | NO
+    { result = val[0] }
+    | GROUP_OBJECT
+    { result = val[0] }
+    | ACCESS_GROUP
+    { result = val[0] }
+    | TIME_RANGE
+    { result = val[0] }
+    | INFORMATION_REQUEST
+    { result = val[0] }
+    | BURST_SIZE
+    { result = val[0] }
+    | RATE_LIMIT
+    { result = val[0] }
+    | INSIDE
+    { result = val[0] }
+    | MODE
+    { result = val[0] }
+    | OUTSIDE
+    { result = val[0] }
+    | INTERFACE
+    { result = val[0] }
+    | ICMP_OBJECT
+    { result = val[0] }
+    | INTRA_INTERFACE
+    { result = val[0] }
+    | PROTOCOL_OBJECT
+    { result = val[0] }
+    | CDP
+    { result = val[0] }
+    | NORANDOMSEQ
+    { result = val[0] }
+    | URL_SERVER
+    { result = val[0] }
+    | NAT
+    { result = val[0] }
+    | SAME_SECURITY_TRAFFIC
+    { result = val[0] }
+    | ICMP
+    { result = val[0] }
+    | BPDU
+    { result = val[0] }
+    | FIREWALL
+    { result = val[0] }
+    | FLOODGUARD
+    { result = val[0] }
+    | STANDBY
+    { result = val[0] }
+    | FACILITY
+    { result = val[0] }
+    | ECHO_REPLY
+    { result = val[0] }
+    | PARAMETER_PROBLEM
+    { result = val[0] }
+    | HISTORY
+    { result = val[0] }
+    | TCP_UDP
+    { result = val[0] }
+    | IN
+    { result = val[0] }
+    | RANGE
+    { result = val[0] }
+    | SET
+    { result = val[0] }
+    | ENABLE
+    { result = val[0] }
+    | DNS
+    { result = val[0] }
+    | STANDARD
+    { result = val[0] }
+    | CONDUIT
+    { result = val[0] }
+    | ROUTER_SOLICITATION
+    { result = val[0] }
+    | POLICY
+    { result = val[0] }
+    | PROXY_BLOCK
+    { result = val[0] }
+    | TIME_EXCEEDED
+    { result = val[0] }
+    | IP
+    { result = val[0] }
+    | POLICY_MAP
+    { result = val[0] }
+    | SERVICE
+    { result = val[0] }
+    | ALERT_INTERVAL
+    { result = val[0] }
+    | NAT_CONTROL
+    { result = val[0] }
+    | MATCH
+    { result = val[0] }
+    | PER_USER_OVERRIDE
+    { result = val[0] }
+    | NAME
+    { result = val[0] }
+    | PORT
+    { result = val[0] }
+    | NAMEIF
+    { result = val[0] }
+    | ADDRESS
+    { result = val[0] }
+    | SECURITY_LEVEL
+    { result = val[0] }
+    | SHUTDOWN
+    { result = val[0] }
+    | SSH 
+    { result = val[0] }
+    | RIP 
+    { result = val[0] }
+    | SNMP_SERVER 
+    { result = val[0] }
+    | HTTP 
+    { result = val[0] }
+    | TELNET 
+    { result = val[0] }
+    | TRAP
+    { result = val[0] }
+    | VERSION
+    { result = val[0] }
+    | COPY
+    { result = val[0] }
+    | SCOPY
+    { result = val[0] }
+    | CONTACT 
+    { result = val[0] }
+    | LOCATION 
+    { result = val[0] }
+    | LISTEN_PORT 
+    { result = val[0] }
+    | COMMUNITY
+    { result = val[0] }
+    | TRAPS
+    { result = val[0] }
+    | AUTHENTICATION_CERTIFICATE
+    { result = val[0] }
+    | SERVER
+    { result = val[0] }
+    | TIMEOUT
+    { result = val[0] }
+    | TFTP
+    { result = val[0] }
+    | ROUTE
+    { result = val[0] }
+    ;
+
+
+
+end
+
+---- header
+
+#require 'rubygems'
+require 'strscan'
+require 'matasano_utils'
+require 'pp'
+
+---- inner
+
+  class ObjectGroupName < String; end
+
+  def initialize(parser_opts)
+      @yydebug = parser_opts.fetch(:debug,false)
+  end
+
+  def parse(ss)
+      @ss = ss
+      yyparse self, :scan
+  end
+
+  def safe_parse(ss)
+      begin
+          return self.parse(ss)
+      rescue => e
+          return e
+      end
+  end
+
+  def on_error(tok, val, vals)
+      STDERR.puts "Parse error at \"#{val}\" on line: #{@ss}" if @yydebug
+      raise ParseError, "Parse error at \"#{val}\" on line: #{@ss}\""
+  end
+
+  # def scan(*args)
+  #     scam(*args) do |tok|
+  #
+  #       pp "HELLO FROM #{tok}"
+  #       yield tok
+  #   end
+  # end
+
+
+  def scan(data="", comments=false)
+      rpf = Cisco::RalexPix.new(@yydebug)
+
+      rpf.tokenize(@ss) { |t, v| 
+          # we skip comments
+          yield t, v unless t.nil? or t == :COMMENT
+      }
+      yield false, '$'
+  end
+
+---- footer
+
+if __FILE__ == $0
+    p = PixParser.new true
+
+
+    while((str = ARGF.readline().chop) and not str.empty?)
+        begin
+            s = p.parse(str)
+            puts s.inspect
+        rescue
+            pp $!
+            traceback
+        end
+
+        print 'pix> '
+    end
+end
+

@@ -1,0 +1,19 @@
+global (outside) 1 131.1.23.12-131.1.23.254
+nat (inside) 1 10.0.0.0 
+static (inside,outside) 131.1.23.11 10.14.8.50
+
+static (inside, outside) 131.1.23.10 10.10.254.3
+
+route inside 10.14.8.0 255.255.255.0 10.10.254.2
+route outside 0.0.0.0 0.0.0.0 131.1.23.1
+
+access-list 101 permit tcp any host 131.1.23.10 eq 22
+access-list 101 permit tcp any 131.1.23.0 255.255.255.248 eq 22
+access-list 101 permit udp host 131.1.23.1 host 131.1.23.11 255.255.255.0 eq 514
+access-list 101 permit tcp any any 22
+access-group 101 in interface outside
+
+nameif ethernet0 outside security0
+nameif ethernet1 inside security100
+
+

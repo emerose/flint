@@ -1,0 +1,701 @@
+## Every time you modify this file, you have to regenerate
+## pf_tagger.rb by running the following command:
+##
+## rake playbook:pf_tagger
+##
+## racc is in the third party build, so make sure to set your
+## environment accordingly Just in case, you might wanna save a copy
+## of the existing cisco_tagger.rb
+
+class PfTagger
+
+
+    token HOST FROM TO 
+
+    option result_var
+
+    start tagged_pattern
+
+    rule
+
+    tagged_pattern : tagged_pattern tagged_pattern
+    { result = val }
+    | ralex_tokens 
+    { result = val }
+    | id
+    { result = val }
+    | NUMBER
+    { result = val }
+    | COMMENT
+    { result = [Comment.new(val[0])] }
+    | fromto
+    { result = val }
+    | tabledef
+    { result = val }
+    | TABLEREF
+    { result = [begin PfTableRef.new(val[0]) rescue val[0] end] }
+    | IPADDR
+    {   # This will only match isolated IP addresses.  The iprange
+        # pattern below matches the normal Cisco IP address
+        # specifications, like ADDR MASK. So here we don't want to
+        # convert masks to IPAddr objects
+        if val[0].starts_with?("255.")
+            result = val[0]
+        else
+            # if the conversion fails, default to the string value
+            result = begin IPAddr.parse(val[0]) rescue val[0] end
+        end
+        # if we got nil from IPAddr.parse, use the original value
+        result ||= val[0]
+    }
+    | PORT portspec
+    { result = [val[0], begin PortName.new(val[1]) rescue val[1] end]}
+    | redirection
+    { result = val }
+    | error 
+    { 
+      STDERR.puts("GOT AN ERROR with #{val}") if @yydebug
+      yyerrok
+      result = @err_tokens.pop; 
+    }
+    ;
+
+fromto : ALL
+    { result = val }
+    | from to
+    { result = val }
+    | from os to
+    { result = val }
+    | from
+    { result = val }
+    | to
+    { result = val }
+    ;
+
+
+os  : OS xos
+    { result = val }
+    | OS OPEN_BRACE os_list CLOSE_BRACE
+    { result = val }
+    ;
+
+xos   : STRING
+    { result = val }
+    ;
+
+os_list   : xos
+    { result = val }
+    | os_list comma xos
+    { result = val }
+    ;
+
+from: FROM ipportspec
+    { result = val }
+    ;
+
+to  : TO ipportspec
+    { result = val }
+    ;
+
+redirection :
+    | ARROW host
+    { result = val }
+    | ARROW host PORT port
+    { result = val }
+
+
+ipportspec  : ipspec
+    { result = val }
+    | ipspec PORT portspec
+    { result = val }
+    | PORT portspec
+    { result = val }
+    ;
+
+ipspec : ANY
+    { result = val }
+    | xhost
+    { result = val }
+    | host
+    { result = val }
+    | OPEN_BRACE host_list CLOSE_BRACE
+    { result = val }
+    ;
+
+host_list : ipspec
+    { result = val }
+    | host_list comma ipspec
+    { result = val }
+    ;
+
+xhost   : not host
+    { result = val }
+    | not NOROUTE
+    { result = val }
+    | not URPFFAILED
+    { result = val }
+    ;
+
+host    : id
+    { result = begin Hostname.new(val[0]) rescue val[0] end }
+    | IPADDR
+    { result = begin IPAddr.parse(val[0]) rescue val[0] end }
+    | id SLASH NUMBER
+    { result = val }
+    | dynaddr
+    { result = val }
+    | dynaddr SLASH NUMBER
+    { result = val }
+    | TABLEREF
+    { result = begin
+                   PfTableRef.new(val[0],:host)
+               rescue 
+                   val[0]
+               end }
+    | ROUTE id
+    { result = val }
+    | id COLON id
+    { result = val }
+
+    ;
+
+
+dynaddr   : OPEN_PAREN id CLOSE_PAREN
+    { result = val }
+                ;
+
+portspec  : port_item
+    { result = val }
+    | OPEN_BRACE port_list CLOSE_BRACE
+    { result = val }
+    ;
+
+port_list : port_item
+    { result = val }
+    | port_list comma port_item
+    { result = val }
+    ;
+
+port_item : port
+    { result = val }
+    | unaryop port
+    { result = val }
+    | port PORTBINARY port
+    { result = val }
+    ;
+
+port : id
+    { result = begin PortName.new(val[0]) rescue val[0] end }
+    | NUMBER
+    { result = begin PortNumber.new(val[0].to_i) rescue val[0] end }
+    | TABLEREF
+    { result = begin 
+                   PfTableRef.new(val[0],:port)
+               rescue
+                   val[0]
+               end}
+    ;
+
+
+tabledef  : TABLE TABLEREF table_opts
+    { begin
+          val[1] = PfTableName.new(val[1])
+          result = val.flatten.compact.map do |tok|
+                if ( tok.kind_of? TableDefStart or
+                     tok.kind_of? TableDefEnd )
+                    tok.table = val[1]
+                end
+                tok
+ 	  end.compact
+      rescue
+          result = val
+      end
+    }
+    ;
+
+table_opts  : table_opts_l
+    { result = val }
+    | /* empty */
+    { result = nil }
+    ;
+
+table_opts_l  : table_opts_l table_opt
+    { result = val }
+    | table_opt
+    { result = val }
+    ;
+
+table_opt : id
+    { result = val }
+    | OPEN_BRACE CLOSE_BRACE
+    { result = val }
+    | OPEN_BRACE table_list CLOSE_BRACE
+    { 
+        s = TableDefStart.new(val.shift)
+        e = TableDefEnd.new(val.pop)
+        result = [s, val, e]
+    }
+    | FILENAME STRING
+    { result = val }
+    ;
+
+table_list : table_item
+    { result = val }
+    | table_list comma table_item
+    { result = val }
+    ;
+
+
+table_item : port
+    {  result = val }
+    | host
+    {  result = val }
+    | xhost
+    {  result = val }
+    ;
+    
+not   : BANG
+    { result = val }
+    | /* empty */
+    { result = nil }
+    ;
+
+comma  : COMMA
+    { result = val }
+    ;
+
+yesno   : NO
+    { result = val }
+    | YES
+    { result = val }
+    | STRING
+    { result = val }
+    ;
+
+unaryop   : EQUALS
+    { result = val }
+    | BANG EQUALS
+    { result = val }
+    | LESS_THAN EQUALS
+    { result = val }
+    | LESS_THAN
+    { result = val }
+    | GREATER_THAN EQUALS
+    { result = val }
+    | GREATER_THAN
+    { result = val }
+    ;
+
+id : ID
+    { result = val[0] }
+    | keyword
+    { result = val }
+    ;
+
+
+    keyword : 
+    | ALL
+    | ALLOWOPTS
+    | ALTQ
+    | ANCHOR
+    | ANTISPOOF
+    | ANY
+    | BANDWIDTH
+    | BINAT
+    | BINATANCHOR
+    | BITMASK
+    | BLOCK
+    | BLOCKPOLICY
+    | CBQ
+    | CODE
+    | FRAGCROP
+    | DEBUG
+    | DROP
+    | FRAGDROP
+    | DUPTO
+    | FASTROUTE
+    | FILENAME
+    | FINGERPRINTS
+    | FLAGS
+    | FLOATING
+    | FLUSH
+    | FOR
+    | FRAGMENT
+    | FROM
+    | GLOBAL
+    | GROUP
+    | HFSC
+    | HOSTID
+    | ICMPTYPE
+    | ICMP6TYPE
+    | IFBOUND
+    | IN
+    | INET
+    | INET6
+    | KEEP
+    | LABEL
+    | LIMIT
+    | LINKSHARE
+    | LOAD
+    | LOG
+    | LOGINTERFACE
+    | MAXIMUM
+    | MAXMSS
+    | MAXSRCCONN
+    | MAXSRCCONNRATE
+    | MAXSRCNODES
+    | MAXSRCSTATES
+    | MINTTL
+    | MODULATE
+    | NAT
+    | NATANCHOR
+    | NO
+    | NODF
+    | NOROUTE
+    | NOSYNC
+    | ON
+    | OPTIMIZATION
+    | OS
+    | OUT
+    | OVERLOAD
+    | PASS
+    | PORT
+    | PRIORITY
+    | PRIQ
+    | PROBABILITY
+    | PROTO
+    | QLIMIT
+    | QUEUE
+    | QUICK
+    | RANDOM
+    | RANDOMID
+    | RDR
+    | RDRANCHOR
+    | REALTIME
+    | REASSEMBLE
+    | REPLYTO
+    | REQUIREORDER
+    | RETURN
+    | RETURNICMP
+    | RETURNICMP6
+    | RETURNRST
+    | ROUNDROBIN
+    | ROUTE
+    | ROUTETO
+    | RULE
+    | SCRUB
+    | SET
+    | SKIP
+    | SOURCEHASH
+    | SOURCETRACK
+    | STATE
+    | STATEPOLICY
+    | STATICPORT
+    | STICKYADDRESS
+    | SYNPROXY
+    | TABLE
+    | TAG
+    | TAGGED
+    | TBRSIZE
+    | TIMEOUT
+    | TO
+    | TOS
+    | TTL
+    | UPPERLIMIT
+    | URPFFAILED
+    | YES
+    | PORTRANGE
+    | PORTINVERSERANGE
+    | LESSOREQUAL
+    | GREATEROREQUAL
+    | ARROW
+    | ROUTING
+    | TCP_STATE
+    | USE
+    { result = val[0] }
+	 ;
+
+    # any tagger that uses Ralex output, should handle these
+    # simply passing the value along is fine
+    ralex_tokens : ID
+    | OPEN_BRACE
+    | CLOSE_BRACE
+    | BANG
+    | COMMA
+    | EQUALS
+    | OPEN_PAREN
+    | CLOSE_PAREN
+    | LESS_THAN
+    | GREATER_THAN
+    | AMPERSAND
+    | AT
+    | DOLLAR
+    | PERCENT
+    | TILDE
+    | HAT
+    | ASTERISK
+    | DASH
+    | UNDERLINE
+    | PLUS
+    | QUESTION
+    | COLON
+    | SEMICOLON
+    | BACKTICK
+    | SLASH
+    | STRING
+    | COMMENT
+    | BYTECOUNT
+    | PERCENTAGE
+    | WORD
+    { result = val[0] }
+    ;
+
+
+end
+
+---- header
+
+require 'rubygems'
+require 'strscan'
+require 'matasano_ipaddr'
+require 'pp'
+require 'rule_tables'
+load "util.rb"
+
+---- inner
+
+
+  class PfTableName < RuleTableName;
+      def extract_name(src)
+          src.gsub(/<|>/,"")
+      end
+  end
+  
+  class PfTableRef < RuleTableRef;
+      def extract_name(src)
+          src.gsub(/<|>/,"")
+      end
+  end
+  
+  class Comment < String; end
+
+  class TableDefStart 
+      attr_accessor :table, :value
+      def initialize(value,table=nil)
+          @value = value
+          if table.kind_of? PfTableName
+              @table = table
+          else
+              @table = PfTableName.new(table) if table
+          end
+      end
+      
+      def eql?(val)
+          return true if ( @table.eql?(val.table) and
+                           @value.eql?(val.value) )
+          return false
+      end
+      
+      def to_s
+          @value.to_s
+      end
+  end
+
+  class TableDefEnd
+      attr_accessor :table, :value
+      def initialize(value,table=nil)
+          @value = value
+          if table.kind_of? PfTableName
+              @table = table
+          else
+              @table = PfTableName.new(table) if table
+          end
+      end
+      
+      def eql?(val)
+          return true if ( @table.eql?(val.table) and
+                           @value.eql?(val.value) )
+          return false
+      end
+      def to_s
+          @value.to_s
+      end
+  end
+
+  def initialize(parser_opts)
+      @yydebug = parser_opts.fetch(:debug,false)
+      @err_tokens  = []
+      @keywords = {
+            "all"   => :ALL,
+            "allow-opts"  => :ALLOWOPTS,
+            "altq"    => :ALTQ,
+            "anchor"  => :ANCHOR,
+            "antispoof" => :ANTISPOOF,
+            "any"   => :ANY,
+            "bandwidth" => :BANDWIDTH,
+            "binat"   => :BINAT,
+            "binat-anchor"  => :BINATANCHOR,
+            "bitmask" => :BITMASK,
+            "block"   => :BLOCK,
+            "block-policy"  => :BLOCKPOLICY,
+            "cbq"   => :CBQ,
+            "code"    => :CODE,
+            "crop"    => :FRAGCROP,
+            "debug"   => :DEBUG,
+            "drop"    => :DROP,
+            "drop-ovl"  => :FRAGDROP,
+            "dup-to"  => :DUPTO,
+            "fastroute" => :FASTROUTE,
+            "file"    => :FILENAME,
+            "fingerprints"  => :FINGERPRINTS,
+            "flags"   => :FLAGS,
+            "floating"  => :FLOATING,
+            "flush"   => :FLUSH,
+            "for"   => :FOR,
+            "fragment"  => :FRAGMENT,
+            "from"    => :FROM,
+            "global"  => :GLOBAL,
+            "group"   => :GROUP,
+            "hfsc"    => :HFSC,
+            "hostid"  => :HOSTID,
+            "icmp-type" => :ICMPTYPE,
+            "icmp6-type"  => :ICMP6TYPE,
+            "if-bound"  => :IFBOUND,
+            "in"    => :IN,
+            "inet"    => :INET,
+            "inet6"   => :INET6,
+            "keep"    => :KEEP,
+            "label"   => :LABEL,
+            "limit"   => :LIMIT,
+            "linkshare" => :LINKSHARE,
+            "load"    => :LOAD,
+            "log"   => :LOG,
+            "loginterface"  => :LOGINTERFACE,
+            "max"   => :MAXIMUM,
+            "max-mss" => :MAXMSS,
+            "max-src-conn"  => :MAXSRCCONN,
+            "max-src-conn-rate" => :MAXSRCCONNRATE,
+            "max-src-nodes" => :MAXSRCNODES,
+            "max-src-states"=> :MAXSRCSTATES,
+            "min-ttl" => :MINTTL,
+            "modulate"  => :MODULATE,
+            "nat"   => :NAT,
+            "nat-anchor"  => :NATANCHOR,
+            "no"    => :NO,
+            "no-df"   => :NODF,
+            "no-route"  => :NOROUTE,
+            "no-sync" => :NOSYNC,
+            "on"    => :ON,
+            "optimization"  => :OPTIMIZATION,
+            "os"    => :OS,
+            "out"   => :OUT,
+            "overload"  => :OVERLOAD,
+            "pass"    => :PASS,
+            "port"    => :PORT,
+            "priority"  => :PRIORITY,
+            "priq"    => :PRIQ,
+            "probability" => :PROBABILITY,
+            "proto"   => :PROTO,
+            "qlimit"  => :QLIMIT,
+            "queue"   => :QUEUE,
+            "quick"   => :QUICK,
+            "random"  => :RANDOM,
+            "random-id" => :RANDOMID,
+            "rdr"   => :RDR,
+            "rdr-anchor"  => :RDRANCHOR,
+            "realtime"  => :REALTIME,
+            "reassemble"  => :REASSEMBLE,
+            "reply-to"  => :REPLYTO,
+            "require-order" => :REQUIREORDER,
+            "return"  => :RETURN,
+            "return-icmp" => :RETURNICMP,
+            "return-icmp6"  => :RETURNICMP6,
+            "return-rst"  => :RETURNRST,
+            "round-robin" => :ROUNDROBIN,
+            "route"   => :ROUTE,
+            "route-to"  => :ROUTETO,
+            "rule"    => :RULE,
+            "scrub"   => :SCRUB,
+            "set"   => :SET,
+            "skip"    => :SKIP,
+            "source-hash" => :SOURCEHASH,
+            "source-track"  => :SOURCETRACK,
+            "state"   => :STATE,
+            "state-policy"  => :STATEPOLICY,
+            "static-port" => :STATICPORT,
+            "sticky-address"=> :STICKYADDRESS,
+            "synproxy"  => :SYNPROXY,
+            "table"   => :TABLE,
+            "tag"   => :TAG,
+            "tagged"  => :TAGGED,
+            "tbrsize" => :TBRSIZE,
+            "timeout" => :TIMEOUT,
+            "to"    => :TO,
+            "tos"   => :TOS,
+            "ttl"   => :TTL,
+            "upperlimit"  => :UPPERLIMIT,
+            "urpf-failed" => :URPFFAILED,
+            "yes" => :YES,
+            "><" => :PORTRANGE,
+            "<>" => :PORTINVERSERANGE,
+            "<=" => :LESSOREQUAL,
+            ">=" => :GREATEROREQUAL,
+            "->" => :ARROW,
+            "ROUTING" => :ROUTING,
+            "TCP_STATE" => :TCP_STATE,
+            "user"    => :USER
+        }
+
+  end
+
+  def parse(ss)
+      @ss = ss
+      [yyparse(self, :scan)].flatten
+  end
+
+  def safe_parse(ss)
+      begin
+          return self.parse(ss)
+      rescue => e
+          return e
+      end
+  end
+
+  def on_error(tok, val, vals)
+      STDERR.puts "Tagger error at \"#{val}\" on line: #{@ss}" if @yydebug
+      @err_tokens.push([vals].flatten)
+  end
+
+  def scan(data="", comments=false)
+      rpf = RalexPf.new(@yydebug, @keywords)
+      rpf.tokenize(@ss) { |t, v| 
+          # we skip comments
+	  begin
+  	         yield t, v unless t.nil?
+          rescue => e
+                 # if we get an error of some sort, we just
+                 # treat the value as an identifier
+	  	 STDERR.puts("Tagger error handling #{t}, #{v}") if @yydebug
+	  	 yield :ID, v
+          end
+      }
+      yield false, ''
+  end
+
+---- footer
+
+if __FILE__ == $0
+    p = PfTagger.new true
+    while((str = ARGF.readline().chop) and not str.empty?)
+        begin
+            s = p.parse(str)
+            puts s.inspect
+        rescue
+            pp $!
+            traceback
+        end
+
+        print 'pf> '
+    end
+end
+

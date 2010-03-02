@@ -1,0 +1,44 @@
+!!! Transitional
+%html{:xmlns => "http://www.w3.org/1999/xhtml", "xml:lang" => "en", :lang => "en"}
+  %head
+    %link{:href => "/ui/style/screen.css",
+          :rel => "stylesheet",
+          :type => "text/css",
+          :media => "screen, projection" }
+
+    %link{:href => "/ui/style/print.css",
+          :rel => "stylesheet",
+          :type => "text/css",
+          :media => "print" }
+      
+    %link{:href => "/ui/style/login.css",
+          :rel => "stylesheet",
+          :type => "text/css",
+          :media => "screen, projection" }
+
+    / [ if IE gt IE 5 ]
+      %link{ :rel => "/ui/style/ie.css",
+             :type => "text/css",
+             :media => "screen, projection",
+             :href => "/ui/style/ie.css" }
+
+  %body
+  
+    #header
+      .container
+        .logo
+          %a{:href => "/login"}
+            %img{:src => "/assets/flint_logo_big.png"}
+          %form.login_form{:action => "/login", :method => "POST"}
+            %table
+              %tr
+                %td
+                  Login
+                %td
+                  %input{:type => "textarea", :name => "login"}
+                %td
+                  Password
+                %td
+                  %input{:type => "password", :name => "password"}
+                %td
+                  %input{:type => "submit", :value => "Login"}

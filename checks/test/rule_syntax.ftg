@@ -1,0 +1,29 @@
+title "Rule Syntax"
+description "Checks for well-formedness of rules"
+code :basics
+
+check :syntax_error, "No Syntax Errors for access-lists" do
+   fail("access-list 101 permit bad bad")
+   fail("access-list 101 permit bad bad eq 55")
+end
+
+check :duplicate_rules, "No duplicate rules" do
+   pass()
+end
+
+check :non_routable, "Non-routable addresses blocked" do
+   pass("access-list 101 deny 10.0.0.0 0.0.0.0 any")
+end
+
+check :allow_any, "No rules allowing any to any traffic" do
+   fail("access-list 111 permit any any")
+end
+
+check :unbound_access_lists, "No unbound access lists" do
+      fail("access-list 99 deny any any eq 25")
+end
+
+
+check :undefined_object_groups, "No undefined object-groups" do
+      pass()
+end

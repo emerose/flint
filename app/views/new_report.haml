@@ -1,0 +1,19 @@
+%p
+.span-9.last
+  .span-9.last
+    %p
+      Upload a file containing your rules:
+  .span-9.last
+    %form#upload_form{:action => "/upload", :method => "POST", :enctype => "multipart/form-data"}
+      %input{:type => "file", :name => "data"}
+      %p
+      .span-9.last
+        or paste the rules below
+      .span-9.last
+        %textarea{:name => "rule_text", :rows => "40", :cols => "30"}
+      .span-9.last
+        .span-4
+          %a#upload_button{:href => "#"}
+            %img{:src => "/assets/run_report.png"}
+        .span-5.last
+          %img.hidden#spinner{:src => "/assets/spinner.gif"}

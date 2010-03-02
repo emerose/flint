@@ -1,0 +1,15 @@
+title "External-to-Internal Service Checks"
+
+description <<EOM
+Typically, firewalls have one or more "secure" internal interfaces connected
+to a trusted internal network, and an "insecure" external interface connected
+to a WAN or the Internet. These checks attempt to sense the external and
+internal interfaces, and then detect firewall rules that allow unsafe
+applications to pass onto the internal network.
+EOM
+
+code :x2i_proto
+
+Dir[FLINT_ROOT + "/checks/pix/x2i_proto/*.check.rb"].each do |x|
+  self.instance_eval(File.read(x), x)
+end

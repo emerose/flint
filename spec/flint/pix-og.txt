@@ -1,0 +1,18 @@
+name 10.1.1.1 devserver
+
+object-group network webservers
+network-object host 10.1.1.10
+network-object host 10.1.1.11
+network-object host devserver
+
+object-group network mailservers
+network-object host 10.1.1.100
+network-object host 10.1.1.111
+
+object-group port badservices
+port-object eq smtp
+port-object range 1000 2000
+
+object-group network servers
+group-object webserver
+group-object mailservers

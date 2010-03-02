@@ -1,0 +1,126 @@
+Flint Sketch
+
+Questions we ask in our tests
+
+Textual analysis
+
+* Does ANY rule use ANY on destination host or port
+* Does ANY rule allow destination of port X explicitely
+* Does ANY rule allow detination of host X explicitely
+* Is a non-rule option set, or command used (do they use fixup ftp on PIX?)
+
+These questions can be answered with just the information contained in
+a specific rule, with basic parsing.
+
+Functional Analysis
+
+* Can ANY hosts get from E to I on port X
+* Can ANY hosts get from I to E on port X
+* Can N+ hosts get from I to E on port X
+* Can ANY hosts get from I to E on more than N ports
+* Can ANY hosts get from E to I at N+ hosts on port X
+* Can packets with flag X set go from E to I
+* Can packets of protocol X go from I to E
+* Can packets of protocol X go from E to I
+* Which hosts can talk to host X on port Y
+
+Accurately answering these questions requires knowing the default
+behavior of the device, and how rules are processed.  Specifically, we
+need to know the default policies, which rules are applied on which
+interface, whether a rule match stops processing, or jumps to another
+rule set, which interface is external/internal.
+
+How we describe network policy
+
+* Direction
+* Destination
+* Hosts
+* Ports/Services
+* Protocol (TCP/ICMP/UDP)
+
+How firewall rule languages describe them...
+
+Packet source/sink
+  * interface(s)
+  * net blocks
+
+Packet specifications
+  net blocks
+  port ranges
+  protocols
+  packet states
+  interfaces
+  flags
+
+Tables
+  lists of packet specifications
+ 
+Rules
+
+Consist of two packet specs, in and out.
+  * match
+    * Pass
+    * Deny
+    * jump
+  * transform
+    * given an input spec, transforms it and returns a new spec
+    
+Chains of Rules
+  * order of execution of rules
+  * allows jump and flow control of rules
+  * default policies
+  * are bound to a direction or interface
+
+
+
+Flint Classes
+
+Firewall
+
+Line
+
+TestGroup
+
+Test
+
+TestResult
+
+TestRunner
+
+
+Some example tests:
+Internal TCP on all ports (d02) 
+Inbound version control (i21) 
+Inbound UDP on all ports (i03) 
+Inbound Instant-Messaging (i19) 
+Inbound X11 (i13) 
+Outbound IRC (o03) 
+Inbound TCP on 2000+ ports (i14) 
+Inbound database access (i20) 
+Inbound "Any" service (i01) 
+Inbound MSSQL (i17) 
+Outbound UDP on all ports (o06) 
+Internal UDP on all ports (d03) 
+Inbound TFTP (i15) 
+Outbound Instant-Messaging (o09) 
+Outbound POP3 (o01) 
+Inbound ICMP to 256+ IPs (i12) 
+Inbound RPC (i05) 
+Inbound DNS/TCP to 256+ IPs (i16) 
+Inbound Microsoft services (i07) 
+Inbound P2P (i18) 
+Inbound Telnet (i04) 
+Inbound SNMP (i06) 
+Inbound SMTP to 256+ IPs (i09) 
+Inbound FTP to 256+ IPs (i11) 
+Internal "Any" service (d01) 
+Inbound DNS/UDP to 256+ IPs (i10) 
+Outbound TCP on 2000+ ports (o07) 
+Inbound HTTP to 256+ IPs (i08) 
+Outbound "Any" service (o04) 
+Internal X11 (d05) 
+Internal Microsoft services (d04) 
+"To Any allow Any service" rules (r01) 
+Outbound P2P (o08) 
+Outbound SMTP from 256+ IPs (o02) 
+

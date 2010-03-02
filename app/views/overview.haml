@@ -1,0 +1,45 @@
+#nav.overview
+#overbar
+  .container
+    .span-21
+      %h3
+        - if not @current_sha.empty?
+          - grade, counts = grade_firewall(@current_sha)
+          %img{:src => "/assets/#{grade}.png"}
+        Overall Rating
+
+.container
+  #subheader.span-24.last
+    %h3
+      Rating Breakdown
+
+  .span-24.fake_table_header.last
+    .span-1
+      &nbsp;
+    .span-1
+      &nbsp;
+    .span-7
+      %a
+        Test Group
+      %img{:src => "/assets/down_arrow.png"}
+    .span-3
+      %a
+        Passed
+    .span-3
+      %a
+        Failed
+    .span-3
+      %a
+        Warnings
+    .span-3
+      %a
+        Notice
+    .span-3.last
+      %a
+        Errors
+    %br
+  - if @testresults.empty?
+    You have no results to view. Please select Run New Report to get started.
+  - else
+    - @testresults.each_with_index do |r,i|
+      = haml :group_result, :layout => false, :locals => {:r => r, :index => i}

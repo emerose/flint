@@ -1,0 +1,102 @@
+- blurb = look_up_by_name(protocol_map.name)
+- name = protocol_map.name
+.span-24.fake_table_header.last
+  .span-1
+    %img#toggle{:src => "/assets/toggle-expand.png", :name => "#{classify(name.downcase)}_details"}
+  .span-6
+    &nbsp;
+    %a#toggle{:name => "#{classify(name.downcase)}_details"}
+      = name.upcase
+  .span-6.realm
+    &nbsp;
+    #{protocol_map.from_realms.all.sort.reverse.join(",&nbsp;")}
+  .span-6.realm
+    &nbsp;
+    #{protocol_map.to_realms.all.sort.reverse.join(",&nbsp;")}
+  .span-4.last.risk
+    = blurb.risk.capitalize if blurb.risk
+    Risk
+
+.span-24.hidden.last(id="#{classify(name.downcase)}_details" style="float:right;")
+  .span-9.padded
+    = blurb.description[0..300]
+  .span-3
+    .span-1.subleft
+      TCP
+    .span-2.last
+      = blurb.tcp_port.all.join(",")
+    .span-1.subleft
+      UDP
+    .span-2.last
+      = blurb.udp_port.all.join(",")
+  .span-2
+    .span-1.subleft
+      alias
+    .span-2.last
+      = blurb.alias.all.join(",")
+    %br
+    .span-1.subleft
+      islike
+    .span-2.last
+      = blurb.islike.all.join(",")
+  .span-5
+    .span-3.subleft
+      exposes-data
+    .span-2.last
+      = blurb.exposes_data
+    .span-3.subleft
+      exposes-integrity
+    .span-2.last
+      = blurb.exposes_integrity
+    .span-3.subleft
+      exposes-connectivity
+    .span-2.last
+      = blurb.exposes_connectivity
+  .span-4.last
+    .span-3.subleft
+      strong-encryption
+    .span-1.last
+      = blurb.strong_encryption
+    .span-3.subleft
+      strong-auth
+    .span-1.last
+      = blurb.strong_auth
+
+
+  .span-24.last
+    .span-5
+      Interfaces
+    .span-8
+      From
+    .span-8
+      To
+    .span-2.last
+      Port
+    - sorted_interface_pairs_for_protocol_map(protocol_map).each do |pair|
+      .span-5
+        %b #{pair[0]} -> #{pair[1]}
+      .span-18.last
+        - service_paths(pair[0], pair[1], protocol_map.name ).each do |path|
+          .span-8
+            = path.source_as_cidr.to_iprange.join(", ")
+          .span-8
+            = path.destination_as_cidr.to_iprange.join(", ")
+          .span-2.last
+            = "#{path.port}/#{path.protocol}"
+
+  .span-24.last
+    .span-5
+      Path
+    .span-3
+      Line #
+    .span-16.last
+      Rule
+    - sorted_interface_pairs_for_protocol_map(protocol_map).each do |pair|
+      .span-5
+        %b #{pair[0]} -> #{pair[1]}
+      .span-19.last
+        - collect_lines_from_service_paths(service_paths(pair[0], pair[1], protocol_map.name )).each do |line|
+          .span-3
+            = line.number
+          .span-16.last
+            = line.source

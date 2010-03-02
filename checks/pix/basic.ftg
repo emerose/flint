@@ -1,0 +1,118 @@
+title "Basic Rule Checks"
+description "Basic rule checks that apply to all policy sets"
+code :basic
+
+interface_check :allow_any_to_any, "No rules allowing any to any traffic" do
+  # should this be limited to only those access lists bound to an
+  # interface?
+  interface_types :external, :dmz
+
+  set_title "No any to any rules on #{interface.name} interface"
+
+  describe "Rules which allow traffic from any host to any host are too promiscuous and allow spoofing."
+
+  each_line_of_applied_chains do |l|
+    acl_for(l.load_ast) do |rule|
+      if ( policy_for(rule) == :permit and
+           (not rule[:protocol].is_icmp?) and
+           rule[:source_net].any? and
+           rule[:destination_net].any? )
+        fail(l)
+      end
+    end
+  end
+  effected_interface(interface)
+end
+
+interface_check :allow_any_service, "No rules should allow all destination services" do
+
+  interface_types :external, :dmz
+
+  set_title "No rules allowing all destination services on #{interface.name} interface"
+
+  describe "Rules which allow traffic to all services on a host are too promiscuous and allow spoofing."
+
+  each_line_of_applied_chains do |l|
+    acl_for(l.load_ast) do |rule|
+      if ( policy_for(rule) == :permit and rule[:protocol] != :icmp)
+        dport = rule[:destination_port]
+        if dport.nil? or dport.count > 256
+          fail(l)
+        end
+      end
+    end
+  end
+  effected_interface(interface)
+end
+
+
+interface_pair_check :redundant_rules, "Redundant or contradictory rules" do
+  
+  redundant = []
+  contradicting = []
+  processed = []
+  
+  each_acl_of_applied_chains do |rule|
+    red = []
+    cont = []
+    processed.each do |back|
+      if rule_includes(back, rule)
+        if policy_for(rule) == policy_for(back)
+          red << back
+        else
+          cont << back
+        end
+      end
+    end
+    redundant << {:line => rule, :refs => red} unless red.empty?
+    contradicting << {:line => rule, :refs => cont} unless cont.empty?
+    processed << rule
+  end
+  
+  
+  unless redundant.empty?
+    set_title "Redundant rules in ACLs (#{interface.name} -> #{@out_interface.name})"
+    with_result do
+      describe "A redundant rule is a rule that is never reached because another rule shadows it and applies the same policy."
+      
+      ex = ""
+      redundant.each do |red|
+        l = line_at(red[:line][:lineno])
+        warn(l)
+        ex << "`#{l.number}: #{l.source}'\nis made redundant by the following lines:\n"
+        
+        red[:refs].each {|x|
+          x = line_at(x[:lineno])
+          ex << "* `" + x.number + ":" + x.source + "`\n"
+        }
+        ex << "\n\n"
+      end
+      explain(ex) unless ex.empty?
+    end
+  end
+
+
+  unless contradicting.empty?
+    with_result do
+      set_title "Contradictory rules in ACLs (#{interface.name} -> #{@out_interface.name})"
+
+      describe "A contradictory rule is a rule that is never reached because another rule shadows it and applies a different  policy."
+    
+      ex = ""
+      contradicting.each do |cont|
+        l = line_at(cont[:line][:lineno])
+        warn(l)
+        ex << "`#{l.number}: #{l.source}'\nis contradicted by the following lines:\n"
+        
+        cont[:refs].each {|x|
+          x = line_at(x[:lineno])
+          ex << "* `" + x.number + ":" + x.source + "`\n"
+        }
+        ex << "\n\n"
+      end
+      explain(ex) unless ex.empty?
+    end
+  end
+
+  supress_result # we made all the results explicitely
+end

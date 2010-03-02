@@ -1,0 +1,5 @@
+- @text.each do |t|
+  %ul
+    - [:error, :tokens, :ast, :source, :number].each do |meth|
+      %li
+        = t.send(meth)

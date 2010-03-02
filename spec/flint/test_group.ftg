@@ -1,0 +1,19 @@
+title "Test Group"
+description "A test group definition"
+
+check :any_rules, "no permit any any rules" do
+            	  
+end
+
+check :default_deny, "ensure default deny", {:dummy => 33} do
+
+end
+
+check :duplicate_rules, "no duplicate rules" do
+            
+end
+
+check :syntax_errors, "no syntax errors" do
+
+end
+

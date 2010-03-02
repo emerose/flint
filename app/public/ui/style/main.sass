@@ -1,0 +1,246 @@
+@import variables
+
+body
+  :margin 0
+  :background-color #ffffff
+  :font-family 'Tahoma'
+  :color= !base_text
+  :font-size 12px
+  :font-weight normal
+  :line-height 18px
+  :width auto
+
+  
+a
+  :text-decoration underline
+  :color= !blueb
+  
+a:hover
+  :color= !blue_hover
+  :cursor pointer
+  
+p
+  :margin-top 5px
+  :margin-bottom 5px  
+  
+#toggle:hover
+  :cursor pointer
+  
+#header
+  :background
+    :image url("/assets/blue_grad.png")
+    :repeat repeat-x
+  :width auto
+  
+#header h1
+  :font-family 'Tahoma'
+  :font-size 18px
+  :line-height 36px
+  :color white
+
+#header h2
+  :text-transform allcaps
+  :color= !dark_gray
+
+.nav
+  :position relative
+  :left 95px
+  
+.nav
+  ul
+    :margin 0
+    :margin-top 1.4em
+    :list-style-type none
+  li
+    :display inline
+    :float left
+    :margin 0 2px 0 0
+    :height 29px
+    :min-width 80px
+    :text-align center
+    :background-image url("/assets/tab.png")
+    a
+      :text-decoration none
+      :color white
+      :display block
+      :margin 5px
+  li.active
+    :background-image url("/assets/active_tab.png") 
+    :color= !base_text
+    a
+      :color= !base_text
+  
+#subheader h3
+  :font-family 'Tahoma'
+  :font-size 18px
+  :line-height 18px
+  :padding-top 18px
+  :margin-bottom 0px
+  
+#overbar
+  :background
+    :image url("/assets/gray_grad.png")
+    :repeat repeat-x
+  :border-bottom= !light_gray
+  :width auto
+  :height 72px
+  img
+    :vertical-align middle
+  a
+    :text-decoration none
+    
+#overbar h3
+  :font-family 'Tahoma'
+  :font-size 18px
+  :line-height 33px
+  :padding-top 20px 
+
+.fake_table_row
+  :border-bottom 1px solid
+  :border-color= !bluea
+  :margin-top 5px
+  :margin-bottom 5px
+  
+.fake_table_row_header
+  :padding-bottom 3px
+  
+.fake_table_header
+  :margin-top 5px
+  :margin-bottom 5px
+  :border-top 1px solid
+  :border-bottom 1px solid
+  :border-color= !bluea
+  :color= !bluea
+  :background-color= !blue_highlight
+  :padding-top 5px
+  :padding-bottom 5px
+  
+.margin_bump
+  :margin-bottom 18px
+  
+.inner_heading
+  :text-transform allcaps
+  :color= !dark_gray
+  :border-bottom 1px solid #F0F0F0
+  
+.hidden
+  :display none
+  
+.passes
+  :color= !greenb
+  :font-weight bold
+  img
+    :vertical-align middle
+  
+.failies
+  :color= !redb
+  :font-weight bold
+  img
+    :vertical-align middle
+
+.warnies
+  :color= !yellowb
+  :font-weight bold
+  
+.dull
+  :color= !light_gray
+  :font-weight normal
+  
+.new_report_button
+  :position relative
+  :left 800px
+  :width 150px
+    
+.logo
+  :position absolute
+  :top 16px
+  
+.grade_a
+  :background
+    :image url("/assets/rating-a.png") 
+    :repeat no-repeat
+
+.grade_b
+  :background
+    :image url("/assets/rating-b.png") 
+    :repeat no-repeat
+.grade_c
+  :background
+    :image url("/assets/rating-c.png") 
+    :repeat no-repeat
+.grade_d
+  :background
+    :image url("/assets/rating-d.png") 
+    :repeat no-repeat
+
+.grade_f
+  :background
+    :image url("/assets/rating-f.png") 
+    :repeat no-repeat
+
+.pass
+  :background
+    :image url("/assets/tick-shield.png") 
+    :repeat no-repeat
+    :position 1% 12%
+  a 
+    :color= !greenb
+
+.pass.selected
+  :background
+    :color #EEF6E6  
+
+.fail
+  :background
+    :image url("/assets/slash.png") 
+    :repeat no-repeat
+    :position 1% 12%
+  a
+    :color= !redb
+  
+.fail.selected
+  :background
+    :color #F6E7E6
+
+.warning
+  :background 
+    :image url("/assets/exclamation-diamond.png")
+    :repeat no-repeat
+  a
+    :color= !yellowb
+
+.notice
+  :background #A7D0F9
+
+.error
+  :background #FFD0D0
+
+.realm
+  :color= !base_text
+
+.risk
+  :color= !base_text
+  :text-align right
+  :margin-right 5px
+  :float right
+  
+.subleft
+  :text-align right
+  :color= !light_gray
+  :margin-right 5px
+  
+.padded
+  :padding 5px
+  
+.business
+  :float right
+  :margin 8px
+  img
+    :vertical-align middle
+  a
+    :color #FFFFFF
+    :text-decoration none
+  
+.eighteen
+  :line-height 18px
+  :padding-top 18px 

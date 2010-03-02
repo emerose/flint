@@ -1,0 +1,25 @@
+You are seeing this page because no users have been added. The user you create with this form will automatically become administrator of the system.
+
+%form{:id => "newuser", :action => "/bootstrap/new", :method => "POST"}
+  %table
+    %tr
+      %td.subleft Full Name:
+      %td
+        %input{:type => "textarea", :name => "full_name"}
+    %tr
+      %td.subleft Login:
+      %td
+        %input{:type => "textarea", :name => "username"} 
+    %tr
+      %td.subleft Password once:
+      %td
+        %input{:type => "password", :name => "password1", :id => "password1"}
+    %tr
+      %td.subleft Password twice:
+      %td
+        %input{:type => "password", :name => "password2", :id => "password2"}
+    %tr
+      %td
+        &nbsp;
+      %td
+        %input{:type => "submit", :value => "submit"}

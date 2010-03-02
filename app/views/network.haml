@@ -1,0 +1,31 @@
+#nav.network
+#overbar
+  .container
+    .span-21
+      %h3
+        Network Details
+.container
+  #subheader.span-24.last
+    &nbsp;
+  .span-24.fake_table_header.last
+    .span-11
+      &nbsp;
+      %a
+        Address or Network Block
+    .span-6
+      &nbsp;
+      %a
+        Interfaces
+    .span-6.last
+      &nbsp;
+      %a
+        Protocols
+  - @testresults.each do |k,v|
+    .span-24.fake_table_row.last
+      .span-11.padded
+        = k
+      .span-6
+        = v[:interfaces]
+      .span-6.last
+        = v[:protocols]
+      

@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+flintpath = File.expand_path(File.dirname(__FILE__) + "/../lib")
+$LOAD_PATH.unshift flintpath
+require 'rubygems'
+require 'flint'
+
+require 'irb'
+IRB.start
+

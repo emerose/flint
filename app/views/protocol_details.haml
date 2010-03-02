@@ -1,0 +1,67 @@
+.span-24.fake_table_header.last
+  .span-1
+    %img#toggle{:src => "/assets/toggle-expand.png", :name => "#{classify(name.downcase)}_details"}
+  .span-11
+    &nbsp;
+    %a#toggle{:name => "#{classify(name.downcase)}_details"}
+      = name.upcase
+  .span-6
+    &nbsp;
+    %a
+  .span-2.last.risk
+    = blurb.risk.capitalize
+    Risk
+.span-24.hidden.last(id="#{classify(name.downcase)}_details" style="float:right;")
+  .span-9.padded
+    = blurb.description[0..300]
+  .span-3
+    .span-1.subleft
+      TCP
+    .span-2.last
+      = blurb.tcp_port.all.join(",")
+    .span-1.subleft
+      UDP
+    .span-2.last
+      = blurb.udp_port.all.join(",")
+  .span-2
+    .span-1.subleft
+      alias
+    .span-2.last
+      = blurb.alias.all.join(",")
+    %br
+    .span-1.subleft
+      islike
+    .span-2.last
+      = blurb.islike.all.join(",")
+  .span-5
+    .span-3.subleft
+      exposes-data
+    .span-2.last
+      = blurb.exposes_data
+    .span-3.subleft
+      exposes-integrity
+    .span-2.last
+      = blurb.exposes_integrity
+    .span-3.subleft
+      exposes-connectivity
+    .span-2.last
+      = blurb.exposes_connectivity
+  .span-4.last
+    .span-3.subleft
+      strong-encryption
+    .span-1.last
+      = blurb.strong_encryption
+    .span-3.subleft
+      strong-auth
+    .span-1.last
+      = blurb.strong_auth
+
+  .span-24.last
+    .span.dull.padded
+      FIREWALL RULES
+    %hr
+  .span-24.last.padded
+    .span-1.subleft
+      = lno
+    .span-22.last
+      = rule

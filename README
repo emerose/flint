@@ -1,0 +1,63 @@
+= Flint -- a firewall rule analyzer
+
+Supported firewalls:
+
+* Cisco Pix/ASA
+* IOS almost...
+* IPTables soon
+* Pf soon
+
+== Installing
+
+gem install ./matasano_utils-0.1.gem
+gem install ./Ralex-0.1.gem
+
+It also needs the following gems:
+* sinatra
+* haml
+* ohm
+* rdiscount
+* compass
+* bcrypt-ruby
+
+Flint also requires a working Redis server.  Redis is available at http://code.google.com/p/redis/
+
+== Running
+
+* Start redis
+* The first time you run, you will need to do run 'rake init'
+* 'rake app'
+
+This will start a Sinatra server listening on port 4567.  Point your browser at that.
+
+== Developers
+
+You will need the racc and rdoc gem, and Ragel installed.  Ragel is available
+at: http://www.complang.org/ragel/
+
+== Project Layout
+
+* `lib`
+
+  Ruby code for the Flint module, as well as the support modules for
+  specific firewall types.
+
+* `app`
+
+  The sinatra app which provides an interface to Flint.
+
+* `checks`
+
+  Contains all of firewall rule checks that Flint uses.  Each firewall
+  has it's own subdir for example:
+
+      checks/<firewall>/*.ftg
+
+  Rule checks are defined in Flint Test Group files, each one defines
+  a specific test group, and it's associated checks.  The
+  `checks/test` subdir contains a set of dummy tests which exercise
+  the UI and the Flint test result classes.
+
+* spec
+
+  RSpec tests for Flint.

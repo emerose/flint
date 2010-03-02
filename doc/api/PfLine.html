@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+
+	<title>Class: PfLine</title>
+
+	<link rel="stylesheet" href="./rdoc.css" type="text/css" media="screen" />
+
+	<script src="./js/jquery.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="./js/thickbox-compressed.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="./js/quicksearch.js" type="text/javascript"
+		charset="utf-8"></script>
+	<script src="./js/darkfish.js" type="text/javascript"
+		charset="utf-8"></script>
+
+</head>
+<body class="class">
+
+	<div id="metadata">
+		<div id="file-metadata">
+			<div id="file-list-section" class="section">
+				<h3 class="section-header">In Files</h3>
+				<div class="section-body">
+					<ul>
+					
+						<li><a href="./lib/pf/pf_line_rb.html?TB_iframe=true&amp;height=550&amp;width=785"
+							class="thickbox" title="lib/pf/pf_line.rb">lib/pf/pf_line.rb</a></li>
+					
+					</ul>
+				</div>
+			</div>
+
+			
+		</div>
+
+		<div id="class-metadata">
+
+			<!-- Parent Class -->
+			
+			<div id="parent-class-section" class="section">
+				<h3 class="section-header">Parent</h3>
+				
+				<p class="link">Line</p>
+				
+			</div>
+			
+
+			<!-- Namespace Contents -->
+			
+
+			<!-- Method Quickref -->
+			
+			<div id="method-list-section" class="section">
+				<h3 class="section-header">Methods</h3>
+				<ul class="link-list">
+					
+					<li><a href="#M000194">::factory</a></li>
+					
+					<li><a href="#M000199">::new</a></li>
+					
+					<li><a href="#M000195">#comment?</a></li>
+					
+					<li><a href="#M000197">#parse</a></li>
+					
+					<li><a href="#M000198">#renderer</a></li>
+					
+					<li><a href="#M000196">#tag</a></li>
+					
+				</ul>
+			</div>
+			
+
+			<!-- Included Modules -->
+			
+		</div>
+
+		<div id="project-metadata">
+			
+			
+			<div id="fileindex-section" class="section project-section">
+				<h3 class="section-header">Files</h3>
+				<ul>
+				
+					<li class="file"><a href="./LICENSE_txt.html">LICENSE.txt</a></li>
+				
+					<li class="file"><a href="./README.html">README</a></li>
+				
+				</ul>
+			</div>
+			
+
+			<div id="classindex-section" class="section project-section">
+				<h3 class="section-header">Class Index
+					<span class="search-toggle"><img src="./images/find.png"
+						height="16" width="16" alt="[+]"
+						title="show/hide quicksearch" /></span></h3>
+				<form action="#" method="get" accept-charset="utf-8" class="initially-hidden">
+				<fieldset>
+					<legend>Quicksearch</legend>
+					<input type="text" name="quicksearch" value=""
+						class="quicksearch-field" />
+				</fieldset>
+				</form>
+
+				<ul class="link-list">
+				
+					<li><a href="./Flint.html">Flint</a></li>
+				
+					<li><a href="./Flint/AnyNetSpec.html">Flint::AnyNetSpec</a></li>
+				
+					<li><a href="./Flint/CidrSet.html">Flint::CidrSet</a></li>
+				
+					<li><a href="./Flint/CiscoFirewall.html">Flint::CiscoFirewall</a></li>
+				
+					<li><a href="./Flint/CiscoLine.html">Flint::CiscoLine</a></li>
+				
+					<li><a href="./Flint/CiscoLineParse.html">Flint::CiscoLineParse</a></li>
+				
+					<li><a href="./Flint/CiscoParse.html">Flint::CiscoParse</a></li>
+				
+					<li><a href="./Flint/EmptyNetSpec.html">Flint::EmptyNetSpec</a></li>
+				
+					<li><a href="./Flint/Firewall.html">Flint::Firewall</a></li>
+				
+					<li><a href="./Flint/Interface.html">Flint::Interface</a></li>
+				
+					<li><a href="./Flint/Line.html">Flint::Line</a></li>
+				
+					<li><a href="./Flint/NetBlockSpec.html">Flint::NetBlockSpec</a></li>
+				
+					<li><a href="./Flint/NetSetSpec.html">Flint::NetSetSpec</a></li>
+				
+					<li><a href="./Flint/NetSpec.html">Flint::NetSpec</a></li>
+				
+					<li><a href="./Flint/NetTableSpec.html">Flint::NetTableSpec</a></li>
+				
+					<li><a href="./Flint/Resolver.html">Flint::Resolver</a></li>
+				
+					<li><a href="./Flint/ResolverCache.html">Flint::ResolverCache</a></li>
+				
+					<li><a href="./Flint/Rule.html">Flint::Rule</a></li>
+				
+					<li><a href="./Flint/RuleChain.html">Flint::RuleChain</a></li>
+				
+					<li><a href="./Flint/RuleChainCache.html">Flint::RuleChainCache</a></li>
+				
+					<li><a href="./Flint/ServiceResolver.html">Flint::ServiceResolver</a></li>
+				
+					<li><a href="./Flint/Table.html">Flint::Table</a></li>
+				
+					<li><a href="./Flint/Test.html">Flint::Test</a></li>
+				
+					<li><a href="./Flint/TestGroup.html">Flint::TestGroup</a></li>
+				
+					<li><a href="./Flint/TestGroupLoader.html">Flint::TestGroupLoader</a></li>
+				
+					<li><a href="./Flint/TestNotApplicable.html">Flint::TestNotApplicable</a></li>
+				
+					<li><a href="./Flint/TestResult.html">Flint::TestResult</a></li>
+				
+					<li><a href="./Flint/TestRunner.html">Flint::TestRunner</a></li>
+				
+					<li><a href="./Ohm.html">Ohm</a></li>
+				
+					<li><a href="./Ohm/Attributes.html">Ohm::Attributes</a></li>
+				
+					<li><a href="./Ohm/Attributes/Collection.html">Ohm::Attributes::Collection</a></li>
+				
+					<li><a href="./Ohm/Model.html">Ohm::Model</a></li>
+				
+					<li><a href="./Cisco.html">Cisco</a></li>
+				
+					<li><a href="./Cisco/PixParser.html">Cisco::PixParser</a></li>
+				
+					<li><a href="./Cisco/RalexPix.html">Cisco::RalexPix</a></li>
+				
+					<li><a href="./Array.html">Array</a></li>
+				
+					<li><a href="./AsaFirewall.html">AsaFirewall</a></li>
+				
+					<li><a href="./CiscoConfigurationSupport.html">CiscoConfigurationSupport</a></li>
+				
+					<li><a href="./CiscoTagger.html">CiscoTagger</a></li>
+				
+					<li><a href="./GenericPixLine.html">GenericPixLine</a></li>
+				
+					<li><a href="./IPAddr.html">IPAddr</a></li>
+				
+					<li><a href="./IosFirewall.html">IosFirewall</a></li>
+				
+					<li><a href="./PfFirewall.html">PfFirewall</a></li>
+				
+					<li><a href="./PfLine.html">PfLine</a></li>
+				
+					<li><a href="./PfLineRenderer.html">PfLineRenderer</a></li>
+				
+					<li><a href="./PixCommentLine.html">PixCommentLine</a></li>
+				
+					<li><a href="./PixFirewall.html">PixFirewall</a></li>
+				
+					<li><a href="./PixLine.html">PixLine</a></li>
+				
+					<li><a href="./Symbol.html">Symbol</a></li>
+				
+				</ul>
+				<div id="no-class-search-results" style="display: none;">No matching classes.</div>
+			</div>
+
+			
+		</div>
+	</div>
+
+	<div id="documentation">
+		<h1 class="class">PfLine</h1>
+
+		<div id="description">
+			<p>
+Parse and analyze Pf rule lines.
+</p>
+
+		</div>
+
+		<!-- Constants -->
+		
+
+		<!-- Attributes -->
+		
+
+		<!-- Methods -->
+		
+		<div id="public-class-method-details" class="method-section section">
+			<h3 class="section-header">Public Class Methods</h3>
+
+		
+			<div id="factory-method" class="method-detail ">
+				<a name="M000194"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">factory</span><span
+						class="method-args">(line, parser_opts={ })</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p class="missing-docs">(Not documented)</p>
+					
+
+					
+					<div class="method-source-code"
+						id="factory-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/pf/pf_line.rb, line 6</span>
+ 6:     <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">factory</span>(<span class="ruby-identifier">line</span>, <span class="ruby-identifier">parser_opts</span>={ })
+ 7:         <span class="ruby-identifier">l</span> = <span class="ruby-identifier">new</span>(<span class="ruby-identifier">line</span>)
+ 8:         <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">l</span>.<span class="ruby-identifier">comment?</span>
+ 9:             <span class="ruby-identifier">l</span>.<span class="ruby-identifier">tag</span>(<span class="ruby-identifier">parser_opts</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">parser_opts</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-identifier">:tag</span>,<span class="ruby-keyword kw">true</span>)
+10:             <span class="ruby-identifier">l</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">parser_opts</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">parser_opts</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-identifier">:parse</span>,<span class="ruby-keyword kw">false</span>)
+11:         <span class="ruby-keyword kw">end</span>
+12:         <span class="ruby-identifier">l</span>
+13:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="new-method" class="method-detail ">
+				<a name="M000199"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">new</span><span
+						class="method-args">(source)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p class="missing-docs">(Not documented)</p>
+					
+
+					
+					<div class="method-source-code"
+						id="new-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/pf/pf_line.rb, line 43</span>
+43:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">source</span>)
+44:         <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">source</span>)
+45: 
+46:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+		</div>
+	
+		<div id="public-instance-method-details" class="method-section section">
+			<h3 class="section-header">Public Instance Methods</h3>
+
+		
+			<div id="comment--method" class="method-detail ">
+				<a name="M000195"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">comment?</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p class="missing-docs">(Not documented)</p>
+					
+
+					
+					<div class="method-source-code"
+						id="comment--source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/pf/pf_line.rb, line 15</span>
+15:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">comment?</span>
+16:         <span class="ruby-operator">!</span><span class="ruby-identifier">source</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">source</span>[<span class="ruby-value">0</span>,<span class="ruby-value">1</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;#&quot;</span>
+17:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="parse-method" class="method-detail ">
+				<a name="M000197"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">parse</span><span
+						class="method-args">(parser_opts)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p class="missing-docs">(Not documented)</p>
+					
+
+					
+					<div class="method-source-code"
+						id="parse-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/pf/pf_line.rb, line 30</span>
+30:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse</span>(<span class="ruby-identifier">parser_opts</span>)
+31:         <span class="ruby-identifier">res</span> = <span class="ruby-constant">PfParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">parser_opts</span>).<span class="ruby-identifier">safe_parse</span>(<span class="ruby-ivar">@source</span>)
+32:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">res</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">Array</span>
+33:             <span class="ruby-ivar">@ast</span> = <span class="ruby-identifier">res</span>
+34:         <span class="ruby-keyword kw">else</span>
+35:             <span class="ruby-ivar">@error</span> = <span class="ruby-identifier">res</span>
+36:         <span class="ruby-keyword kw">end</span>
+37:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="renderer-method" class="method-detail ">
+				<a name="M000198"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">renderer</span><span
+						class="method-args">()</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p class="missing-docs">(Not documented)</p>
+					
+
+					
+					<div class="method-source-code"
+						id="renderer-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/pf/pf_line.rb, line 39</span>
+39:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">renderer</span>
+40:         <span class="ruby-constant">PfLineRenderer</span>.<span class="ruby-identifier">instance</span>
+41:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+			<div id="tag-method" class="method-detail ">
+				<a name="M000196"></a>
+
+				<div class="method-heading">
+				
+					<span class="method-name">tag</span><span
+						class="method-args">(parser_opts)</span>
+					<span class="method-click-advice">click to toggle source</span>
+				
+				</div>
+
+				<div class="method-description">
+					
+					<p class="missing-docs">(Not documented)</p>
+					
+
+					
+					<div class="method-source-code"
+						id="tag-source">
+<pre>
+    <span class="ruby-comment cmt"># File lib/pf/pf_line.rb, line 19</span>
+19:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">tag</span>(<span class="ruby-identifier">parser_opts</span>)
+20:         <span class="ruby-identifier">res</span> = <span class="ruby-constant">PfTagger</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">parser_opts</span>).<span class="ruby-identifier">safe_parse</span>(<span class="ruby-ivar">@source</span>)
+21:         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">res</span>
+22:             <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">res</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">Array</span>
+23:                 <span class="ruby-ivar">@tokens</span> = <span class="ruby-identifier">res</span>.<span class="ruby-identifier">compact</span>
+24:             <span class="ruby-keyword kw">else</span>
+25:                 <span class="ruby-ivar">@error</span> = <span class="ruby-identifier">res</span>
+26:             <span class="ruby-keyword kw">end</span>
+27:         <span class="ruby-keyword kw">end</span>
+28:     <span class="ruby-keyword kw">end</span></pre>
+					</div>
+					
+				</div>
+
+				
+			</div>
+
+		
+		</div>
+	
+
+	</div>
+
+
+	<div id="rdoc-debugging-section-dump" class="debugging-section">
+	
+		<p>Disabled; run with --debug to generate this.</p>
+	
+	</div>
+
+	<div id="validator-badges">
+		<p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+		<p><small>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish
+			Rdoc Generator</a> 1.1.6</small>.</p>
+	</div>
+
+</body>
+</html>
+

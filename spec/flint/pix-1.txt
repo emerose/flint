@@ -1,0 +1,107 @@
+!--- Create an access list to allow pings out 
+!--- and return packets back in. 
+
+access-list 100 permit icmp any any echo-reply  
+access-list 100 permit icmp any any time-exceeded  
+access-list 100 permit icmp any any unreachable  
+
+
+!--- Allows anyone on the Internet to connect to 
+!--- the web, mail, and FTP servers. 
+
+access-list 100 permit tcp any host 10.1.1.3 eq www  
+access-list 100 permit tcp any host 10.1.1.4 eq smtp  
+access-list 100 permit tcp any host 10.1.1.5 eq ftp 
+pager lines 24 
+
+
+!--- Enable logging. 
+
+logging on 
+no logging timestamp 
+no logging standby 
+no logging console 
+no logging monitor 
+
+
+!--- Enable error and more severe syslog messages 
+!--- to be saved to the local buffer. 
+
+logging buffered errors 
+
+
+!--- Send notification and more severe syslog messages
+!--- to the syslog server. 
+
+logging trap notifications 
+no logging history 
+logging facility 20 
+logging queue 512 
+
+
+!--- Send syslog messages to a syslog server 
+!--- on the inside interface. 
+
+logging host inside 192.168.1.220 
+
+!--- Define a Network Address Translation (NAT) pool that
+!--- internal hosts use when going out to the Internet.
+
+global (outside) 1 10.1.1.15-10.1.1.253 
+
+
+!--- Define a Port Address Translation (PAT) address that 
+!--- is used once the NAT pool is exhausted.
+
+global (outside) 1 10.1.1.254 
+
+
+!--- Allow all internal hosts to use 
+!--- the NAT or PAT addresses specified previously.
+
+nat (inside) 1 0.0.0.0 0.0.0.0 0 0 
+
+
+!--- Define a static translation for the internal 
+!--- web server to be accessible from the Internet.
+
+static (inside,outside) 10.1.1.3 192.168.1.4 
+   netmask 255.255.255.255 0 0 
+
+
+!--- Define a static translation for the internal 
+!--- mail server to be accessible from the Internet.
+
+static (inside,outside) 10.1.1.4 192.168.1.15 
+   netmask 255.255.255.255 0 0 
+
+
+!--- Define a static translation for the internal 
+!--- FTP server to be accessible from the Internet.
+
+static (inside,outside) 10.1.1.5 192.168.1.10 
+   netmask 255.255.255.255 0 0 
+
+
+!--- Apply access list 100 to the outside interface.
+
+access-group 100 in interface outside 
+
+
+!--- Define a default route to the ISP router.
+
+route outside 0.0.0.0 0.0.0.0 10.1.1.1 1 
+
+
+!--- Output Suppressed
+
+
+
+
+!--- Allow the host 192.168.1.254 to be able to 
+!--- Telnet to the inside of the PIX. 
+
+telnet 192.168.1.254 255.255.255.255 inside 
+
+
+access-list dmz permit udp DMZNETWORK 255.255.255.0 host MSSMS object-group SMSUDP 

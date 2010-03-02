@@ -1,0 +1,80 @@
+!--- Sets the global pool for hosts inside the firewall:
+
+global (outside) 1 131.1.23.12-131.1.23.254
+
+!--- Allows hosts in the 10.0.0.0 network to be
+!--- translated through the PIX:
+
+nat (inside) 1 10.0.0.0 
+
+!--- Configures a static translation for an admin workstation 
+!--- with local address 10.14.8.50:
+
+static (inside,outside) 131.1.23.11 10.14.8.50
+
+!--- Allows syslog packets to pass through the PIX from RTRA.
+!--- You can use conduits OR access-lists to permit traffic.
+!--- Conduits has been added to show the use of the command,
+!--- however they are commented in the document, since the 
+!--- recommendation is to use access-list.
+!--- To the admin workstation (syslog server):
+!--- Using conduit: 
+!--- conduit permit udp host 131.1.23.11 eq 514 host 131.1.23.1 
+
+
+
+!--- Using access-list:
+
+Access-list 101 permit udp host 131.1.23.1 host 131.1.23.11 255.255.255.0 eq 514
+Access-group 101 in interface outside
+
+!--- Permits incoming mail connections to 131.1.23.10:
+
+static (inside, outside) 131.1.23.10 10.10.254.3
+
+!--- Using conduits
+!--- conduit permit TCP host 131.1.23.10 eq smtp any
+!--- Using Access-lists, we use access-list 101
+!--- which is already applied to interface outside.
+
+Access-list 101 permit tcp any host 131.1.23.10 eq smtp
+
+!--- PIX needs static routes or the use of routing protocols
+!--- to know about networks not directly connected.
+!--- Add a route to network 10.14.8.x/24.
+
+route inside 10.14.8.0 255.255.255.0 10.10.254.2
+
+!--- Add a default route to the rest of the traffic 
+!--- that goes to the internet.
+
+Route outside 0.0.0.0 0.0.0.0 131.1.23.1
+
+!--- Enables the Mail Guard feature 
+!--- to accept only seven SMTP commands 
+!--- HELO, MAIL, RCPT, DATA, RSET, NOOP, and QUIT:
+!--- (This can be turned off to permit ESMTP by negating with 
+!--- the no fixup protocol smtp 25 command):
+
+fixup protocol smtp 25
+
+!--- Allows Telnet from the inside workstation at 10.14.8.50 
+!--- into the inside interface of the PIX:
+
+telnet 10.14.8.50
+
+!--- Turns on logging:
+
+logging on
+
+!--- Turns on the logging facility 20:
+
+logging facility 20
+
+!--- Turns on logging level 7:
+
+logging history 7
+
+!--- Turns on the logging on the inside interface:
+
+logging host inside 10.14.8.50

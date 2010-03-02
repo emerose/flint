@@ -1,0 +1,50 @@
+title "External-to-DMZ Checks"
+code :external_to_dmz
+
+description <<EOM
+Typically, firewalls have one or more "DMZ" interfaces, which are connected to a network where externally available servies are hosted.  These checks ensure that access to the DMZ from the outside world is restricted.
+EOM
+
+class Flint::X2DTest
+  def assert_protocol_is_restricted(service, spec, threshold = 256)
+    ports = spec[:destination_port]
+    raise "Need a :destination_port in your spec" unless ports
+
+    describe("The #{service} protocol should be restricted to a specific set of hosts in the DMZ.  This check ensures that #{threshold} or less hosts are reachable via this protocol.")
+    m, lines = permit_map_select do |rule|
+      match_acl(rule, spec)
+    end
+
+    total_hosts = 0
+    m.map { |destination, source|
+      total_hosts += destination.count
+    }
+    if total_hosts > threshold
+      explain "Too many hosts (#{total_hosts}) in the DMZ can be reached via #{service}, on port(s): #{ports}"
+      lines.each do |l| 
+        fail(l) if Flint::policy(l) == :permit
+      end
+    end  
+  end
+end
+
+x2d_check :http_restricted, "HTTP is restricted to a specific set of hosts" do
+  assert_protocol_is_restricted("http", {:protocol => :tcp, :destination_port => [80]})
+end
+
+x2d_check :https_restricted, "HTTPS is restricted to a specific set of hosts" do
+  assert_protocol_is_restricted("https", {:protocol => :tcp, :destination_port => [443]})
+end
+
+x2d_check :smtp_restricted, "SMTP is restricted to a specific set of hosts" do
+  assert_protocol_is_restricted("smtp", {:protocol => :tcp, :destination_port => [25]})
+end
+
+x2d_check :pop3_restricted, "POP3 is restricted to a specific set of hosts" do
+  assert_protocol_is_restricted("pop3", {:protocol => :tcp, :destination_port => [110]})
+end
+
+
+x2d_check :imap_restricted, "IMAP is restricted to a specific set of hosts" do
+  assert_protocol_is_restricted("imap", {:protocol => :tcp, :destination_port => [143]})
+end

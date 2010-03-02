@@ -1,0 +1,13 @@
+Gems required for this app to run:
+
+haml (2.2.3)
+sinatra (0.9.4)
+ohm (0.0.32)
+bcrypt-ruby (2.1.2)
+json (1.2.0)
+rdiscount (1.5.8)
+
+
+Packages required for this app to run:
+
+http://code.google.com/p/redis/

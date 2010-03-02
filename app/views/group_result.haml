@@ -1,0 +1,55 @@
+- group = r[0]
+- results = r[1]
+.span-24.last.fake_table_row.group_result
+  .span-24.fake_table_row_header.last
+    .span-1(style="text-align:right;")
+      %img#toggle{:src => "/assets/toggle-expand.png", :name => "#{classify(group.title)}_details"}
+    .span-1(class="grade_#{ letter_grade(group.grade(@current_sha))}")
+      &nbsp;
+    .span-7
+      %a#toggle{:name => "#{classify(group.title)}_details"}
+        = group.title
+    - if ( c = results.select { |r| r.result == "pass" }.size ) > 0 
+      .span-3.passes
+        %img{:src => "/assets/tick-shield.png"}
+        = c
+    - else
+      .span-3.dull
+        0
+    - if ( c = results.select { |r| r.result == "fail" }.size ) > 0 
+      .span-3.failies
+        %img{:src => "/assets/slash.png"}
+        = c
+    - else
+      .span-3.dull
+        0
+    - if ( c = results.select { |r| r.result == "warning" }.size ) > 0
+      .span-3 
+        = c
+    - else
+      .span-3.dull
+        0            
+    - if ( c = results.select { |r| r.result == "notice" }.size ) > 0
+      .span-3 
+        = c
+    - else
+      .span-3.dull
+        0            
+    - if ( c = results.select { |r| r.result == "error" }.size ) > 0
+      .span-3.last 
+        = c
+    - else
+      .span-3.last.dull
+        0            
+  .span-24.hidden.last(id="#{classify(group.title)}_details")
+    .span-10
+      - results.each do |r|
+        .span-1
+          &nbsp;
+        .span-8.last(class="#{r.result}" style="padding:2px;")
+          %a.test_result(style="margin:20px;" id="#{r.id}")
+            = r.title
+
+    .span-12
+      .test_result_detail{:id => "trd_#{group.code}"}
+        = group.description

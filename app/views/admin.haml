@@ -1,0 +1,41 @@
+#nav.admin
+#overbar
+  .container
+    .span-20
+      %h3
+        Users
+    .span-4.eighteen.last
+      %a.nyroModal{:href => "/admin/user/new" }
+        %img{:src => "/assets/plus-circle.png"}
+        Add a new user
+.container
+  #subheader.span-24.last
+    &nbsp;
+  .span-24.fake_table_header.last
+    .span-10
+      %a
+        Full Name
+    .span-4
+      %a
+        Login
+    .span-4
+      %a 
+        Administrator
+    .span-6.last
+      %a.nyroModal{:href => "/admin/user/edit"}
+        
+  - @users.each do |u|
+    .span-24.fake_table_row.last
+      .span-10
+        = u.full_name
+      .span-4
+        = u.login
+      .span-4
+        = (u.isadmin == "1") ? "Yes" : "No"
+      .span-3
+        %a.nyroModal{:href => "/admin/user/edit/#{u.login}"}
+          Edit
+      .span-3.last
+        %a{:href => "/admin/user/delete/#{u.id}"}
+          Delete
+      
