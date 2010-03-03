@@ -48,6 +48,9 @@ def connect_to_model
   end
 end
 
+
+set :host, '127.0.0.1'
+
 get "/" do
     redirect "/overview"
 end
