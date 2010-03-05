@@ -83,6 +83,9 @@ describe Flint::CiscoFirewall do
 
     spec = @fw.normalize_netspec([:object_group_ref, "webservers"])
     spec.should == Flint::CidrSet.new("10.1.1.10", "10.1.1.11", "10.1.1.1")
+
+    spec = @fw.normalize_netspec([:object_group_ref, "servers"])
+    spec.should == Flint::CidrSet.new("10.1.1.10", "10.1.1.11", "10.1.1.1", "10.1.1.100", "10.1.1.111")
   end
 
   it "should normalize ports and services" do

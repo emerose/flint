@@ -19,9 +19,6 @@ module Flint
   # Connects to Ohm
   def self.start
     Ohm.connect
-
-    
-    
   end
 
   module TestHelpers
@@ -71,4 +68,3 @@ require "flint/cisco_line"
 require "flint/cisco_firewall"
 
 Flint::start
-

@@ -14,5 +14,8 @@ port-object eq smtp
 port-object range 1000 2000
 
 object-group network servers
-group-object webserver
+group-object webservers
 group-object mailservers
+
+
+

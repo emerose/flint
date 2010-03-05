@@ -158,7 +158,7 @@ module Flint
 
             # table member
           elsif ast[0].match(/^group-object$/i)
-            current_group.add(ast.tail)
+            current_group.add([:object_group_ref, ast[1]])
 
             # acl def
           elsif ast[0].match(/^access-list$/i)
@@ -252,16 +252,13 @@ module Flint
 
         elsif input[0] == :object_group_ref
           # it's an object group reference
-          group = groups[input[1]]
-          if group
-            set = CidrSet.new
-            group.members.each do |mbr|
-              set.add(normalize_netspec(mbr))
-            end
-            set
-          else
-            CidrSet.empty
+          gset = CidrSet.new
+          if grp=groups[input[1]]
+            grp.members.each {|mbr|
+              gset.add(normalize_netspec(mbr))
+            }
           end
+          gset
         else
           raise "Error parsing network spec: #{input.inspect}"
         end
@@ -300,11 +297,11 @@ module Flint
       when /^neq$/i  
         PortSet.any().subtract(input[1])
       when :object_group_ref
-        set = PortSet.new()
+        gset = PortSet.new()
         if grp=groups[input[1]]
-          grp.members.each {|mbr| set.add(normalize_portspec(mbr)) }
+          grp.members.each {|mbr| gset.add(normalize_portspec(mbr)) }
         end
-        set
+        gset
       else 
         raise "Error parsing port spec: #{input.inspect}"
       end
@@ -314,11 +311,11 @@ module Flint
       if input.kind_of?(Array)
         f = input[0]
         if f.kind_of? Symbol and f == :object_group_ref
-          set = ProtocolSet.new
+          gset = ProtocolSet.new
           if grp=groups[ input[1] ]
-            grp.members.each{|mbr| set.add(normalize_protocol(mbr.first)) }
+            grp.members.each{|mbr| gset.add(normalize_protocol(mbr.first)) }
           end
-          set
+          gset
         else
           ProtocolSet.new(*input)
         end
@@ -331,11 +328,11 @@ module Flint
       if input.kind_of?(Array)
         f = input[0]
         if f.kind_of? Symbol and f == :object_group_ref
-          set = IcmpTypeSet.new
+          gset = IcmpTypeSet.new
           if grp=groups[ input[1] ]
-            grp.members.each{|mbr| set.add(normalize_protocol(mbr.first)) }
+            grp.members.each{|mbr| gset = add(normalize_icmp_type(mbr.first)) }
           end
-          set
+          gset
         else
           IcmpTypeSet.new(*input)
         end
