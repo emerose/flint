@@ -37,16 +37,27 @@ task :gems do
 
 end
 
-
-
 task :tarball do
   sh "git archive --format=tar --prefix=flint-#{FLINT_VERSION}/ HEAD | gzip > flint-#{FLINT_VERSION}.tgz"
 end
 
-
 task :upload_tarball do
-  sh "scp flint-#{FLINT_VERSION}.tgz deployer@runplaybook.com:/root/runplaybook-staging/shared/system/storage/flint-#{FLINT_VERSION}.tgz"
+  sh "scp flint-#{FLINT_VERSION}.tgz deployer@runplaybook.com:/root/runplaybook-staging/shared/system/storage/flint/flint-#{FLINT_VERSION}.tgz"
 end
+
+task :make_current_release do
+  # put the readme in place
+  sh "scp README deployer@runplaybook.com:/root/runplaybook-staging/shared/system/storage/flint/README"
+
+  # link the flint-current.tgz to the tarball
+  sh "ssh deployer@runplaybook.com ln -sf /root/runplaybook-staging/shared/system/storage/flint/flint-#{FLINT_VERSION}.tgz /root/runplaybook-staging/shared/system/storage/flint/flint-current.tgz"
+
+  # and at this old location too
+  sh "ssh deployer@runplaybook.com ln -sf /root/runplaybook-staging/shared/system/storage/flint/flint-#{FLINT_VERSION}.tgz /root/runplaybook-staging/shared/system/storage/flint-current.tgz"
+
+end
+
+task :push_release => [:tarball, :upload_tarball, :make_current_release ]
 
 begin
   require 'rake/rdoctask'
