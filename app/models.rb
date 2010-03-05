@@ -3,10 +3,10 @@ require 'bcrypt'
 
 class User < Ohm::Model
   attribute   :login
-  index				:login
+  index	      :login
   attribute   :full_name
   attribute   :hash
-  attribute		:isadmin
+  attribute   :isadmin
   list        :information
 
   # assert_unique :login

@@ -16,7 +16,6 @@ module Flint
       @options = options
     end
 
-    require 'ruby-debug'
     def grade(sha)
       raise "Must be given a sha to identify the firewall we are grading" if sha.empty?
       results = TestResult.find(:group => self.code, :sha => sha)

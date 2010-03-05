@@ -5,8 +5,10 @@ module Flint
     case p
     when String
       (p =~ /^\d+$/) ?  p.to_i : ServiceResolver.lookup_service(p.downcase,prot).first
-    when PortName : ServiceResolver.lookup_service(p.name,prot).first
-    when PortNumber : p.value
+    when PortName
+	ServiceResolver.lookup_service(p.name,prot).first
+    when PortNumber
+	p.value
     end
   end
   

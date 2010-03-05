@@ -4,7 +4,7 @@ require 'pp'
 require 'rubygems'
 require 'sinatra'
 require 'haml'
-require 'md5'
+require 'digest/md5'
 
 # include the base of our flint project
 $LOAD_PATH.unshift File.dirname(__FILE__) + "/../lib"

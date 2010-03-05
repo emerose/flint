@@ -1,9 +1,10 @@
+require 'rubygems'
 require 'ralex/ralextask.rb'
 
 # Ralex files
 Ralex::RalexTask.new('lib/cisco/ralex_pix.rb')
 RACC="racc"
-
+FLINT_VERSION = File.read('VERSION')
 # Racc file
 
 file 'lib/cisco/pix_parser.rb' =>  [ 'lib/cisco/pix_parser.racc',
@@ -34,6 +35,17 @@ end
 
 task :gems do
 
+end
+
+
+
+task :tarball do
+  sh "git archive --format=tar --prefix=flint-#{FLINT_VERSION}/ HEAD | gzip > flint-#{FLINT_VERSION}.tgz"
+end
+
+
+task :upload_tarball do
+  sh "scp flint-#{FLINT_VERSION}.tgz deployer@runplaybook.com:/root/runplaybook-staging/shared/system/storage/flint-#{FLINT_VERSION}.tgz"
 end
 
 begin
