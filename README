@@ -1,4 +1,4 @@
-= Flint -- a firewall rule analyzer
+# Flint -- a firewall rule analyzer
 
 Supported firewalls:
 
@@ -7,7 +7,7 @@ Supported firewalls:
 * IPTables soon
 * Pf soon
 
-== Installing
+## Installing
 
 gem install ./matasano_utils-0.1.gem
 gem install ./Ralex-0.1.gem
@@ -22,7 +22,7 @@ It also needs the following gems:
 
 Flint also requires a working Redis server.  Redis is available at http://code.google.com/p/redis/
 
-== Running
+## Running
 
 * Start redis
 * The first time you run, you will need to do run 'rake init'
@@ -30,12 +30,12 @@ Flint also requires a working Redis server.  Redis is available at http://code.g
 
 This will start a Sinatra server listening on port 4567.  Point your browser at that.
 
-== Developers
+## Developers
 
 You will need the racc and rdoc gem, and Ragel installed.  Ragel is available
 at: http://www.complang.org/ragel/
 
-== Project Layout
+## Project Layout
 
 * `lib`
 
