@@ -20,7 +20,11 @@ It also needs the following gems:
 * compass
 * bcrypt-ruby
 
-Flint also requires a working Redis server.  Redis is available at http://code.google.com/p/redis/
+Flint also requires a working Redis 1.2.3+
+
+Redis is available at http://code.google.com/p/redis/
+
+Note, the Ubuntu redis-server package is too old.
 
 ## Running
 

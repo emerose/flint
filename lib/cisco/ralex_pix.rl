@@ -75,10 +75,12 @@ class RalexPix < Ralex::Base
             | greaterorequal
 	    | open_paren
 	    | close_paren
+	    | ampersand
 	    | comma
 	    | arrow
 	    | hashcomment
 	    | quote
+	    | ralex_specials
 	    ) %{ finish_token; };
 
   unknown = ( any - (space | token) ) @collect_token
