@@ -1304,6 +1304,7 @@ who             513/udp     # maintains data bases showing who's
 #                          net and the load average of the
 #                          machine
 shell           514/tcp     # cmd
+rsh           514/tcp     # cmd   CISCO SERVICE NAME
 cmd           514/tcp     # cmd CISCO SERVICE NAME
 #                          like exec, but automatic authentication 
 #                          is performed as for login server
