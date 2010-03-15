@@ -61,36 +61,7 @@ class RalexPix < Ralex::Base
     >{ start_token(:PORTSET) }
     ;
 
-    # a string that goes until the end of the line
-  action getstring   { fcall scarf_string; }
-  action collect_string {  c = data[p..p]
-                           if (c == '\n' or p == pe)
-                              finish_token
-                              fret;
-                            else 
-                              token << c
-                            end
-                         }
-  scarf_string := any* @collect_string >{ start_token(:STRING) }
-     %{ finish_token
-        fret; }
-  ;       
-
-  # This token we treat special, since we wanna know when a remark starts
-  access_list = /access-list/i >{start_token(:ACCESS_LIST);} @collect_token ;
-  remark = /remark/i @collect_token ;
-  snmp_server = /snmp-server/i @collect_token;
-  contact = /contact/i @collect_token;
-  location = /location/i >collect_token;
-  enable = /enable/i @collect_token;
-  traps = /traps/i @collect_token;
-
-
-  token = ( access_list %{finish_token;} ' '+ id %{finish_token;} ' '+ remark %{finish_token;} ' '+ >getstring
-            | snmp_server %{finish_token} ' '+ contact %{finish_token} ' '+ >getstring
-            | snmp_server %{finish_token} ' '+ location %{finish_token} ' '+ >getstring
-            | snmp_server %{finish_token;} ' '+ enable %{finish_token;} ' '+ traps %{finish_token;} ' '+ >getstring
-            | id
+  token = ( id
   	    | url
             | ipaddr
 	    | ipset
@@ -217,6 +188,7 @@ class RalexPix < Ralex::Base
     "log" => :LOG,
     "time-range" => :TIME_RANGE,
     "inactive" => :INACTIVE,
+    "remark" => :REMARK,
     "standard" => :STANDARD,
     "compiled" => :COMPILED,
     "object-group-search" => :OBJECT_GROUP_SEARCH,

@@ -16,8 +16,8 @@ lines.each_with_index do |l, i|
   if cl.error
     puts "ERROR:#{cl.source} #{cl.error.backtrace}\n              #{cl.source}"
   else
-    puts cl.ast.inspect
-    #puts cl.ast.to_hash.inspect
+    #puts cl.ast.inspect
+    puts cl.ast.to_hash.inspect
   end
 end
     
