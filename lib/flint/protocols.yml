@@ -380,7 +380,7 @@ PWDGEN: |
   ([exposes-data: 5])
   ([exposes-integrity: 5])
   ([exposes-connectivity: 5])
-  ([risk: 5])
+  ([risk: high])
   
   ([strong-encryption: no])
   ([strong-auth: no])
@@ -1320,7 +1320,7 @@ xAP: |
   ([exposes-data: maybe])
   ([exposes-integrity: maybe])
   ([exposes-connectivity: maybe])
-  ([risk: unknown])
+  ([risk: low])
   
   ([strong-encryption: no])
   ([strong-auth: no])
@@ -1970,7 +1970,7 @@ RDP: |+
   ([exposes-data: 1])
   ([exposes-integrity: 4])
   ([exposes-connectivity: 2])
-  ([risk: ihigh])
+  ([risk: high])
   
   ([strong-encryption: maybe])
   ([strong-auth: maybe])
