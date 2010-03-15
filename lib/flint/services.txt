@@ -187,6 +187,8 @@ acas             62/tcp     # ACA Services
 #                          E. Wald <ewald@via.enet.dec.com>
 whois++          63/udp     # whois++
 whois++          63/tcp     # whois++
+whois          63/udp     # whois CISCO SERVICE NAME
+whois          63/tcp     # whois CISCO SERVICE NAME
 #                          Rickard Schoultz <schoultz@sunet.se>
 covia            64/udp     # Communications Integrator (CI)
 covia            64/tcp     # Communications Integrator (CI)
@@ -233,6 +235,7 @@ finger           79/udp     # Finger
 finger           79/tcp     # Finger
 #                          David Zimmerman <dpz@RUTGERS.EDU>
 www           80/tcp	   # CISCO SERVICE NAME
+www           80/udp	   # CISCO SERVICE NAME
 http             80/udp     www www-http # World Wide Web HTTP
 http             80/tcp     www www-http # World Wide Web HTTP
 #                          Tim Berners-Lee <timbl@W3.org>
@@ -1054,6 +1057,8 @@ mobileip-agent  434/udp     # MobileIP-Agent
 mobileip-agent  434/tcp     # MobileIP-Agent
 mobileip  434/udp     # MobileIP-Agent CISCO SERVICE NAME
 mobileip  434/tcp     # MobileIP-Agent CISCO SERVICE NAME
+mobile-ip  434/udp     # MobileIP-Agent CISCO SERVICE NAME
+mobile-ip  434/tcp     # MobileIP-Agent CISCO SERVICE NAME
 mobilip-mn      435/udp     # MobilIP-MN
 mobilip-mn      435/tcp     # MobilIP-MN
 #                          Kannan Alagappan <kannan@sejour.lkg.dec.com>
@@ -1311,6 +1316,8 @@ cmd           514/tcp     # cmd CISCO SERVICE NAME
 syslog          514/udp # 
 printer         515/udp     # spooler
 printer         515/tcp     # spooler
+lpd         515/udp     # spooler
+lpd         515/tcp     # spooler
 videotex        516/udp     # videotex
 videotex        516/tcp     # videotex
 #                          Daniel Mavrakis <system@venus.mctel.fr>
@@ -4910,6 +4917,8 @@ dls-monitor	2048/udp #
 dls-monitor	2048/tcp # 
 nfsd		2049/tcp   nfs		# NFS server daemon
 nfsd		2049/udp   nfs		# NFS server daemon
+nfs		2049/tcp   nfs		# NFS CISCO SERVICE NAME
+nfs		2049/udp   nfs		# NFS CISCO SERVICE NAME
 #PROBLEMS!=============================================================
 #shilp		2049/tcp
 #shilp		2049/udp
