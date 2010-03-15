@@ -29,7 +29,7 @@ require 'interface'
 
 
 # compile sass 
-`sass public/ui/style/main.sass public/ui/style/main.css`
+`sass public/ui/style/main.sass public/ui/style/main.css || echo "Could not find sass"`
 
 if User.all.empty?
   User.add_user("admin", "admin77", "Administrator", "1")
