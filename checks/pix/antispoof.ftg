@@ -78,7 +78,7 @@ interface_check :bogons, "Team Cymru Bogons cannot traverse external interface" 
   og_text = "object-group network cymrubogons\n"
   baddrs.each { |b|
     net, mask = b.split("/")
-    og_text << "  network-object #{net} #{mask}\n"
+    og_text << "    network-object #{net} #{mask}\n"
   }
   
   describe "Team Cymru has compiled a set of unassigned and non-routable addresses, which they term Bogons.  Your external interface should not allow these packets to travese it.  The following configuration blocks them:
