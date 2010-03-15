@@ -28,8 +28,6 @@ Note, the Ubuntu redis-server package is too old.
 
 ## Running
 
-* Start redis
-* The first time you run, you will need to do run 'rake init'
 * 'rake app'
 
 This will start a Sinatra server listening on port 4567.  Point your browser at that.
