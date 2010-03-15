@@ -21,20 +21,38 @@ end
 
 task :build => [:racc, :ralex]
 
-task :init => [:build] do
+task :init => [:build, :redis] do
   sh "./script/init"
 end
 
-task :reset  do
+task :redis do
+  # restarts the redis if it is already running
+  if File.exists?('redis.pid')
+    rpid = File.read('redis.pid').to_i
+    puts "redis-server already running (pid: #{rpid})"
+  else
+    sh "redis-server redis.conf"
+  end
+end
+
+task :redis_down do
+  if File.exists?('redis.pid')
+    rpid = File.read('redis.pid').to_i
+    Process.kill(15,rpid)
+    File.delete('redis.pid')
+  end
+end
+
+task :reset  => [:redis] do
   sh "./script/reset"
 end
 
-task :app => [:init] do
+task :app => [:redis, :init] do
   sh "cd app; ruby app.rb"	
+  sh "rake redis_down"
 end
 
 task :gems do
-
 end
 
 task :tarball do
