@@ -28,7 +28,7 @@ namespace "bundler" do
       puts "******************************************************************************"
       exit 1
     end
-    sh("[ -e vendor/bin/bundle ] || gem install vendor/cache/bundler*.gem --no-rdoc --no-ri -i vendor")
+    sh("[ -e vendor/bin/bundle ] || gem install vendor/cache/bundler*.gem --no-rdoc --no-ri --user-install --bindir vendor/bin")
   end
   
   task :uninstall do
@@ -80,7 +80,7 @@ task :redis do
     rpid = File.read('redis.pid').to_i
     puts "redis-server already running (pid: #{rpid})"
   else
-    sh "redis-server redis.conf"
+    sh "vendor/bin/redis-server redis.conf"
   end
 end
 
