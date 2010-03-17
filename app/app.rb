@@ -1,14 +1,12 @@
 ## Stuff that we didn't write goes here:
-
 require 'pp'
-require 'rubygems'
-require 'sinatra'
-require 'haml'
 require 'digest/md5'
 
 # include the base of our flint project
 $LOAD_PATH.unshift File.dirname(__FILE__) + "/../lib"
 require 'flint'
+require 'sinatra' 
+require 'haml' 
 
 use Rack::Session::Cookie, :key => 'rack.session',
                        :secret => '92b1817c783f0ec156237306ba0ad188'

@@ -7,6 +7,38 @@ RACC="racc"
 FLINT_VERSION = File.read('VERSION')
 # Racc file
 
+
+namespace "bundler" do
+  task :gem do
+    # install bundler
+    sh("[ -e vendor/bin/bundle ] || gem install vendor/cache/bundler*.gem --no-rdoc --no-ri -i vendor")
+  end
+  
+  task :uninstall do
+    sh("gem uninstall -i vendor")
+  end
+  
+  task :install => [ :gem ] do
+    # install our dependencies
+    sh("vendor/bin/bundle check || vendor/bin/bundle install vendor --disable-shared-gems")
+  end
+end
+
+namespace "redis" do
+
+  task :uninstall do
+    sh("[ -e vendor/bin/redis-server ] && rm vendor/bin/redis-server")
+  end
+
+  task :install do
+    sh("[ -e vendor/bin/redis-server ] || ( cd vendor && tar xzvf redis-1.2.5.tar.gz && cd redis-1.2.5 && make && cp redis-server ../bin/redis-server )" )
+  end
+end
+
+task :install => [ "bundler:install", "redis:install"] 
+
+task :uninstall => [ "bundler:uninstall", "redis:uninstall"] 
+
 file 'lib/cisco/pix_parser.rb' =>  [ 'lib/cisco/pix_parser.racc',
                                        'lib/cisco/ralex_pix.rb'] do
   sh "cd lib/cisco; #{RACC} -gv -e `which ruby` pix_parser.racc -o pix_parser.rb"
@@ -55,27 +87,29 @@ end
 task :gems do
 end
 
-task :tarball do
-  sh "git archive --format=tar --prefix=flint-#{FLINT_VERSION}/ HEAD | gzip > flint-#{FLINT_VERSION}.tgz"
+namespace "release" do
+  task :tarball do
+    sh "git archive --format=tar --prefix=flint-#{FLINT_VERSION}/ HEAD | gzip > flint-#{FLINT_VERSION}.tgz"
+  end
+
+  task :upload_tarball do
+    sh "scp flint-#{FLINT_VERSION}.tgz deployer@runplaybook.com:/root/runplaybook-staging/shared/system/storage/flint/flint-#{FLINT_VERSION}.tgz"
+  end
+
+  task :make_current_release do
+    # put the readme in place
+    sh "scp README deployer@runplaybook.com:/root/runplaybook-staging/shared/system/storage/flint/README"
+
+    # link the flint-current.tgz to the tarball
+    sh "ssh deployer@runplaybook.com ln -sf /root/runplaybook-staging/shared/system/storage/flint/flint-#{FLINT_VERSION}.tgz /root/runplaybook-staging/shared/system/storage/flint/flint-current.tgz"
+
+    # and at this old location too
+    sh "ssh deployer@runplaybook.com ln -sf /root/runplaybook-staging/shared/system/storage/flint/flint-#{FLINT_VERSION}.tgz /root/runplaybook-staging/shared/system/storage/flint-current.tgz"
+
+  end
+
+  task :push_release => [:tarball, :upload_tarball, :make_current_release ]
 end
-
-task :upload_tarball do
-  sh "scp flint-#{FLINT_VERSION}.tgz deployer@runplaybook.com:/root/runplaybook-staging/shared/system/storage/flint/flint-#{FLINT_VERSION}.tgz"
-end
-
-task :make_current_release do
-  # put the readme in place
-  sh "scp README deployer@runplaybook.com:/root/runplaybook-staging/shared/system/storage/flint/README"
-
-  # link the flint-current.tgz to the tarball
-  sh "ssh deployer@runplaybook.com ln -sf /root/runplaybook-staging/shared/system/storage/flint/flint-#{FLINT_VERSION}.tgz /root/runplaybook-staging/shared/system/storage/flint/flint-current.tgz"
-
-  # and at this old location too
-  sh "ssh deployer@runplaybook.com ln -sf /root/runplaybook-staging/shared/system/storage/flint/flint-#{FLINT_VERSION}.tgz /root/runplaybook-staging/shared/system/storage/flint-current.tgz"
-
-end
-
-task :push_release => [:tarball, :upload_tarball, :make_current_release ]
 
 begin
   require 'rake/rdoctask'
