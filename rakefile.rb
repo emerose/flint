@@ -2,7 +2,7 @@ begin
   require 'rubygems'
 rescue LoadError
   puts "Please install RubyGems, see: http://docs.rubygems.org/read/chapter/3"
-  exit
+  exit 1
 end
 
 begin
@@ -19,6 +19,15 @@ end
 namespace "bundler" do
   task :gem do
     # install bundler
+    maj,min,rev = Gem::VERSION.split('.')
+    if maj.to_i <  1 or min.to_i < 3 or rev.to_i < 6
+      puts "******************************************************************************"
+      puts " Please upgrade your rubygems to 1.3.6 or better:"
+      puts "    sudo gem install rubygems_update"
+      puts "    sudo update_rubygems"
+      puts "******************************************************************************"
+      exit 1
+    end
     sh("[ -e vendor/bin/bundle ] || gem install vendor/cache/bundler*.gem --no-rdoc --no-ri -i vendor")
   end
   
