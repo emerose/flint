@@ -1,4 +1,9 @@
-require 'rubygems'
+begin
+  require 'rubygems'
+rescue LoadError
+  puts "Please install RubyGems, see: http://docs.rubygems.org/read/chapter/3"
+  exit
+end
 
 begin
   require 'ralex/ralextask.rb'

@@ -9,30 +9,13 @@ Supported firewalls:
 
 ## Installing
 
-gem install ./matasano_utils-0.1.gem
-gem install ./Ralex-0.1.gem
-
-It also needs the following gems:
-* sinatra
-* haml
-* ohm
-* rdiscount
-* compass
-* bcrypt-ruby
-
-Flint also requires a working Redis 1.2.3+
-
-Redis is available at http://code.google.com/p/redis/
-
-Note, the Ubuntu redis-server package is too old.
+    rake install
 
 ## Running
 
-* Start redis
-* The first time you run, you will need to do run 'rake init'
-* 'rake app'
+    rake app
 
-This will start a Sinatra server listening on port 4567.  Point your browser at that.
+This will start a Sinatra server listening on port http://localhost:4567.  Point your browser at that.
 
 ## Developers
 
