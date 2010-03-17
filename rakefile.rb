@@ -1,12 +1,15 @@
 require 'rubygems'
-require 'ralex/ralextask.rb'
 
-# Ralex files
-Ralex::RalexTask.new('lib/cisco/ralex_pix.rb')
-RACC="racc"
-FLINT_VERSION = File.read('VERSION')
-# Racc file
-
+begin
+  require 'ralex/ralextask.rb'
+  # Ralex files
+  Ralex::RalexTask.new('lib/cisco/ralex_pix.rb')
+  RACC="racc"
+  FLINT_VERSION = File.read('VERSION')
+  # Racc file
+rescue LoadError
+  #puts "Cannot load Ralex, so you will not be able to update the lexers"
+end
 
 namespace "bundler" do
   task :gem do
@@ -113,7 +116,7 @@ end
 
 begin
   require 'rake/rdoctask'
-rescue => e
+rescue LoadeError => e
     puts "Install the rdoc gem please."
 end
 
