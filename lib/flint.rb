@@ -1,3 +1,14 @@
+begin
+  # Try to require the preresolved locked set of gems.
+  require File.expand_path('../../.bundle/environment', __FILE__)
+rescue LoadError => e
+  puts "Cannot load #{e}"
+  # Fall back on doing an unlocked resolve at runtime.
+  require "rubygems"
+  require "bundler"
+  Bundler.setup
+end
+
 module Flint
   VERSION = "0.1"
 

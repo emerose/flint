@@ -1,4 +1,3 @@
-# http://ohm.keyvalue.org/
 require 'bcrypt'
 
 class User < Ohm::Model

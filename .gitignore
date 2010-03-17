@@ -1,0 +1,10 @@
+.bundle
+vendor/bin
+vendor/doc
+vendor/gems
+vendor/specifications
+vendor/redis*
+redis.pid
+app/.sass-cache
+dump.rdb
+flint*.tgz

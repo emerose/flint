@@ -1,11 +1,62 @@
-require 'rubygems'
-require 'ralex/ralextask.rb'
+begin
+  require 'rubygems'
+rescue LoadError
+  puts "Please install RubyGems, see: http://docs.rubygems.org/read/chapter/3"
+  exit 1
+end
 
-# Ralex files
-Ralex::RalexTask.new('lib/cisco/ralex_pix.rb')
+begin
+  require 'ralex/ralextask.rb'
+  # Ralex files
+  Ralex::RalexTask.new('lib/cisco/ralex_pix.rb')
+  # Racc file
+rescue LoadError
+  #puts "Cannot load Ralex, so you will not be able to update the lexers"
+end
+
 RACC="racc"
 FLINT_VERSION = File.read('VERSION')
-# Racc file
+
+
+namespace "bundler" do
+  task :gem do
+    # install bundler
+    maj,min,rev = Gem::VERSION.split('.')
+    if maj.to_i <  1 or min.to_i < 3 or rev.to_i < 6
+      puts "******************************************************************************"
+      puts " Please upgrade your rubygems to 1.3.6 or better:"
+      puts "    sudo gem install rubygems_update"
+      puts "    sudo update_rubygems"
+      puts "******************************************************************************"
+      exit 1
+    end
+    sh("[ -e vendor/bin/bundle ] || gem install vendor/cache/bundler*.gem --no-rdoc --no-ri --user-install --bindir vendor/bin")
+  end
+  
+  task :uninstall do
+    sh("gem uninstall -i vendor")
+  end
+  
+  task :install => [ :gem ] do
+    # install our dependencies
+    sh("vendor/bin/bundle check || vendor/bin/bundle install vendor --disable-shared-gems")
+  end
+end
+
+namespace "redis" do
+
+  task :uninstall do
+    sh("[ -e vendor/bin/redis-server ] && rm vendor/bin/redis-server")
+  end
+
+  task :install do
+    sh("[ -e vendor/bin/redis-server ] || ( cd vendor && tar xzvf redis-1.2.5.tar.gz && cd redis-1.2.5 && make && cp redis-server ../bin/redis-server )" )
+  end
+end
+
+task :install => [ "bundler:install", "redis:install"] 
+
+task :uninstall => [ "bundler:uninstall", "redis:uninstall"] 
 
 file 'lib/cisco/pix_parser.rb' =>  [ 'lib/cisco/pix_parser.racc',
                                        'lib/cisco/ralex_pix.rb'] do
@@ -27,19 +78,29 @@ end
 
 task :redis do
   # restarts the redis if it is already running
+  rpid = nil
   if File.exists?('redis.pid')
     rpid = File.read('redis.pid').to_i
-    puts "redis-server already running (pid: #{rpid})"
-  else
-    sh "redis-server redis.conf"
+    begin
+      Process.kill(0,rpid)
+      puts "redis-server already running (pid: #{rpid})"
+    rescue 
+      puts "redis.pid file is stale, removing"
+      File.delete('redis.pid')
+      rpid = nil
+    end
+  end
+  
+  unless rpid
+    sh "vendor/bin/redis-server redis.conf"
   end
 end
 
 task :redis_down do
   if File.exists?('redis.pid')
     rpid = File.read('redis.pid').to_i
-    Process.kill(15,rpid)
     File.delete('redis.pid')
+    Process.kill(15,rpid)
   end
 end
 
@@ -55,31 +116,33 @@ end
 task :gems do
 end
 
-task :tarball do
-  sh "git archive --format=tar --prefix=flint-#{FLINT_VERSION}/ HEAD | gzip > flint-#{FLINT_VERSION}.tgz"
+namespace "release" do
+  task :tarball do
+    sh "git archive --format=tar --prefix=flint-#{FLINT_VERSION}/ HEAD | gzip > flint-#{FLINT_VERSION}.tgz"
+  end
+
+  task :upload_tarball do
+    sh "scp flint-#{FLINT_VERSION}.tgz deployer@runplaybook.com:/root/runplaybook-staging/shared/system/storage/flint/flint-#{FLINT_VERSION}.tgz"
+  end
+
+  task :make_current do
+    # put the readme in place
+    sh "scp README deployer@runplaybook.com:/root/runplaybook-staging/shared/system/storage/flint/README"
+
+    # link the flint-current.tgz to the tarball
+    sh "ssh deployer@runplaybook.com ln -sf /root/runplaybook-staging/shared/system/storage/flint/flint-#{FLINT_VERSION}.tgz /root/runplaybook-staging/shared/system/storage/flint/flint-current.tgz"
+
+    # and at this old location too
+    sh "ssh deployer@runplaybook.com ln -sf /root/runplaybook-staging/shared/system/storage/flint/flint-#{FLINT_VERSION}.tgz /root/runplaybook-staging/shared/system/storage/flint-current.tgz"
+
+  end
+
+  task :push => [:tarball, :upload_tarball, :make_current ]
 end
-
-task :upload_tarball do
-  sh "scp flint-#{FLINT_VERSION}.tgz deployer@runplaybook.com:/root/runplaybook-staging/shared/system/storage/flint/flint-#{FLINT_VERSION}.tgz"
-end
-
-task :make_current_release do
-  # put the readme in place
-  sh "scp README deployer@runplaybook.com:/root/runplaybook-staging/shared/system/storage/flint/README"
-
-  # link the flint-current.tgz to the tarball
-  sh "ssh deployer@runplaybook.com ln -sf /root/runplaybook-staging/shared/system/storage/flint/flint-#{FLINT_VERSION}.tgz /root/runplaybook-staging/shared/system/storage/flint/flint-current.tgz"
-
-  # and at this old location too
-  sh "ssh deployer@runplaybook.com ln -sf /root/runplaybook-staging/shared/system/storage/flint/flint-#{FLINT_VERSION}.tgz /root/runplaybook-staging/shared/system/storage/flint-current.tgz"
-
-end
-
-task :push_release => [:tarball, :upload_tarball, :make_current_release ]
 
 begin
   require 'rake/rdoctask'
-rescue => e
+rescue LoadeError => e
     puts "Install the rdoc gem please."
 end
 

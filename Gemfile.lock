@@ -1,0 +1,63 @@
+--- 
+dependencies: 
+  compass: 
+    group: 
+    - :default
+    version: = 0.8.17
+  matasano_utils: 
+    group: 
+    - :default
+    version: = 0.1
+  haml: 
+    group: 
+    - :default
+    version: = 2.2.20
+  rack: 
+    group: 
+    - :default
+    version: = 1.1.0
+  sinatra: 
+    group: 
+    - :default
+    version: = 0.9.4
+  bcrypt-ruby: 
+    group: 
+    - :default
+    version: = 2.1.2
+  Ralex: 
+    group: 
+    - :default
+    version: = 0.1
+  rdiscount: 
+    group: 
+    - :default
+    version: = 1.5.8
+  ohm: 
+    group: 
+    - :default
+    version: = 0.0.32
+specs: 
+- compass: 
+    version: 0.8.17
+- matasano_utils: 
+    version: "0.1"
+- haml: 
+    version: 2.2.20
+- rack: 
+    version: 1.1.0
+- sinatra: 
+    version: 0.9.4
+- bcrypt-ruby: 
+    version: 2.1.2
+- Ralex: 
+    version: "0.1"
+- rdiscount: 
+    version: 1.5.8
+- ohm: 
+    version: 0.0.32
+hash: ef560bccae23bee7a7e44db9985baa1130c7f2e1
+sources: 
+- Rubygems: 
+    uri: http://gemcutter.org
+- Rubygems: 
+    uri: http://gems.github.com
