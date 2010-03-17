@@ -125,7 +125,7 @@ namespace "release" do
     sh "scp flint-#{FLINT_VERSION}.tgz deployer@runplaybook.com:/root/runplaybook-staging/shared/system/storage/flint/flint-#{FLINT_VERSION}.tgz"
   end
 
-  task :make_current_release do
+  task :make_current do
     # put the readme in place
     sh "scp README deployer@runplaybook.com:/root/runplaybook-staging/shared/system/storage/flint/README"
 
@@ -137,7 +137,7 @@ namespace "release" do
 
   end
 
-  task :push_release => [:tarball, :upload_tarball, :make_current_release ]
+  task :push => [:tarball, :upload_tarball, :make_current ]
 end
 
 begin
