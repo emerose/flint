@@ -1,0 +1,258 @@
+#!/bin/bash
+set -e
+
+usage()
+{
+cat << EOF
+usage: $0 [-q] <VMName> <playbook.pbp>
+
+This scripts builds the debian packages for playbook
+
+OPTIONS:
+   -h      Show this message
+   -q      Build a QA VM.  This must always have QA in the name, and is configured ot make QA easy
+   -p      Do not package the VM.
+
+   <VMName>  Should be of the form Playbook_2.5.7, and if it is a QA VM, should be Playbook_2.5.7_QA
+EOF
+}
+
+while getopts "hqp" OPTION
+do
+     case $OPTION in
+         h)
+             usage
+             exit 1
+             ;;
+         q)
+             QAVM=1
+             ;;
+         p)
+	     NOPACKAGE=1
+	     ;;
+         ?)
+             usage
+             exit
+             ;;
+     esac
+done
+shift $((OPTIND-1))
+
+
+VMNAME=${1:?"Must provide a VM name, such as \"Playbook_v2.5\""}
+PBDEB=${2:?"Must provide a playbook package to be installed"}
+
+REV=`echo $PBDEB | cut -f 2  -d'_'`
+
+if [[ ! -f "$PBDEB" ]];then
+	echo "File not found: $PBDEB"
+	exit 1
+fi
+
+
+
+if [[ -n $QAVM ]]; then
+    echo "Building a QA VM, named $VMNAME with $PBDEB"
+else
+    echo "Building VM named $VMNAME with $PBDEB and $PBTPDEB"
+fi
+
+if [[ -n $NOPACKAGE ]]; then
+    echo "VM will NOT be packaged."
+fi
+
+SSH="ssh -o StrictHostKeyChecking=no"
+SCP="scp -o StrictHostKeyChecking=no"
+
+VMDIR=/var/lib/vmware/vms
+SEEDVM=Playbook-JeOS
+VMIP=10.75.1.244
+VMRUN="vmrun -T server -h https://tick.chi.matasano.com:8333/sdk -u pbbuild -p heluhelu" 
+
+echo "Building $VMNAME"
+WDIR=`(cd $WDIR && pwd)`
+
+function log
+{
+	echo "$@"
+}
+
+
+TDIR=$VMDIR/$VMNAME
+SDIR=$VMDIR/$SEEDVM
+
+function start_vm
+{
+	VMX="[standard] $1/$1.vmx"
+	log "Starting $VMX"
+	if $VMRUN listRegisteredVM | grep -q "$1/$1.vmx"; then
+		log "Already registered."
+	else
+		$VMRUN register "$VMX"
+	fi
+	if $VMRUN list | grep -q "$1/$1.vmx"; then
+		log "Already running."
+	else
+		$VMRUN start "$VMX"
+	fi
+}
+
+function stop_vm
+{
+	VMX="[standard] $1/$1.vmx"
+	log "Stopping $VMX"
+	if $VMRUN list | grep -q "$1/$1.vmx"; then
+		$VMRUN stop "$VMX"
+	else
+		log "Not running."
+	fi
+}
+
+function unregister_vm
+{
+	VMX=$VMDIR/$1/$1.vmx
+	log "Unregistering $VMX"
+	if $VMRUN listRegisteredVM | grep -q "$1/$1.vmx"; then
+	    $VMRUN unregister "$VMX"
+	else
+	    log "Not registered."
+	fi
+}
+
+
+function wait_for_host
+{
+	log "Waiting for host $1"
+	while ! netcat -z $1 22; do
+		log "Not ready yet"
+		sleep 1
+	done
+}
+
+
+function copy_vm
+{
+	echo "Copying $SDIR to $TDIR"
+	cp -r $SDIR $TDIR
+
+	( cd $TDIR
+	  log "Renaming vdisk from $SEEDVM.vmdk to $VMNAME.vmdk"
+ 	  vmware-vdiskmanager -n $SEEDVM.vmdk $VMNAME.vmdk
+          cat - > $VMNAME.vmx <<EOF
+#!/usr/local/bin/vmware
+config.version = "8"
+virtualHW.version = "4"
+scsi0.present = "TRUE"
+scsi0.virtualDev = "lsilogic"
+memsize = "512"
+scsi0:0.present = "TRUE"
+scsi0:0.fileName = "$VMNAME.vmdk"
+scsi0:0.writeThrough = "TRUE"
+ide1:0.present = "FALSE"
+ide1:0.deviceType = "cdrom-image"
+floppy0.startConnected = "FALSE"
+floppy0.fileName = "/dev/fd0"
+Ethernet0.present = "TRUE"
+displayName = "$VMNAME"
+guestOS = "other26xlinux"
+priority.grabbed = "normal"
+priority.ungrabbed = "normal"
+powerType.powerOff = "soft"
+powerType.powerOn = "hard"
+powerType.suspend = "hard"
+powerType.reset = "soft"
+scsi0:0.redo = ""
+ide1:0.startConnected = "FALSE"
+ethernet0.addressType = "generated"
+tools.syncTime = "TRUE"
+machine.id = "$VMNAME $VMIP"
+EOF
+	  chmod +x $VMNAME.vmx
+	)
+}
+
+
+
+function wait_for_host
+{
+	log "Waiting for host $1"
+	while ! netcat -z $1 22; do
+		log "Not ready yet"
+		sleep 1
+	done
+}
+
+function install_playbook
+{
+	$SCP -i vmbuilder prepvm.sh root@$VMIP:prepvm.sh
+	
+	$SCP -i vmbuilder playbook-keyring.gpg root@$VMIP:/etc/playbook-keyring.gpg
+	chmod +x pbp-install
+	$SCP -i vmbuilder pbp-install root@$VMIP:/usr/local/bin/pbp-install
+	#$SCP -i vmbuilder $PBTPDEB root@$VMIP:$PBTPDEB
+	$SSH -i vmbuilder -t -t root@$VMIP "./prepvm.sh"
+        $SCP -i vmbuilder $PBDEB root@$VMIP:$PBDEB
+	$SSH -i vmbuilder -t -t root@$VMIP "pbp-install $PBDEB"
+	# gotta do this AFTER the package is installed, to ensure the user is present
+	$SSH -i vmbuilder root@$VMIP "/etc/init.d/playbook stop"
+}
+	
+function test_playbook
+{
+	$SSH -i vmbuilder root@$VMIP "/etc/init.d/playbook stop"
+	$SSH -i vmbuilder playbook@$VMIP "cd app/app; ./test.sh"
+
+}
+
+function clean_playbook_vm
+{
+        # remove and re-install $SSHd, so we get uniue host keys
+	$SCP -i vmbuilder scrubvm.sh root@$VMIP:scrubvm.sh
+	$SCP -i vmbuilder initial_vm_config root@$VMIP:initial_vm_config
+	$SCP -i vmbuilder interfaces root@$VMIP:/etc/network/interfaces
+	$SCP -i vmbuilder rc.local root@$VMIP:/etc/rc.local
+
+	if [[ -n $QAVM ]]; then
+	    make_qa_vm
+	fi
+
+	$SSH -i vmbuilder root@$VMIP "/bin/bash -x ./scrubvm.sh && rm ./scrubvm.sh && history -c"
+}
+
+function make_qa_vm
+{
+    $SCP -i vmbuilder resolv.conf.qa root@$VMIP:/etc/resolv.conf
+    $SCP -i vmbuilder interfaces.qa root@$VMIP:/etc/network/interfaces
+    $SCP -i vmbuilder ssh_host_dsa_key.qa root@$VMIP:/etc/ssh/ssh_host_dsa_key
+    $SCP -i vmbuilder ssh_host_rsa_key.qa root@$VMIP:/etc/ssh/ssh_host_rsa_key
+}
+
+stop_vm $SEEDVM
+sleep 10
+stop_vm $VMNAME || true
+sleep 30
+unregister_vm $VMNAME
+sleep 30
+rm -rf $TDIR
+
+copy_vm
+
+
+echo "ALL DONE, SEE CRAIG"
+exit 0
+
+start_vm $VMNAME
+wait_for_host $VMIP
+install_playbook
+clean_playbook_vm
+
+stop_vm $VMNAME
+
+if [[ ! -n $NOPACKAGE ]]; then
+    sleep 60
+    ./package-vm $VMNAME
+fi
+
+#test_playbook
+
+
