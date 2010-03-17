@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -e
+
+TOUCHFILE=~flint/.initial_vm_config_done
+APPDIR=~flint/app
+
+if [ -f $TOUCHFILE ]; then
+    exit 0
+fi
+
+# make new host keys
+echo "Generating new SSH host keys..."
+cd /etc/ssh
+rm -f ssh_host_dsa_key*
+ssh-keygen -t dsa -N "" -f ssh_host_dsa_key
+
+rm -f ssh_host_rsa_key*
+ssh-keygen -t rsa -N "" -f ssh_host_rsa_key
+
+# mark it as done
+date > $TOUCHFILE 
+

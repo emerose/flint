@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+VMDIR=/var/lib/vmware/vms
+VMNAME=$1
+TDIR=$VMDIR/$VMNAME
+SEEDVM=Playbook-JeOS
+
+OVFTOOL=/usr/local/lib/vmware/ovftool/ovftool
+function scrub_vmdir
+{
+    rm -rf $TDIR/$SEEDVM.*
+    rm -rf $TDIR/*JeOS*
+    (cd $TDIR;
+     mv $VMNAME.vmx $VMNAME.vmx.off;
+     vmware-vdiskmanager -d $VMNAME.vmdk;
+     vmware-vdiskmanager -k $VMNAME.vmdk;
+     mv $VMNAME.vmx.off $VMNAME.vmx)
+    rm -rf $TDIR/*.log
+}
+
+function tar_vm
+{
+    (cd $VMDIR; rm -f $VMNAME.tbz; tar cjvf $VMNAME.tbz $VMNAME)
+}
+
+
+function zip_vm
+{
+    echo "Making zip archive $VMNAME.zip"
+    (cd $VMDIR; rm -f $VMNAME.zip; 7z a -xr\!\*.vmsd -tzip $VMNAME.zip $VMNAME)
+}
+
+function ovf_vm
+{
+    echo "Making OVF distribution in $VMNAME.ovf.zip"	
+    rm -f $VMDIR/$VMNAME.ovf.zip;
+    rm $VMDIR/$VMNAME.ovf 
+    $OVFTOOL $VMDIR/$VMNAME/$VMNAME.vmx $VMDIR/$VMNAME/$VMNAME.ovf
+    (cd $VMDIR; 7z a -xr\!*.vmsd -tzip $VMNAME.ovf.zip $VMNAME/$VMNAME-disk?.vmdk $VMNAME/$VMNAME.ovf)
+}
+
+scrub_vmdir
+#tar_vm
+zip_vm
+ovf_vm
+
+mv $VMDIR/$VMNAME.zip .
+mv $VMDIR/$VMNAME.ovf.zip .
+
