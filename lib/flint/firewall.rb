@@ -5,6 +5,7 @@ module Flint
     attribute :options_dump
     attribute :sha
 
+    
     index :sha
 
     def self.factory(rule_text, options = { })
@@ -19,6 +20,17 @@ module Flint
       end
       f.parse
       f
+    end
+
+    def options
+      @options ||=  Marshal.load(self.options_dump)
+      @options
+    end
+
+    def options=(newopts)
+      @options = newopts.clone
+      self.options_dump = Marshal.dump(@options)
+      @options
     end
 
     def self.from_file(filename)
@@ -38,19 +50,21 @@ module Flint
     def validate
       assert_unique :sha
     end
-
-
+    
     # we model three specific realms of the firewall, external, dmz, and internal
     def external? iface
-      raise "Unimplemented."
+      iface = iface.name if iface.kind_of? Interface
+      options[:external_interfaces].member?(iface)
     end
 
     def internal? iface
-      raise "Unimplemented."
+      iface = iface.name if iface.kind_of? Interface
+      options[:internal_interfaces].member?(iface)
     end
 
     def dmz? iface
-      raise "Unimplemented."
+      iface = iface.name if iface.kind_of? Interface
+      options[:dmz_interfaces].member?(iface)
     end
 
     def interface_realm iface

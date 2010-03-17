@@ -188,11 +188,33 @@ module Flint
             i.save
           end
         end
+        build_realms
         ServicePath.build_service_paths(self)
         ProtocolMap.build_protocol_map(self)
       end
     end
 
+    def build_realms
+      opts = self.options
+      extr = []
+      intr = []
+      dmzr = []
+      Interface.find(:sha => sha).all.each do |i|
+        if i.name.match(/inside/i)
+          intr.push(i.name)
+        elsif i.name.match(/outside/i)
+          extr.push(i.name)
+        elsif i.name.match(/dmz/i)
+          dmzr.push(i.name)
+        end
+      end
+      opts[:internal_interfaces] = intr
+      opts[:external_interfaces] = extr
+      opts[:dmz_interfaces] = dmzr
+      self.options = opts
+      self.save
+    end
+    
     def ensure_interface(sha, name)
       i = Interface.find(:sha => sha, :name => name).first
       i ||= Interface.create(:name => name,
@@ -343,26 +365,6 @@ module Flint
 
     def normalize_rule(line)
       line
-    end
-
-    def external? iface
-      # XXX
-      iface = iface.name if iface.kind_of? Interface
-      iface =~ /outside/i
-    end
-
-    def dmz? iface
-      iface = iface.name if iface.kind_of? Interface
-      iface =~/dmz/i
-    end
-
-    def internal? iface
-      iface = iface.name if iface.kind_of? Interface
-      iface =~/inside/i
-    end
-
-    def external
-      "outside"
     end
 
     def table_by_name(n)

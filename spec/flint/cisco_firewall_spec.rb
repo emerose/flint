@@ -37,7 +37,9 @@ describe Flint::CiscoFirewall do
 
     # a comment
     lines[100].comment?.should be_true
-
+    
+    @fw.options[:external_interfaces].should eql(["outside"])
+    
   end
 
   it "should recognize name commands" do
@@ -109,14 +111,5 @@ describe Flint::CiscoFirewall do
     spec.should == Flint::PortSet.new((0..79),(81..Flint::PORT_MAX))
 
   end
-
-  it "should parse a big rule file" do
-    @rules = File.read("#{ FLINT_ROOT }/victim.pix")
-    @fw = Flint::CiscoFirewall.factory(@rules)
-    lines = @fw.rule_lines
-    lines.size.should == 4709
-  end
-
-
 
 end
