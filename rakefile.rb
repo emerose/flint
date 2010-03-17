@@ -1,7 +1,9 @@
 begin
   require 'rubygems'
 rescue LoadError
+  puts "******************************************************************************"
   puts "Please install RubyGems, see: http://docs.rubygems.org/read/chapter/3"
+  puts "******************************************************************************"
   exit 1
 end
 
@@ -39,7 +41,7 @@ namespace "bundler" do
   
   task :install => [ :gem ] do
     # install our dependencies
-    sh("vendor/bin/bundle check || vendor/bin/bundle install vendor --disable-shared-gems")
+    sh("vendor/bin/bundle check || vendor/bin/bundle install vendor --disable-shared-gems --without development")
   end
 end
 
@@ -66,7 +68,7 @@ end
 task :racc => ['lib/cisco/pix_parser.rb']
 task :ralex => ['lib/cisco/ralex_pix.rb']
 
-task :spec => [:racc, :ralex] do
+task :spec => [:racc, :ralex, :redis] do
     sh "spec --format nested --colour spec/flint/*_spec.rb"
 end
 
@@ -117,6 +119,9 @@ task :gems do
 end
 
 namespace "release" do
+  task :changelog do
+    sh "script/git-changelog > ChangeLog"
+  end
   task :tarball do
     sh "git archive --format=tar --prefix=flint-#{FLINT_VERSION}/ HEAD | gzip > flint-#{FLINT_VERSION}.tgz"
   end

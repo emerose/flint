@@ -15,3 +15,6 @@ gem "bcrypt-ruby", "2.1.2"
 gem "Ralex", "0.1"
 gem "matasano_utils", "0.1"
 
+# these are for dev only
+
+gem "rspec", :group => :development

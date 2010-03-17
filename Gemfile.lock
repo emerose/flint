@@ -4,14 +4,18 @@ dependencies:
     group: 
     - :default
     version: = 0.8.17
-  matasano_utils: 
-    group: 
-    - :default
-    version: = 0.1
   haml: 
     group: 
     - :default
     version: = 2.2.20
+  matasano_utils: 
+    group: 
+    - :default
+    version: = 0.1
+  rspec: 
+    group: 
+    - :development
+    version: ">= 0"
   rack: 
     group: 
     - :default
@@ -20,14 +24,14 @@ dependencies:
     group: 
     - :default
     version: = 0.9.4
-  bcrypt-ruby: 
-    group: 
-    - :default
-    version: = 2.1.2
   Ralex: 
     group: 
     - :default
     version: = 0.1
+  bcrypt-ruby: 
+    group: 
+    - :default
+    version: = 2.1.2
   rdiscount: 
     group: 
     - :default
@@ -43,6 +47,8 @@ specs:
     version: "0.1"
 - haml: 
     version: 2.2.20
+- rspec: 
+    version: 1.3.0
 - rack: 
     version: 1.1.0
 - sinatra: 
@@ -55,7 +61,7 @@ specs:
     version: 1.5.8
 - ohm: 
     version: 0.0.32
-hash: ef560bccae23bee7a7e44db9985baa1130c7f2e1
+hash: 83a050183536de8de1ec6b2c53ba3ed1cccf4d89
 sources: 
 - Rubygems: 
     uri: http://gemcutter.org
