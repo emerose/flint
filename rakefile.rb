@@ -9,12 +9,14 @@ begin
   require 'ralex/ralextask.rb'
   # Ralex files
   Ralex::RalexTask.new('lib/cisco/ralex_pix.rb')
-  RACC="racc"
-  FLINT_VERSION = File.read('VERSION')
   # Racc file
 rescue LoadError
   #puts "Cannot load Ralex, so you will not be able to update the lexers"
 end
+
+RACC="racc"
+FLINT_VERSION = File.read('VERSION')
+
 
 namespace "bundler" do
   task :gem do
@@ -76,10 +78,20 @@ end
 
 task :redis do
   # restarts the redis if it is already running
+  rpid = nil
   if File.exists?('redis.pid')
     rpid = File.read('redis.pid').to_i
-    puts "redis-server already running (pid: #{rpid})"
-  else
+    begin
+      Process.kill(0,rpid)
+      puts "redis-server already running (pid: #{rpid})"
+    rescue 
+      puts "redis.pid file is stale, removing"
+      File.delete('redis.pid')
+      rpid = nil
+    end
+  end
+  
+  unless rpid
     sh "vendor/bin/redis-server redis.conf"
   end
 end
@@ -87,8 +99,8 @@ end
 task :redis_down do
   if File.exists?('redis.pid')
     rpid = File.read('redis.pid').to_i
-    Process.kill(15,rpid)
     File.delete('redis.pid')
+    Process.kill(15,rpid)
   end
 end
 
