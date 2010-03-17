@@ -9,6 +9,11 @@ Supported firewalls:
 
 ## Installing
 
+You will need a development environment.  On Mac OSX that means XCode.
+On Ubuntu/Debian Linux is would be that `build-essentials` packages.
+
+You will also need Ruby, along with the usual tools, rake and gem.
+
     rake install
 
 ## Running
@@ -48,3 +53,7 @@ at: http://www.complang.org/ragel/
 * spec
 
   RSpec tests for Flint.
+
+* vendor
+  
+  Third party code that we depend upon.
