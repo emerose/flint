@@ -1,3 +1,5 @@
+require 'bcrypt'
+
 class User < Ohm::Model
   attribute   :login
   index	      :login
