@@ -18,3 +18,5 @@ gem "matasano_utils", "0.1"
 # these are for dev only
 
 gem "rspec", :group => :development
+gem "racc", :group => :development
+gem "rdoc", :group => :development

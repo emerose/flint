@@ -36,10 +36,18 @@ dependencies:
     group: 
     - :default
     version: = 1.5.8
+  racc: 
+    group: 
+    - :development
+    version: ">= 0"
   ohm: 
     group: 
     - :default
     version: = 0.0.32
+  rdoc: 
+    group: 
+    - :development
+    version: ">= 0"
 specs: 
 - compass: 
     version: 0.8.17
@@ -53,15 +61,19 @@ specs:
     version: 1.1.0
 - sinatra: 
     version: 0.9.4
-- bcrypt-ruby: 
-    version: 2.1.2
 - Ralex: 
     version: "0.1"
+- bcrypt-ruby: 
+    version: 2.1.2
 - rdiscount: 
     version: 1.5.8
+- racc: 
+    version: 1.4.6
 - ohm: 
     version: 0.0.32
-hash: 83a050183536de8de1ec6b2c53ba3ed1cccf4d89
+- rdoc: 
+    version: 2.4.3
+hash: 57eebdb3e56d89076bcd3d5f48d0b4568b6fb7c8
 sources: 
 - Rubygems: 
     uri: http://gemcutter.org

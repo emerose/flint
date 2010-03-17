@@ -24,8 +24,9 @@ This will start a Sinatra server listening on port http://localhost:4567.  Point
 
 ## Developers
 
-You will need the racc and rdoc gem, and Ragel installed.  Ragel is available
-at: http://www.complang.org/ragel/
+You will need the rspec, racc, and rdoc gems.  You can use `bundle install` to pull in those gems.  
+
+Assuming you want to hack on the lexers, Ragel is available at: http://www.complang.org/ragel
 
 ## Project Layout
 
