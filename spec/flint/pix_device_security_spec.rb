@@ -12,7 +12,10 @@ describe "Pix Device Security Checks" do
  telnet 10.0.0.0 255.0.0.0 outside
  http 10.0.0.0 255.0.0.0 outside
  http 10.0.0.0 255.0.0.0 inside
- snmp-server host outside 10.0.0.0")
+ snmp-server host outside 10.0.0.0
+ nameif ethernet0 outside security0
+ nameif ethernet0 dmz security50"
+)
     @tr = Flint::TestRunner.new(@tg)
     @tr.run(@fw)
     @tr.results(:dmz_ssh).all.select { |r|
@@ -35,7 +38,9 @@ describe "Pix Device Security Checks" do
  telnet 10.0.0.0 255.0.0.0 dmz
  http 10.0.0.0 255.0.0.0 dmz
  http 10.0.0.0 255.0.0.0 dmz
- snmp-server host dmz 10.0.0.0")
+ snmp-server host dmz 10.0.0.0
+ nameif ethernet0 outside security0
+ nameif ethernet0 dmz security50")
     @tr = Flint::TestRunner.new(@tg)
     @tr.run(@fw)
 

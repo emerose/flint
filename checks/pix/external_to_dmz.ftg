@@ -29,6 +29,7 @@ class Flint::X2DTest
 end
 
 x2d_check :http_restricted, "HTTP is restricted to a specific set of hosts" do
+  puts "I RAN!"
   assert_protocol_is_restricted("http", {:protocol => :tcp, :destination_port => [80]})
 end
 

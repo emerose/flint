@@ -10,10 +10,8 @@ x2i_check :high_risk_protocol, "Block high risk protocols" do
         describe "The #{pb.name} protocol presents a high risk to your network, and should not be allowed into your internal networks from the outside."
 
         paths = []
-        pp "Looking for #{pb.name}"
         tcp_ports.each do |port|
           if port
-            pp "Looking at #{port}"
             paths.concat(Flint::ServicePath.find( :sha => firewall.sha,
                                                   :protocol => "tcp",
                                                   :out_interface_name => @out_interface.name,
@@ -24,7 +22,6 @@ x2i_check :high_risk_protocol, "Block high risk protocols" do
 
         udp_ports.each do |port|
           if port
-            pp "Looking at #{port}"
             paths.concat(Flint::ServicePath.find( :sha => firewall.sha,
                                                   :protocol => :udp,
                                                   :out_interface_name => @out_interface.name,
@@ -34,7 +31,6 @@ x2i_check :high_risk_protocol, "Block high risk protocols" do
         end
 
         paths.each do |path|
-          puts "Got bad path: #{path.inspect}"
           path.lines.all.each do |ln|
             affected_netblocks(path.destination_as_cidr)
             if r = firewall.rule_at(ln)
