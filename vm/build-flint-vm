@@ -4,7 +4,7 @@ set -e
 usage()
 {
 cat << EOF
-usage: $0 [-q] <VMName> <playbook.pbp>
+usage: $0 [-q] <VMName>
 
 This scripts builds the debian packages for playbook
 
@@ -40,21 +40,23 @@ shift $((OPTIND-1))
 
 
 VMNAME=${1:?"Must provide a VM name, such as \"Playbook_v2.5\""}
-PBDEB=${2:?"Must provide a playbook package to be installed"}
+#PBDEB=${2:?"Must provide a playbook package to be installed"}
 
-REV=`echo $PBDEB | cut -f 2  -d'_'`
+#REV=`echo $PBDEB | cut -f 2  -d'_'`
 
-if [[ ! -f "$PBDEB" ]];then
-	echo "File not found: $PBDEB"
-	exit 1
-fi
+#if [[ ! -f "$PBDEB" ]];sdffvcvthen
+#	echo "File not found: $PBDEB"
+#	exit 1
+#fi
+
+
 
 
 
 if [[ -n $QAVM ]]; then
     echo "Building a QA VM, named $VMNAME with $PBDEB"
 else
-    echo "Building VM named $VMNAME with $PBDEB and $PBTPDEB"
+    echo "Building VM named $VMNAME"
 fi
 
 if [[ -n $NOPACKAGE ]]; then
@@ -65,8 +67,8 @@ SSH="ssh -o StrictHostKeyChecking=no"
 SCP="scp -o StrictHostKeyChecking=no"
 
 VMDIR=/var/lib/vmware/vms
-SEEDVM=Playbook-JeOS
-VMIP=10.75.1.244
+SEEDVM=Ubuntu_8.04_JeOS
+VMIP=10.75.1.146
 VMRUN="vmrun -T server -h https://tick.chi.matasano.com:8333/sdk -u pbbuild -p heluhelu" 
 
 echo "Building $VMNAME"
@@ -137,42 +139,53 @@ function copy_vm
 
 	( cd $TDIR
 	  log "Renaming vdisk from $SEEDVM.vmdk to $VMNAME.vmdk"
- 	  vmware-vdiskmanager -n $SEEDVM.vmdk $VMNAME.vmdk
+	 # vmware-vdiskmanager -n $SEEDVM.vmdk $VMNAME.vmdk
           cat - > $VMNAME.vmx <<EOF
 #!/usr/local/bin/vmware
+.encoding = "UTF-8"
 config.version = "8"
 virtualHW.version = "4"
 scsi0.present = "TRUE"
 scsi0.virtualDev = "lsilogic"
-memsize = "512"
+memsize = "256"
 scsi0:0.present = "TRUE"
-scsi0:0.fileName = "$VMNAME.vmdk"
-scsi0:0.writeThrough = "TRUE"
+scsi0:0.fileName = "root.vmdk"
 ide1:0.present = "FALSE"
 ide1:0.deviceType = "cdrom-image"
-floppy0.startConnected = "FALSE"
-floppy0.fileName = "/dev/fd0"
-Ethernet0.present = "TRUE"
+floppy0.autodetect = "TRUE"
+ethernet0.present = "TRUE"
+ethernet0.wakeOnPcktRcv = "FALSE"
 displayName = "$VMNAME"
-guestOS = "other26xlinux"
-priority.grabbed = "normal"
-priority.ungrabbed = "normal"
+guestOS = "ubuntu"
+nvram = "Ubuntu.nvram"
+deploymentPlatform = "windows"
+virtualHW.productCompatibility = "hosted"
+tools.upgrade.policy = "useGlobal"
+
+ide1:0.autodetect = "FALSE"
+floppy0.fileName = "A:"
+extendedConfigFile = "Ubuntu.vmxf"
+
+scsi0:1.present = "TRUE"
+scsi0:1.fileName = "swap.vmdk"
+floppy0.startConnected = "FALSE"
+
+ethernet0.addressType = "generated"
+#ethernet0.generatedAddress = "00:0c:29:75:25:ad"
+#ethernet0.generatedAddressOffset = "0"
+
 powerType.powerOff = "soft"
-powerType.powerOn = "hard"
-powerType.suspend = "hard"
 powerType.reset = "soft"
 scsi0:0.redo = ""
-ide1:0.startConnected = "FALSE"
-ethernet0.addressType = "generated"
-tools.syncTime = "TRUE"
-machine.id = "$VMNAME $VMIP"
+scsi0:1.redo = ""
+tools.remindInstall = "FALSE"
+
+debugStub.linuxOffsets = "0x0,0xffffffff,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0"
+
 EOF
-	  chmod +x $VMNAME.vmx
-	)
+	chmod +x $VMNAME.vmx
+     )
 }
-
-
-
 function wait_for_host
 {
 	log "Waiting for host $1"
@@ -182,7 +195,7 @@ function wait_for_host
 	done
 }
 
-function install_playbook
+function install_flint
 {
 	$SCP -i vmbuilder prepvm.sh root@$VMIP:prepvm.sh
 	
@@ -191,20 +204,17 @@ function install_playbook
 	$SCP -i vmbuilder pbp-install root@$VMIP:/usr/local/bin/pbp-install
 	#$SCP -i vmbuilder $PBTPDEB root@$VMIP:$PBTPDEB
 	$SSH -i vmbuilder -t -t root@$VMIP "./prepvm.sh"
-        $SCP -i vmbuilder $PBDEB root@$VMIP:$PBDEB
-	$SSH -i vmbuilder -t -t root@$VMIP "pbp-install $PBDEB"
-	# gotta do this AFTER the package is installed, to ensure the user is present
 	$SSH -i vmbuilder root@$VMIP "/etc/init.d/playbook stop"
 }
 	
-function test_playbook
+function test_flint
 {
 	$SSH -i vmbuilder root@$VMIP "/etc/init.d/playbook stop"
 	$SSH -i vmbuilder playbook@$VMIP "cd app/app; ./test.sh"
 
 }
 
-function clean_playbook_vm
+function clean_flint_vm
 {
         # remove and re-install $SSHd, so we get uniue host keys
 	$SCP -i vmbuilder scrubvm.sh root@$VMIP:scrubvm.sh
@@ -233,7 +243,7 @@ stop_vm $VMNAME || true
 sleep 30
 unregister_vm $VMNAME
 sleep 30
-rm -rf $TDIR
+rm -rf $TDIRx
 
 copy_vm
 
