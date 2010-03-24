@@ -8,8 +8,11 @@ require 'flint'
 require 'sinatra' 
 require 'haml' 
 
+
+unless File.exists?
+  sec=File.read(app_secret.txt)
 use Rack::Session::Cookie, :key => 'rack.session',
-                       :secret => '92b1817c783f0ec156237306ba0ad188'
+                       :secret => sec
 
 # Don't put any actions in this file.
 require 'helpers'
@@ -41,13 +44,25 @@ def connect_to_model
   (@current_sha ||= last_rule.sha) if last_rule
   @current_firewall = Flint::CiscoFirewall.find(:sha => @current_sha).all.first unless @current_sha.empty?
   
+  # we got a bad sha
+  unless @current_firewall
+    @current_sha = nil
+  end
+
   if session[:user] and u = User[session[:user]]
     @current_user = u
   end
 end
 
+unless ENV['RACK_ENV'] == "production"
+  set :host, '127.0.0.1'
+end
 
-set :host, '127.0.0.1'
+set :environment, Proc.new { if ENV['RACK_ENV'].empty? :production else :development end }
+set :haml, {:escape_html => :true }
+
+# needed until we get Ohm behaving better.
+set :lock, true
 
 get "/" do
     redirect "/overview"
