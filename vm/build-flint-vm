@@ -69,7 +69,7 @@ SCP="scp -o StrictHostKeyChecking=no"
 VMDIR=/var/lib/vmware/vms
 SEEDVM=Ubuntu_8.04_JeOS
 VMIP=10.75.1.146
-VMRUN="vmrun -T server -h https://tick.chi.matasano.com:8333/sdk -u pbbuild -p heluhelu" 
+VMRUN="vmrun -T server -h https://tick.chi.matasano.com:8333/sdk -u $VMWUSER -p $VMWPASS" 
 
 echo "Building $VMNAME"
 WDIR=`(cd $WDIR && pwd)`
