@@ -6,7 +6,7 @@ usage()
 cat << EOF
 usage: $0 [-q] <VMName>
 
-This scripts builds the debian packages for playbook
+This script builds the flint vm
 
 OPTIONS:
    -h      Show this message
@@ -39,7 +39,7 @@ done
 shift $((OPTIND-1))
 
 
-VMNAME=${1:?"Must provide a VM name, such as \"Playbook_v2.5\""}
+VMNAME=${1:?"Must provide a VM name, such as \"Flint_vX.X\""}
 #PBDEB=${2:?"Must provide a playbook package to be installed"}
 
 #REV=`echo $PBDEB | cut -f 2  -d'_'`
@@ -147,41 +147,31 @@ config.version = "8"
 virtualHW.version = "4"
 scsi0.present = "TRUE"
 scsi0.virtualDev = "lsilogic"
-memsize = "256"
+memsize = "512"
 scsi0:0.present = "TRUE"
 scsi0:0.fileName = "root.vmdk"
+scsi0:0.writeThrough = "TRUE"
 ide1:0.present = "FALSE"
 ide1:0.deviceType = "cdrom-image"
-floppy0.autodetect = "TRUE"
-ethernet0.present = "TRUE"
-ethernet0.wakeOnPcktRcv = "FALSE"
+ide1:0.startConnected = "FALSE"
+floppy0.startConnected = "FALSE"
+floppy0.fileName = "/dev/fd0"
+Ethernet0.present = "TRUE"
 displayName = "$VMNAME"
-guestOS = "ubuntu"
-nvram = "Ubuntu.nvram"
-deploymentPlatform = "windows"
-virtualHW.productCompatibility = "hosted"
-tools.upgrade.policy = "useGlobal"
-
-ide1:0.autodetect = "FALSE"
-floppy0.fileName = "A:"
-extendedConfigFile = "Ubuntu.vmxf"
-
+guestOS = "Ubuntu"
+priority.grabbed = "normal"
+priority.ungrabbed = "normal"
+powerType.powerOff = "soft"
+powerType.powerOn = "hard"
+powerType.suspend = "hard"
+powerType.reset = "soft"
+ethernet0.addressType = "generated"
 scsi0:1.present = "TRUE"
 scsi0:1.fileName = "swap.vmdk"
-floppy0.startConnected = "FALSE"
-
-ethernet0.addressType = "generated"
-#ethernet0.generatedAddress = "00:0c:29:75:25:ad"
-#ethernet0.generatedAddressOffset = "0"
-
-powerType.powerOff = "soft"
-powerType.reset = "soft"
 scsi0:0.redo = ""
 scsi0:1.redo = ""
-tools.remindInstall = "FALSE"
-
-debugStub.linuxOffsets = "0x0,0xffffffff,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0"
-
+tools.syncTime = "TRUE"
+machine.id = "$VMNAME $VMIP"
 EOF
 	chmod +x $VMNAME.vmx
      )
@@ -246,14 +236,12 @@ sleep 30
 rm -rf $TDIRx
 
 copy_vm
-
-
-echo "ALL DONE, SEE CRAIG"
 exit 0
 
 start_vm $VMNAME
 wait_for_host $VMIP
-install_playbook
+install_flint
+
 clean_playbook_vm
 
 stop_vm $VMNAME
