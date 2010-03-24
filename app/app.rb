@@ -1,6 +1,7 @@
 ## Stuff that we didn't write goes here:
 require 'pp'
 require 'digest/md5'
+require 'digest/sha1'
 
 # include the base of our flint project
 $LOAD_PATH.unshift File.dirname(__FILE__) + "/../lib"
@@ -9,10 +10,16 @@ require 'sinatra'
 require 'haml' 
 
 
-unless File.exists?
-  sec=File.read(app_secret.txt)
+unless File.exists?('app_secret.txt')
+  srand
+  seed = "--#{rand(10000)}--#{Time.now}--"
+  sec = Digest::SHA1.hexdigest(seed)
+  File.open('app_secret.txt','w').write(sec)
+end
+
+sec=File.read('app_secret.txt')
 use Rack::Session::Cookie, :key => 'rack.session',
-                       :secret => sec
+:secret => sec
 
 # Don't put any actions in this file.
 require 'helpers'
@@ -58,8 +65,14 @@ unless ENV['RACK_ENV'] == "production"
   set :host, '127.0.0.1'
 end
 
-set :environment, Proc.new { if ENV['RACK_ENV'].empty? :production else :development end }
-set :haml, {:escape_html => :true }
+set :environment, Proc.new { if ( ENV['RACK_ENV'].empty? )
+                               :production
+                             else
+                               :development
+                             end 
+}
+
+set :haml, {:escape_html => :true}
 
 # needed until we get Ohm behaving better.
 set :lock, true
