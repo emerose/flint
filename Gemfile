@@ -20,3 +20,4 @@ gem "matasano_utils", "0.1"
 gem "rspec", :group => :development
 gem "racc", :group => :development
 gem "rdoc", :group => :development
+gem "ruby-debug", :group => :development
