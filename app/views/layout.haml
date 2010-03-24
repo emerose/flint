@@ -71,8 +71,8 @@
               %a{:href => "/interface"} Interface
           
     #main
-      = yield 
-
+      != yield 
+      
     #footer
-    #new_report_dialog.dialog(title="Run New Report")
-      = haml :new_report, :layout => false
+    #new_report_dialog.dialog(title="Run New Report" modal=true)
+      != haml :new_report, :layout => false
