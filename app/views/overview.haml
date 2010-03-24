@@ -42,4 +42,4 @@
     You have no results to view. Please select Run New Report to get started.
   - else
     - @testresults.each_with_index do |r,i|
-      = haml :group_result, :layout => false, :locals => {:r => r, :index => i}
+      != haml :group_result, :layout => false, :locals => {:r => r, :index => i}
