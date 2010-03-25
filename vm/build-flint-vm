@@ -39,7 +39,7 @@ done
 shift $((OPTIND-1))
 
 
-VMNAME=${1:?"Must provide a VM name, such as \"Flint_vX.X\""}
+VMNAME=${1:?"Must provide a VM name, such as \"FlintVM-X.X\""}
 
 if [[ ! -n $VMWUSER ]]; then
     log "Please set the VMWUSER env var to the vmware user"
@@ -129,7 +129,8 @@ function copy_vm
 {
 	echo "Copying $SDIR to $TDIR"
 	cp -r $SDIR $TDIR
-
+	rm $TDIR/readme.txt
+	cp ../README $TDIR/README
 	( cd $TDIR
           cat - > $VMNAME.vmx <<EOF
 #!/usr/local/bin/vmware

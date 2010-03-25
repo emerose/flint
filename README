@@ -1,26 +1,48 @@
 # Flint -- a firewall rule analyzer
 
-Supported firewalls:
+## Supported firewalls:
 
-* Cisco Pix/ASA
-* IOS almost...
-* IPTables soon
-* Pf soon
+At the moment Flint only works with Cisco PIX/ASA.  Support for Cisco
+IOS, BSD PF, and Linux IPTables is in the works.  Please let us know
+which platforms you are interested in.
 
-## Installing
+## Installing the FlintVM
+
+The FlintVM is a VMWare image based on Ubuntu JeOS 8.04 (Hardy Heron)
+image provided by Joao Inacio <jcinacio at gmail dot com> and
+available at:  <http://www.jcinacio.com/projects/vmware-ubuntujeos-804/>
+
+It will configure it's network using DHCP.  Check the VM console for the address it was assigned.
+Flint starts up listing on port 4567.  So you can access it at <http://<ip of vm>:4567
+
+### Virtual Machine Login Details:
+
+    username: flint
+    password: flint
+
+Please login and change the flint user's password immediately.
+
+## Installing from Source
 
 You will need a development environment.  On Mac OSX that means XCode.
-On Ubuntu/Debian Linux is would be that `build-essentials` packages.
+On Ubuntu/Debian Linux is would be that `build-essentials` and
+`libc6-dev` packages.
 
 You will also need Ruby, along with the usual tools, rake and gem.
 
+To install all required gemsand supporting software:
+
     rake install
 
-## Running
+To start the web interface:
 
     rake app
 
 This will start a Sinatra server listening on port http://localhost:4567.  Point your browser at that.
+
+## Running Flint
+
+The default user is: admin/admin77
 
 ## Developers
 

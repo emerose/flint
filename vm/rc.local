@@ -14,6 +14,28 @@
 /usr/local/bin/initial_vm_config
 
 echo 'Starting Flint'
-su -l flint -c "(cd flint; /usr/bin/rake app 2>&1 > app.log)" &
+su -l flint -c "(cd flint; /usr/bin/rake app 2>&1 > app.log)" 2>&1 > /var/log/flint.log &
+
+update_motd () {
+# Update motd
+uname -snrvm > /var/run/motd
+[ -f /etc/motd.tail ] && cat /etc/motd.tail >> /var/run/motd
+FLINTIP=`/sbin/ifconfig eth0 | awk '/inet addr:/ { print substr($2,6) }'`
+cat - >> /var/run/motd <<EOF
+----------------------------------------------------------------------
+Flint is available at:
+
+http://$FLINTIP:4567
+
+The default Flint web interface user is: admin/admin77
+
+The default Virtual Machine user is: flint/flint
+----------------------------------------------------------------------
+EOF
+}
+
+# we spit our motd on boot
+update_motd
+cat /etc/motd
 
 exit 0
