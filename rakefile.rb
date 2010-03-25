@@ -23,8 +23,10 @@ FLINT_VERSION = File.read('VERSION')
 namespace "bundler" do
   task :gem do
     # install bundler
-    maj,min,rev = Gem::VERSION.split('.')
-    if maj.to_i <  1 or min.to_i < 3 or rev.to_i < 6
+    maj,min,rev = `gem --version`.split(".").map{|n| n.to_i}
+    current_gem_version = ( maj * 1000) + (min * 100) + (rev * 10 )
+    target_gem_version = ( 1 * 1000) + ( 3 * 100) + ( 6 * 10 )
+    unless current_gem_version >= target_gem_version  
       puts "******************************************************************************"
       puts " Please upgrade your rubygems to 1.3.6 or better:"
       puts "    sudo gem install rubygems-update"
