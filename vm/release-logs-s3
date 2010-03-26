@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'aws/s3'
+
+
+AWS::S3::Base.establish_connection!(
+  :access_key_id => ENV['AMAZON_ACCESS_KEY_ID'],
+  :secret_access_key => ENV['AMAZON_SECRET_ACCESS_KEY']
+                                    )
+
+
+FLINT_BUCKET='matasano_flint'
+begin
+  bucket = AWS::S3::Bucket.find(FLINT_BUCKET)
+rescue AWS::S3::NoSuchBucket
+  bucket = AWS::S3::Bucket.create(FLINT_BUCKET)
+end
+
+AWS::S3::Bucket.enable_logging_for(FLINT_BUCKET)
+
+bucket.logs.each {|l|
+  l.lines.each {|line|
+    if ( line.operation == 'REST.GET.OBJECT' and
+         line.http_status == 200 )
+      puts line
+    end
+  }
+}
+
