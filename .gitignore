@@ -8,3 +8,15 @@ redis.pid
 app/.sass-cache
 dump.rdb
 flint*.tgz
+vm/Flint*zip
+app/app_secret.txt
+ChangeLog
+# These are files wanted inthe dev bundle, which we don't wanna
+# ship to people
+vendor/cache/columnize-0.3.1.gem
+vendor/cache/linecache-0.43.gem
+vendor/cache/racc-1.4.6.gem
+vendor/cache/rdoc-2.4.3.gem
+vendor/cache/rspec-1.3.0.gem
+vendor/cache/ruby-debug-0.10.3.gem
+vendor/cache/ruby-debug-base-0.10.3.gem
