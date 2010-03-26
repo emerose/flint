@@ -19,7 +19,8 @@ AWS::S3::Base.establish_connection!(
 
 
 FLINT_BUCKET='matasano_flint'
-
+require 'ruby-debug'
+debugger
 begin
   bucket = AWS::S3::Bucket.find(FLINT_BUCKET)
 rescue AWS::S3::NoSuchBucket
@@ -32,28 +33,31 @@ puts "Uploading #{release_zip} to the #{FLINT_BUCKET} bucket."
 AWS::S3::S3Object.store(release_zip, open(release_zip), FLINT_BUCKET,
                         :access => :public_read)
 
-AWS::S3::S3Object.copy(release_zip, "FlintVM-current.zip", FLINT_BUCKET,
-                       :access => :public_read)
-
+AWS::S3::S3Object.copy(release_zip, "FlintVM-current.zip", FLINT_BUCKET)
+policy = AWS::S3::S3Object.acl('FlintVM-current.zip', FLINT_BUCKET)
+policy.grants << AWS::S3::ACL::Grant.grant(:public_read)
+AWS::S3::S3Object.acl('FlintVM-current.zip', FLINT_BUCKET, policy)
 puts "Available at #{AWS::S3::S3Object.url_for(release_zip, FLINT_BUCKET, :authenticated => false)}"
+puts "Available at #{AWS::S3::S3Object.url_for('FlintVM-current.zip', FLINT_BUCKET, :authenticated => false)}"
 
 
 puts "Uploading #{release_ovf} to the #{FLINT_BUCKET} bucket."
 AWS::S3::S3Object.store(release_ovf, open(release_ovf), FLINT_BUCKET,
                         :access => :public_read)
-
-AWS::S3::S3Object.copy(release_zip, "FlintVM-current.ovf.zip", FLINT_BUCKET,
-                       :access => :public_read)
-
+AWS::S3::S3Object.copy(release_zip, "FlintVM-current.ovf.zip", FLINT_BUCKET)
+policy = AWS::S3::S3Object.acl('FlintVM-current.ovf.zip', FLINT_BUCKET)
+policy.grants << AWS::S3::ACL::Grant.grant(:public_read)
+AWS::S3::S3Object.acl('FlintVM-current.ovf.zip', FLINT_BUCKET, policy)
 puts "Available at #{AWS::S3::S3Object.url_for(release_ovf, FLINT_BUCKET, :authenticated => false)}"
+puts "Available at #{AWS::S3::S3Object.url_for('FlintVM-current.ovf.zip', FLINT_BUCKET, :authenticated => false)}"
 
 
-puts "Uploading #{release_tarball} to the #{FLINT_BUCKET} bucket."
-AWS::S3::S3Object.store(release_tarball, open(release_tarball), FLINT_BUCKET,
-                        :access => :public_read)
-AWS::S3::S3Object.copy(release_zip, "Flint-current.src.tgz", FLINT_BUCKET,
-                       :access => :public_read)
+#puts "Uploading #{release_tarball} to the #{FLINT_BUCKET} bucket."
+#AWS::S3::S3Object.store(release_tarball, open(release_tarball), FLINT_BUCKET,
+#                        :access => :public_read)
+#AWS::S3::S3Object.copy(release_zip, "Flint-current.src.tgz", FLINT_BUCKET,
+#                       :access => :public_read)
 
-puts "Available at #{AWS::S3::S3Object.url_for(release_tarball, FLINT_BUCKET, :authenticated => false)}"
+#puts "Available at #{AWS::S3::S3Object.url_for(release_tarball, FLINT_BUCKET, :authenticated => false)}"
 
 
