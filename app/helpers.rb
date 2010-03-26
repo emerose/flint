@@ -87,7 +87,10 @@ helpers do
     end.compact
   end
 
-      
-      
+  
+  def get_test_groups
+    @tests = Dir["../checks/pix/*.ftg"]
+    @tests.map{ |tgf| Flint::TestGroup.load(tgf) }.flatten
+  end
 
 end

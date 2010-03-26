@@ -38,7 +38,8 @@ describe Flint::CiscoFirewall do
     # a comment
     lines[100].comment?.should be_true
     
-    @fw.options[:external_interfaces].should eql(["outside"])
+    @fw.options[:realm_map]["outside"].should eql(:external)
+    @fw.options[:realm_map]["inside"].should eql(:internal)
     
   end
 

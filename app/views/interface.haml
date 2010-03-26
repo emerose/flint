@@ -13,10 +13,10 @@
       - ["internal","dmz","external","unknown"].each do |itype|
         .span-24.fake_table_header.last
           .span-1
-            %img#toggle{:src => "/assets/toggle-expand.png", :name => "#{classify(itype)}_details"}
+            %img.expanded#toggle{:src => "/assets/toggle.png", :name => "#{classify(itype)}_details"}
           .span-11
             &nbsp;
-            %a#toggle{:name => "#{classify(itype)}_details"}
+            %a.expanded#toggle{:name => "#{classify(itype)}_details"}
               = itype.upcase
           .span-6
             &nbsp;
@@ -26,7 +26,7 @@
             %a
 
         - @interfaces[itype].each do |l|
-          .span-24.hidden.last(id="#{classify(itype)}_details")
+          .span-24.last(id="#{classify(itype)}_details")
             .span-3.subleft
               interface name
             .span-2.last

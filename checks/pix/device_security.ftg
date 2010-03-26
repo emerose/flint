@@ -24,7 +24,6 @@ check :external_telnet, "Cannot telnet into device from external" do
   }            
 end
 
-
 check :external_http, "Cannot access device via http/https from external" do
   firewall.lines.each { |l|
     if l.ast and l.ast[0] == :http

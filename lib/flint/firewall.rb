@@ -4,7 +4,6 @@ module Flint
     attribute :rule_text
     attribute :options_dump
     attribute :sha
-
     
     index :sha
 
@@ -45,38 +44,59 @@ module Flint
     end
 
     def parse
+      self
+    end
+
+    def analyze
+      self
     end
 
     def validate
       assert_unique :sha
     end
     
+    def interfaces
+      Interface.find(:sha => sha).all.map do |ifa|
+        [ifa.name, ifa]
+      end.to_hash
+    end
+
     # we model three specific realms of the firewall, external, dmz, and internal
     def external? iface
-      iface = iface.name if iface.kind_of? Interface
-      options[:external_interfaces].member?(iface)
+      interface_realm(iface) == :external
     end
 
     def internal? iface
-      iface = iface.name if iface.kind_of? Interface
-      options[:internal_interfaces].member?(iface)
+      interface_realm(iface) == :internal
     end
 
     def dmz? iface
-      iface = iface.name if iface.kind_of? Interface
-      options[:dmz_interfaces].member?(iface)
+      interface_realm(iface) == :dmz
     end
 
     def interface_realm iface
-      if external? iface
-        :external
-      elsif internal? iface
-        :internal
-      elsif dmz? iface
-        :dmz
-      else
-        nil
+      iface = iface.name if iface.kind_of? Interface
+      options[:realm_map].fetch(iface, nil)
+    end
+    
+    def set_interface_realm(iface, realm)
+      iface = iface.name if iface.kind_of? Interface
+      updating_options do |opts|
+        opts[:realm_map] =  {} unless opts[:realm_map]
+        opts[:realm_map][iface] = realm
       end
     end
+    
+    def updating_options(&block)
+      opts = self.options.clone
+      yield opts
+      self.options = opts
+      save
+    end
+
+    def realmless? iface
+      ! interface_realm(iface)
+    end
+
   end
 end

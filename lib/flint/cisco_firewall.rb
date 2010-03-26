@@ -189,9 +189,15 @@ module Flint
           end
         end
         build_realms
-        ServicePath.build_service_paths(self)
-        ProtocolMap.build_protocol_map(self)
       end
+      self
+    end
+
+    def analyze
+      super
+      ServicePath.build_service_paths(self)
+      ProtocolMap.build_protocol_map(self)
+      self
     end
 
     def build_realms
@@ -201,18 +207,13 @@ module Flint
       dmzr = []
       Interface.find(:sha => sha).all.each do |i|
         if i.name.match(/inside/i)
-          intr.push(i.name)
+          set_interface_realm(i, :internal)
         elsif i.name.match(/outside/i)
-          extr.push(i.name)
+          set_interface_realm(i, :external)
         elsif i.name.match(/dmz/i)
-          dmzr.push(i.name)
+          set_interface_realm(i, :dmz)
         end
       end
-      opts[:internal_interfaces] = intr
-      opts[:external_interfaces] = extr
-      opts[:dmz_interfaces] = dmzr
-      self.options = opts
-      self.save
     end
     
     def ensure_interface(sha, name)
@@ -373,12 +374,6 @@ module Flint
       else
         nil
       end
-    end
-
-    def interfaces
-      Interface.find(:sha => sha).all.map do |ifa|
-        [ifa.name, ifa]
-      end.to_hash
     end
 
     def rule_lines

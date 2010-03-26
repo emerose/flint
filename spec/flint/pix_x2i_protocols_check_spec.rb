@@ -29,7 +29,7 @@ describe "Pix External-to-Internal Protocol Checks" do
 
   it "should identify when SSH is permitted from any to any" do
     fwdat, off = make_x2i_fw( 'permit tcp any any eq 22' )
-    fw = Flint::CiscoFirewall.factory(fwdat)
+    fw = Flint::CiscoFirewall.factory(fwdat).analyze
     tr = Flint::TestRunner.new(@tg)
     tr.run(fw)
     res = tr.results(:ssh)
@@ -38,14 +38,14 @@ describe "Pix External-to-Internal Protocol Checks" do
     res.first.affected_rules.first.should == fw.rule_lines[off].number
 
     fwdat, off = make_x2i_fw("permit tcp any any eq 80")
-    fw = Flint::CiscoFirewall.factory(fwdat)
+    fw = Flint::CiscoFirewall.factory(fwdat).analyze
     tr = Flint::TestRunner.new(@tg)
     tr.run(fw)
     res = tr.results(:ssh)
     res.first.result.should ==  "pass"
 
     fwdat, off = make_x2i_fw("deny ip any any", "permit ip any any eq 22")
-    fw = Flint::CiscoFirewall.factory(fwdat)
+    fw = Flint::CiscoFirewall.factory(fwdat).analyze
     tr = Flint::TestRunner.new(@tg)
     tr.run(fw)
     res = tr.results(:ssh)
@@ -54,7 +54,7 @@ describe "Pix External-to-Internal Protocol Checks" do
 
   it "should identify when FTP is permitted from any to any" do
     fwdat, off = make_x2i_fw( 'permit tcp any any eq 21' )
-    fw = Flint::CiscoFirewall.factory(fwdat)
+    fw = Flint::CiscoFirewall.factory(fwdat).analyze
     tr = Flint::TestRunner.new(@tg)
     tr.run(fw)
     res = tr.results(:ftp)
@@ -63,14 +63,14 @@ describe "Pix External-to-Internal Protocol Checks" do
     res.first.affected_rules.first.should == fw.rule_lines[off].number
 
     fwdat, off = make_x2i_fw("permit tcp any any eq 80")
-    fw = Flint::CiscoFirewall.factory(fwdat)
+    fw = Flint::CiscoFirewall.factory(fwdat).analyze
     tr = Flint::TestRunner.new(@tg)
     tr.run(fw)
     res = tr.results(:ftp)
     res.first.result.should ==  "pass"
 
     fwdat, off = make_x2i_fw("deny ip any any", "permit ip any any eq 21")
-    fw = Flint::CiscoFirewall.factory(fwdat)
+    fw = Flint::CiscoFirewall.factory(fwdat).analyze
     tr = Flint::TestRunner.new(@tg)
     tr.run(fw)
     res = tr.results(:ftp)
@@ -83,7 +83,7 @@ describe "Pix External-to-Internal Protocol Checks" do
                               'permit udp any any eq 138',
                               'permit udp any any eq 137' )
 
-    fw = Flint::CiscoFirewall.factory(fwdat)
+    fw = Flint::CiscoFirewall.factory(fwdat).analyze
     tr = Flint::TestRunner.new(@tg)
     tr.run(fw)
     res = tr.results(:smb)
@@ -95,7 +95,7 @@ describe "Pix External-to-Internal Protocol Checks" do
     res.first.affected_rules.all.should be_include(fw.rule_lines[off+3].number)
 
     fwdat, off = make_x2i_fw("permit tcp any any eq 80")
-    fw = Flint::CiscoFirewall.factory(fwdat)
+    fw = Flint::CiscoFirewall.factory(fwdat).analyze
     tr = Flint::TestRunner.new(@tg)
     tr.run(fw)
     res = tr.results(:smb)
@@ -107,7 +107,7 @@ describe "Pix External-to-Internal Protocol Checks" do
                               'permit udp any any eq 138',
                               'permit udp any any eq 137' )
 
-    fw = Flint::CiscoFirewall.factory(fwdat)
+    fw = Flint::CiscoFirewall.factory(fwdat).analyze
     tr = Flint::TestRunner.new(@tg)
     tr.run(fw)
     res = tr.results(:smb)
@@ -128,7 +128,7 @@ describe "Pix External-to-Internal Protocol Checks" do
     fwdat, off = 
       make_x2i_fw(*database_ports.map{|p| "permit ip any any eq #{p}"})
 
-    fw = Flint::CiscoFirewall.factory(fwdat)
+    fw = Flint::CiscoFirewall.factory(fwdat).analyze
 
     tr = Flint::TestRunner.new(@tg)
     tr.run(fw)
@@ -140,10 +140,9 @@ describe "Pix External-to-Internal Protocol Checks" do
     end
   end
 
-
   it "should identify a 'high risk' protocol permitted from any to any" do
     fwdat, off = make_x2i_fw("permit ip any any eq 174")
-    fw = Flint::CiscoFirewall.factory(fwdat)
+    fw = Flint::CiscoFirewall.factory(fwdat).analyze
     tr = Flint::TestRunner.new(@tg)
     tr.run(fw)
     res = tr.results(:high_risk_protocol)
@@ -153,7 +152,7 @@ describe "Pix External-to-Internal Protocol Checks" do
     mailq.affected_rules.first.should == fw.rule_lines[off].number
 
     fwdat, off = make_x2i_fw("permit tcp any any eq 80")
-    fw = Flint::CiscoFirewall.factory(fwdat)
+    fw = Flint::CiscoFirewall.factory(fwdat).analyze
     tr = Flint::TestRunner.new(@tg)
     tr.run(fw)
     res = tr.results(:high_risk_protocol)
@@ -161,7 +160,7 @@ describe "Pix External-to-Internal Protocol Checks" do
     mailq.result.should ==  "pass"
 
     fwdat, off = make_x2i_fw("deny ip any any", "permit ip any any eq 174")
-    fw = Flint::CiscoFirewall.factory(fwdat)
+    fw = Flint::CiscoFirewall.factory(fwdat).analyze
     tr = Flint::TestRunner.new(@tg)
     tr.run(fw)
     res = tr.results(:high_risk_protocol)

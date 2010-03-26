@@ -3,8 +3,12 @@
 get "/overview" do
   connect_to_model
   ## XXXToDo: if you reset and haven't cleared your session, the welcome does not fire. --ep
-  @welcome = true unless @current_sha
-  @testresults =  Flint::TestHook.new(@current_sha).run
+  if @current_firewall
+    @testresults =  Flint::TestHook.new(@current_sha).run
+  else
+    @welcome = true unless @current_firewall
+  end
+
   haml :overview
 end
 

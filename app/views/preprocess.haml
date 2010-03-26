@@ -1,0 +1,65 @@
+#overbar
+  .container
+    %h3 Tell me a little about your firewall...
+.container.preprocess{:style => "margin-top: 1em"}
+  %form{:action => "/preprocess", :method => "POST"}
+    .span-12
+      %h3 Interface Realms
+
+      %p Flint assigns each firewall interface to a security realm:
+      %dl
+        %dt External
+        %dh The realm containing the Internet, or other organizations.  It is the least trusted realm, and should have limited access to the DMZ realm, and no access to the internal realm.
+        %dt DMZ
+        %dh The 'demilitarized zone' containing those hosts which must interact with the External realm, and are quarantined.  This realm should have limited access to the Internal and External realms.
+        %dt Internal
+        %dh The organization's LAN or internal network.
+
+    .span-12.last
+      %table#interface_realms
+        %tr
+          %th Interface
+          %th.external External
+          %th.internal Internal
+          %th.dmz DMZ
+          %th.none None
+
+        - @current_firewall.interfaces.keys.each do |iface|
+          %tr
+            %th
+              = iface
+            %td.external
+              %input{:type => "radio", :name => "#{iface}_realm", :value => "external", :checked => @current_firewall.external?(iface) }
+            %td.internal
+              %input{:type => "radio", :name => "#{iface}_realm", :value => "internal", :checked => @current_firewall.internal?(iface)}
+            %td.dmz
+              %input{:type => "radio", :name => "#{iface}_realm", :value => "dmz", :checked => @current_firewall.dmz?(iface)}
+            %td.none
+              %input{:type => "radio", :name => "#{iface}_realm", :value => "unknown", :checked => @current_firewall.realmless?(iface)}
+
+    .span-24.last{:style => "margin-bottom: 2em"}
+      %input#upload_button{:type => "submit", :value => "Run Firewall Checks Now"}
+
+    .span-12
+      %h3 Run These Checks
+      %p Not all checks are applicable to all firewalls.  Please select which test groups you would like to run against this one.
+    .span-12.last
+      %table#test_groups
+        - runthese = @current_firewall.options[:test_groups]
+        - available_tgs = get_test_groups
+        - runthese ||= available_tgs.map { |tg| tg.code }
+        - available_tgs.each do |tg|
+          - runit = runthese.member?(tg.code)
+          %tr
+            %td
+              %img#toggle{:src => "/assets/toggle-expand.png", :name => "#{tg.code}_details"}
+              %a#toggle{:name => "#{tg.code}_details"}
+                = tg.title
+            %td
+              %input.run_test_group{:type => "checkbox", :name => "run_#{tg.code}", :value => "YES", :checked => runit }
+          %tr.hidden(id="#{tg.code}_details")
+            %td(colspan=2)
+              = tg.description
+
+    .span-24.last{:style => "margin-bottom: 2em"}
+      %input#upload_button{:type => "submit", :value => "Run Firewall Checks Now"}
