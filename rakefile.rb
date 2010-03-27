@@ -18,7 +18,8 @@ end
 
 RACC="racc"
 FLINT_VERSION = File.read('VERSION')
-
+GEM_DIR = File.dirname(__FILE__) + "/vendor"
+ENV['GEM_HOME']=GEM_DIR
 
 namespace "bundler" do
   task :gem do
@@ -34,7 +35,7 @@ namespace "bundler" do
       puts "******************************************************************************"
       exit 1
     end
-    sh("[ -e vendor/bin/bundle ] || gem install vendor/cache/bundler*.gem --no-rdoc --no-ri --user-install --bindir vendor/bin")
+    sh("[ -e vendor/bin/bundle ] || gem install vendor/cache/bundler*.gem --no-rdoc --no-ri --install-dir \"#{GEM_DIR}\" --bindir vendor/bin")
   end
   
   task :uninstall do
@@ -43,7 +44,7 @@ namespace "bundler" do
   
   task :install => [ :gem ] do
     # install our dependencies
-    sh("vendor/bin/bundle check || vendor/bin/bundle install vendor --disable-shared-gems --without development")
+    sh("vendor/bin/bundle check || vendor/bin/bundle install \"#{GEM_DIR}\" --disable-shared-gems --without development")
   end
 end
 
